@@ -4481,7 +4481,7 @@
     eslint-plugin-sort-keys-fix "1.1.2"
     tsx "3.13.0"
 
-"@unlock-protocol/unlock-js@0.40.2":
+"@unlock-protocol/unlock-js@^0.40.2":
   version "0.40.2"
   resolved "https://registry.yarnpkg.com/@unlock-protocol/unlock-js/-/unlock-js-0.40.2.tgz#9e684bc51f55bb533eb9609be00b5daf931824a1"
   integrity sha512-xQw+iM4X2wIlQdhJvpvhZ3TaerpYaV4bJcOIgNTxy/4cjKvVayA0KyEg9Y8l86PbpL5+WIJl5t92/CIIN7QbsQ==

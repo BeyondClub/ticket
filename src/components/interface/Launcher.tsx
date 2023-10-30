@@ -13,16 +13,16 @@ const options = [
     cta: 'Organize an event and sell tickets',
     href: '/event/new',
   },
-  {
-    image: {
-      src: '/images/illustrations/certifications/img-handoffDoc.svg',
-      width: 250,
-      height: 200,
-      alt: 'create certification',
-    },
-    cta: 'Certify & Show the expertise on chain.',
-    href: '/certification/new',
-  },
+  // {
+  //   image: {
+  //     src: '/images/illustrations/certifications/img-handoffDoc.svg',
+  //     width: 250,
+  //     height: 200,
+  //     alt: 'create certification',
+  //   },
+  //   cta: 'Certify & Show the expertise on chain.',
+  //   href: '/certification/new',
+  // },
 ]
 
 export const Launcher = () => {
@@ -64,7 +64,7 @@ export const Launcher = () => {
         I am not sure yet,{' '}
         <Link
           className="underline font-semibold text-brand-ui-primary"
-          href="/locks/create"
+          href="/events/create"
         >
           let me create my own membership contract
         </Link>

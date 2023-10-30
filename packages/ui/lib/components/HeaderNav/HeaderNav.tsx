@@ -439,7 +439,7 @@ export const HeaderNav = ({
                   <img
                     src={logoImageSrc}
                     alt="logo"
-                    className="h-5 lg:h-6"
+                    className="h-6 lg:h-7"
                     style={{
                       height: logo.size ? `${logo.size}px` : undefined,
                     }}

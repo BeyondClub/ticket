@@ -17,7 +17,7 @@ export const HomeContent = () => {
 
   useEffect(() => {
     if (account) {
-      router.push('/locks')
+      router.push('/events')
     }
   })
 

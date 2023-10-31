@@ -11,6 +11,7 @@ import { addressMinify } from '~/utils/strings'
 import { MdExitToApp as DisconnectIcon } from 'react-icons/md'
 import { useConnectModal } from '~/hooks/useConnectModal'
 import { useLanguage } from '~/contexts/LanguageContext'
+import LanguageSwitcher from '../LanguageSwitcher'
 
 interface DashboardLayoutProps {
   title?: ReactNode
@@ -169,19 +170,19 @@ export const AppLayout = ({
     logo: { url: logoRedirectUri, src: logoSrc },
     menuSections: showLinks
       ? [
-          {
-            title: 'Events',
-            url: '/events',
-          },
-          {
-            title: 'Event Tickets',
-            url: '/keychain',
-          },
-          {
-            title: 'Settings',
-            url: '/settings',
-          },
-        ]
+        {
+          title: 'Events',
+          url: '/events',
+        },
+        {
+          title: 'Event Tickets',
+          url: '/keychain',
+        },
+        {
+          title: 'Settings',
+          url: '/settings',
+        },
+      ]
       : [],
   }
 
@@ -227,35 +228,38 @@ export const AppLayout = ({
               {...MENU}
               actions={[
                 {
-                  content: account ? (
-                    <div className="flex gap-2">
-                      <button
+                  content: <div className='flex gap-x-3'>
+                    <LanguageSwitcher />
+                    {account ? (
+                      <div className="flex gap-2">
+                        <button
+                          onClick={(event) => {
+                            event.preventDefault()
+                            openConnectModal()
+                          }}
+                        >
+                          <div className="flex items-center gap-2">
+                            <span className="text-brand-ui-primary">
+                              {addressMinify(account)}
+                            </span>
+                            <DisconnectIcon
+                              className="text-brand-ui-primary"
+                              size={20}
+                            />
+                          </div>
+                        </button>
+                      </div>
+                    ) : (
+                      <Button
                         onClick={(event) => {
                           event.preventDefault()
                           openConnectModal()
                         }}
                       >
-                        <div className="flex items-center gap-2">
-                          <span className="text-brand-ui-primary">
-                            {addressMinify(account)}
-                          </span>
-                          <DisconnectIcon
-                            className="text-brand-ui-primary"
-                            size={20}
-                          />
-                        </div>
-                      </button>
-                    </div>
-                  ) : (
-                    <Button
-                      onClick={(event) => {
-                        event.preventDefault()
-                        openConnectModal()
-                      }}
-                    >
-                      Connect
-                    </Button>
-                  ),
+                        Connect
+                      </Button>
+                    )}
+                  </div>
                 },
               ]}
             />

@@ -1,12 +1,24 @@
 import React from 'react'
 import type { NextPage } from 'next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'next-i18next'
 import LocksListPage from '~/components/interface/locks/List'
 import { AppLayout } from '~/components/interface/layouts/AppLayout'
 import { Button } from '@unlock-protocol/ui'
 import { useAuth } from '~/contexts/AuthenticationContext'
 import { Launcher } from '~/components/interface/Launcher'
+import { LanguageContext } from '~/contexts/LanguageContext'
 
-const Locks: NextPage = () => {
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale)),
+    },
+  }
+}
+
+
+const EventPageContent = () => {
   const { account } = useAuth()
   const [showLauncher, setShowLauncher] = React.useState(false)
 
@@ -37,10 +49,21 @@ const Locks: NextPage = () => {
     )
   }
   return (
-    <AppLayout title="Locks" description={<Description />}>
+    <AppLayout title="Events" description={<Description />}>
       <LocksListPage />
     </AppLayout>
   )
 }
 
-export default Locks
+const Events: NextPage = (props) => {
+  const { t } = useTranslation()
+
+  return (
+    <LanguageContext.Provider value={{ t }}>
+      <EventPageContent />
+    </LanguageContext.Provider>
+  )
+}
+
+
+export default Events

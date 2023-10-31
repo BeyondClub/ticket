@@ -10,6 +10,7 @@ import { queryClient } from '~/config/queryClient'
 import { ConnectModalProvider } from '~/hooks/useConnectModal'
 import { SessionProvider } from '~/hooks/useSession'
 import GlobalWrapper from '../components/interface/GlobalWrapper'
+import { appWithTranslation } from 'next-i18next'
 import '../index.css'
 
 const UnlockApp = ({ Component, pageProps }: AppProps) => {
@@ -37,4 +38,4 @@ const UnlockApp = ({ Component, pageProps }: AppProps) => {
   )
 }
 
-export default UnlockApp
+export default appWithTranslation(UnlockApp)

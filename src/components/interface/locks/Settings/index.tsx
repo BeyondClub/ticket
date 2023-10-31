@@ -18,7 +18,7 @@ import { useWeb3Service } from '~/utils/withWeb3Service'
 import { SettingGeneral } from './elements/SettingGeneral'
 import { SettingMisc } from './elements/SettingMisc'
 import { SettingPayments } from './elements/SettingPayments'
-import { SettingTab } from '~/pages/locks/settings'
+import { SettingTab } from '~/pages/events/settings'
 import { SettingEmail } from './elements/SettingEmail'
 
 interface LockSettingsPageProps {

@@ -33,6 +33,7 @@ const markdownToHtml = async (content: string) => {
   try {
     const parsedContent = await unified()
       .use(remarkParse)
+      // @ts-ignore
       .use(remarkHtml, {
         sanitize: true,
       })

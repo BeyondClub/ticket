@@ -10,6 +10,7 @@ import { useSIWE } from '~/hooks/useSIWE'
 import UnlockProvider from '~/services/unlockProvider'
 import { useConfig } from '~/utils/withConfig'
 import { ConnectButton, CustomAnchorButton } from './Custom'
+import { useTranslation } from 'next-i18next'
 
 interface UnlockAccountSignInProps {
   onSignUp(): void
@@ -50,6 +51,8 @@ export const UnlockAccountSignIn = ({
       }
     }
   }
+  const { t } = useTranslation()
+
   return (
     <div className="grid gap-2">
       <form className="grid gap-4 px-6" onSubmit={handleSubmit(onSubmit)}>
@@ -64,7 +67,7 @@ export const UnlockAccountSignIn = ({
           </div>
         ) : (
           <Input
-            label="Email"
+            label={t("common.email")}
             placeholder="your@email.com"
             {...register('email', {
               required: 'Email is required',
@@ -74,7 +77,7 @@ export const UnlockAccountSignIn = ({
           />
         )}
         <Input
-          label={signedInBefore ? 'Confirm your password' : 'Password'}
+          label={signedInBefore ? `${t("common.confirm")} ${t("common.password")}` : t("common.password")}
           type="password"
           placeholder="Password"
           {...register('password', {
@@ -89,15 +92,15 @@ export const UnlockAccountSignIn = ({
         <ConnectButton
           primary
           loading={isSubmitting}
-          // icon={
-          //   <SvgComponents.Unlock
-          //     width={40}
-          //     height={40}
-          //     className="fill-inherit"
-          //   />
-          // }
+        // icon={
+        //   <SvgComponents.Unlock
+        //     width={40}
+        //     height={40}
+        //     className="fill-inherit"
+        //   />
+        // }
         >
-          {signedInBefore ? 'Confirm' : 'Sign In'}
+          {signedInBefore ? t("common.confirm") : t("wallet.signIn")}
         </ConnectButton>
       </form>
       {!signedInBefore && (
@@ -109,7 +112,7 @@ export const UnlockAccountSignIn = ({
             }}
             className="hover:text-ui-main-600"
           >
-            No account?
+            {t("wallet.noAcc")}?
           </button>
         </div>
       )}
@@ -141,6 +144,7 @@ export const UnlockAccountSignUp = ({
     setError,
     formState: { errors, isSubmitting },
   } = useForm<SignUpForm>()
+  const { t } = useTranslation()
 
   const onSubmit = async ({ email, password }: SignUpForm) => {
     try {
@@ -160,12 +164,13 @@ export const UnlockAccountSignUp = ({
       }
     }
   }
+
   return (
     <div className="grid gap-2">
       <form className="grid gap-4 px-6" onSubmit={handleSubmit(onSubmit)}>
         <Input
           type="email"
-          label="Email"
+          label={t("common.email")}
           placeholder="your@email.com"
           {...register('email', {
             required: {
@@ -176,7 +181,7 @@ export const UnlockAccountSignUp = ({
           error={errors.email?.message}
         />
         <Input
-          label="Password"
+          label={t("common.password")}
           type="password"
           placeholder="Password"
           {...register('password', {
@@ -192,7 +197,7 @@ export const UnlockAccountSignUp = ({
           error={errors.password?.message}
         />
         <Input
-          label="Confirm Password"
+          label={`${t("common.confirm")} ${t("common.password")}`}
           type="password"
           placeholder="Re-type your password"
           {...register('confirmPassword', {
@@ -213,15 +218,15 @@ export const UnlockAccountSignUp = ({
           type="submit"
           primary
           loading={isSubmitting}
-          // icon={
-          //   <SvgComponents.Unlock
-          //     width={40}
-          //     height={40}
-          //     className="fill-inherit"
-          //   />
-          // }
+        // icon={
+        //   <SvgComponents.Unlock
+        //     width={40}
+        //     height={40}
+        //     className="fill-inherit"
+        //   />
+        // }
         >
-          Create an account
+          {t("wallet.createAcc")}
         </ConnectButton>
       </form>
       <div className="flex items-center justify-end px-6">
@@ -232,7 +237,7 @@ export const UnlockAccountSignUp = ({
           }}
           className="hover:text-ui-main-600"
         >
-          Have an account?
+          {t("wallet.haveAcc")}?
         </button>
       </div>
     </div>
@@ -250,6 +255,7 @@ export const ConnectUnlockAccount = ({ onExit }: Props) => {
   const { account, connected } = useAuth()
   const config = useConfig()
   const { signOut } = useSIWE()
+  const { t } = useTranslation()
 
   const requireSignIn = account && !connected
 
@@ -309,7 +315,7 @@ export const ConnectUnlockAccount = ({ onExit }: Props) => {
               rel="noopener noreferrer"
               href="https://ethereum.org/en/wallets/find-wallet/"
             >
-              Get a crypto wallet
+              {t("wallet.get")}
             </CustomAnchorButton>
             <ConnectButton
               icon={<WalletIcon size={24} />}
@@ -318,7 +324,7 @@ export const ConnectUnlockAccount = ({ onExit }: Props) => {
                 onExit()
               }}
             >
-              <span>Back to using your crypto wallet</span>
+              <span>{t("wallet.goBack")}</span>
             </ConnectButton>
           </div>
         )}

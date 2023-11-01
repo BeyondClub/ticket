@@ -7,6 +7,7 @@ import { useSIWE } from '~/hooks/useSIWE'
 import { useCallback, useEffect, useState } from 'react'
 import { useConnectModal } from '~/hooks/useConnectModal'
 import BlockiesSvg from 'blockies-react-svg'
+import { useTranslation } from 'next-i18next'
 
 export const ConnectedWallet = () => {
   const { deAuthenticate, displayAccount, connected } = useAuth()
@@ -18,6 +19,7 @@ export const ConnectedWallet = () => {
   const [_, copy] = useClipboard(displayAccount!, {
     successDuration: 1000,
   })
+  const { t } = useTranslation()
 
   const onSignIn = useCallback(async () => {
     setIsSigningIn(true)
@@ -64,16 +66,16 @@ export const ConnectedWallet = () => {
         )}
         {session && !isDisconnecting && (
           <div className="text-gray-700">
-            You are successfully verified as {minifyAddress(displayAccount!)}
+            {t("wallet.conf.verified")} {minifyAddress(displayAccount!)}
           </div>
         )}
         {!session && !isDisconnecting && (
           <div className="flex flex-col gap-4">
             <h3 className="text-gray-700">
-              Sign message to confirm ownership of your account
+              {t("wallet.conf.msg")}
             </h3>
             <Button loading={isSigningIn} onClick={onSignIn}>
-              Confirm Ownership
+              {t("wallet.conf.confOwnership")}
             </Button>
           </div>
         )}
@@ -84,7 +86,7 @@ export const ConnectedWallet = () => {
           loading={isDisconnecting}
           icon={<DisconnectIcon size={24} />}
         >
-          Disconnect
+          {t("wallet.disconnect")}
         </ConnectButton>
       </div>
     </div>

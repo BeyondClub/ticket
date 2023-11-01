@@ -10,7 +10,7 @@ import { config } from '~/config/app'
 import { addressMinify } from '~/utils/strings'
 import { MdExitToApp as DisconnectIcon } from 'react-icons/md'
 import { useConnectModal } from '~/hooks/useConnectModal'
-import { useLanguage } from '~/contexts/LanguageContext'
+import { useTranslation } from 'next-i18next'
 import LanguageSwitcher from '../LanguageSwitcher'
 
 interface DashboardLayoutProps {
@@ -155,7 +155,7 @@ export const AppLayout = ({
   const { termsAccepted, saveTermsAccepted, termsLoading } = useTermsOfService()
   const config = useConfig()
   const { openConnectModal } = useConnectModal()
-  const { t } = useLanguage()
+  const { t } = useTranslation()
 
   const showLogin = authRequired && !account
 
@@ -256,7 +256,7 @@ export const AppLayout = ({
                           openConnectModal()
                         }}
                       >
-                        Connect
+                        {t("wallet.connect")}
                       </Button>
                     )}
                   </div>

@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { useTranslation } from 'next-i18next'
 import { FiExternalLink as ExternalLinkIcon } from 'react-icons/fi'
-import { useLanguage } from '~/contexts/LanguageContext'
 
 const options = (cta1: string) => [
   {
@@ -27,7 +27,7 @@ const options = (cta1: string) => [
 ]
 
 export const Launcher = () => {
-  const { t } = useLanguage()
+  const { t } = useTranslation()
 
   return (
     <div className="flex flex-col items-center text-center">

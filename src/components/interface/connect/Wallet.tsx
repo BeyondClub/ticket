@@ -5,6 +5,8 @@ import {
   useAuthenticate,
 } from '~/hooks/useAuthenticate'
 import { ConnectButton } from './Custom'
+import { useTranslation } from 'next-i18next'
+
 interface ConnectWalletProps {
   onUnlockAccount: () => void
 }
@@ -13,6 +15,7 @@ export const ConnectWallet = ({ onUnlockAccount }: ConnectWalletProps) => {
   const { authenticateWithProvider } = useAuthenticate()
   const [recentlyUsedProvider] = useLocalStorage(RECENTLY_USED_PROVIDER, null)
   const [isConnecting, setIsConnecting] = useState('')
+  const { t } = useTranslation()
 
   const createOnConnectHandler = (provider: any) => {
     const handler: MouseEventHandler<HTMLButtonElement> = async (event) => {
@@ -58,8 +61,7 @@ export const ConnectWallet = ({ onUnlockAccount }: ConnectWalletProps) => {
       </div>
       <div className="grid gap-4 p-6">
         <div className="px-2 text-sm text-center text-gray-600">
-          If you previously created an unlock account or do not have a wallet,
-          use this option.
+          {t('wallet.msg1.1')} unlock {t('wallet.msg1.2')}
         </div>
         <ConnectButton
           // icon={<SvgComponents.Unlock width={40} height={40} />}
@@ -70,7 +72,7 @@ export const ConnectWallet = ({ onUnlockAccount }: ConnectWalletProps) => {
             onUnlockAccount()
           }}
         >
-          Unlock Account
+          Unlock {t('wallet.acc')}
         </ConnectButton>
       </div>
     </div>

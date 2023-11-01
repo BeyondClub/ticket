@@ -1,4 +1,5 @@
 import { classed, ComponentProps } from '@tw-classed/react'
+import { useTranslation } from 'next-i18next'
 import { forwardRef, ReactNode } from 'react'
 import { CgSpinnerAlt as SpinnerIcon } from 'react-icons/cg'
 
@@ -35,6 +36,8 @@ interface Props extends ComponentProps<typeof CustomButton> {
 
 export const ConnectButton = forwardRef<HTMLButtonElement, Props>(
   ({ loading, icon, children, highlight, ...props }, ref) => {
+    const { t } = useTranslation()
+
     return (
       <CustomButton
         {...props}
@@ -45,7 +48,7 @@ export const ConnectButton = forwardRef<HTMLButtonElement, Props>(
         <div className="flex flex-col items-start w-full">
           {children}
           {highlight && (
-            <div className="text-xs text-ui-main-400">Recently used</div>
+            <div className="text-xs text-ui-main-400">{t("wallet.recentlyUsed")}</div>
           )}
         </div>
         {loading ? (

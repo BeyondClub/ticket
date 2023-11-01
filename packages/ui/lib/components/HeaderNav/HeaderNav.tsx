@@ -12,6 +12,7 @@ import { Button } from '../Button/Button'
 import { Icon } from '../Icon/Icon'
 import { Link } from '../Link/Link'
 import { SOCIAL_LINKS } from '../constants'
+import { useRouter } from 'next/router'
 
 export interface NavbarMenuProps {
   title: string
@@ -45,25 +46,25 @@ export type NavOptionProps =
 
 export type MenuSectionProps =
   | {
-      title: string
-      small?: boolean
-      options: NavOptionProps[]
-    }
+    title: string
+    small?: boolean
+    options: NavOptionProps[]
+  }
   | {
-      title: string
-      small?: boolean
-      url: string
-    }
+    title: string
+    small?: boolean
+    url: string
+  }
 
 export type ActionsProps =
   | {
-      title: string
-      url: string
-      icon?: IconType
-    }
+    title: string
+    url: string
+    icon?: IconType
+  }
   | {
-      content: ReactNode
-    }
+    content: ReactNode
+  }
 export interface NavbarProps {
   menuSections: MenuSectionProps[]
   actions: ActionsProps[]
@@ -215,13 +216,14 @@ const NavSectionDesktop = (section: MenuSectionProps) => {
 
   const Title = ({ title, open }: any) => {
     const [isActive, setActive] = useState(false)
+    const router = useRouter()
     useEffect(() => {
-      setActive(window && window?.location?.pathname === url)
+      setActive(window && router.asPath === url)
     }, [])
 
     return (
       <span
-        className={`text-lg duration-200  hover:text-brand-ui-primary md:p-4 ${
+        className={`text-lg duration-200 hover:text-brand-ui-primary md:p-4 ${
           open || isActive ? 'text-brand-ui-primary' : 'text-gray-700'
         }`}
       >
@@ -257,9 +259,8 @@ const NavSectionDesktop = (section: MenuSectionProps) => {
           <>
             <Popover.Button className="outline-none">
               <span
-                className={`text-lg duration-200 md:p-4 hover:text-brand-ui-primary ${
-                  open ? 'text-brand-ui-primary' : 'text-gray-700'
-                }`}
+                className={`text-lg duration-200 md:p-4 hover:text-brand-ui-primary ${open ? 'text-brand-ui-primary' : 'text-gray-700'
+                  }`}
               >
                 {title}
               </span>
@@ -300,9 +301,8 @@ const NavSectionMobile = ({
     return (
       <div className="flex items-center justify-between" {...props}>
         <span
-          className={`text-2xl font-bold duration-200  hover:text-brand-ui-primary ${
-            open ? 'text-brand-ui-primary' : 'text-brand-dark'
-          }`}
+          className={`text-2xl font-bold duration-200  hover:text-brand-ui-primary ${open ? 'text-brand-ui-primary' : 'text-brand-dark'
+            }`}
         >
           {text}
         </span>
@@ -432,9 +432,8 @@ export const HeaderNav = ({
               )}
               <Link href={logoUrl}>
                 <div
-                  className={`grid items-center gap-1 divide-x md:gap-2 ${
-                    hasDomain ? 'grid-cols-2' : ''
-                  }`}
+                  className={`grid items-center gap-1 divide-x md:gap-2 ${hasDomain ? 'grid-cols-2' : ''
+                    }`}
                 >
                   <img
                     src={logoImageSrc}
@@ -499,9 +498,8 @@ export const HeaderNav = ({
       {/* mobile menu */}
       {menuExpanded && (
         <div
-          className={`fixed bottom-0 left-0 right-0 z-10 block overflow-scroll pb-20 top-24 lg:hidden ${
-            extraClass?.mobile ?? ''
-          }`}
+          className={`fixed bottom-0 left-0 right-0 z-10 block overflow-scroll pb-20 top-24 lg:hidden ${extraClass?.mobile ?? ''
+            }`}
         >
           <div className="flex flex-col gap-10">
             <NavSectionMobile menuSections={menuSections} />

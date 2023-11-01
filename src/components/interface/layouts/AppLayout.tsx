@@ -171,15 +171,15 @@ export const AppLayout = ({
     menuSections: showLinks
       ? [
         {
-          title: 'Events',
+          title: t("menu.events"),
           url: '/events',
         },
         {
-          title: 'Event Tickets',
+          title: t("menu.event_tickets"),
           url: '/keychain',
         },
         {
-          title: 'Settings',
+          title: t("menu.settings"),
           url: '/settings',
         },
       ]

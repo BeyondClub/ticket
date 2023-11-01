@@ -55,7 +55,7 @@ export const EventContentWithProps = ({
       showLinks={false}
       authRequired={false}
       logoRedirectUrl="/event"
-      logoImageUrl="/images/svg/logo-unlock-events.svg"
+      logoImageUrl="/images/svg/logo-beyondclub.svg"
     >
       <Head>
         <title>{pageTitle('Event')}</title>

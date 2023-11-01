@@ -6,6 +6,16 @@ import {
   useEmailListUnSubscribe,
 } from '~/hooks/useEmailSubscription'
 import { Button } from '@unlock-protocol/ui'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale)),
+    },
+  }
+}
+
 
 export const InvalidSubscribeLink = () => {
   return (

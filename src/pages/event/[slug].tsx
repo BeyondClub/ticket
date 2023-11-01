@@ -1,11 +1,13 @@
 import React from 'react'
 import { EventContentWithProps } from '~/components/content/EventContent'
 import { storage } from '~/config/storage'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 interface Params {
   params: {
     slug: string
-  }
+  },
+  locale: string
 }
 
 interface EventPageProps {
@@ -16,7 +18,7 @@ interface EventPageProps {
   }
 }
 
-export const getServerSideProps = async ({ params }: Params) => {
+export const getServerSideProps = async ({ params, locale }: Params) => {
   const { data: lockSettings } = await storage.getLockSettingsBySlug(
     params.slug
   )
@@ -30,6 +32,7 @@ export const getServerSideProps = async ({ params }: Params) => {
         lockAddress: lockSettings?.lockAddress,
         network: lockSettings?.network,
         metadata: lockMetadataResponse?.data,
+        ...(await serverSideTranslations(locale)),
       },
     }
   }
@@ -38,6 +41,7 @@ export const getServerSideProps = async ({ params }: Params) => {
     props: {
       lockAddress: lockSettings?.lockAddress,
       network: lockSettings?.network,
+      ...(await serverSideTranslations(locale)),
     },
   }
 }

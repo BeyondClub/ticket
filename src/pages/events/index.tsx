@@ -6,6 +6,7 @@ import { AppLayout } from '~/components/interface/layouts/AppLayout'
 import { Button } from '@unlock-protocol/ui'
 import { useAuth } from '~/contexts/AuthenticationContext'
 import { Launcher } from '~/components/interface/Launcher'
+import { useTranslation } from 'next-i18next'
 
 export async function getStaticProps({ locale }) {
   return {
@@ -18,13 +19,13 @@ export async function getStaticProps({ locale }) {
 const Events: NextPage = () => {
   const { account } = useAuth()
   const [showLauncher, setShowLauncher] = React.useState(false)
+  const { t } = useTranslation()
 
   const Description = () => {
     return (
       <div className="flex flex-col gap-4 md:gap-0 md:justify-between md:flex-row">
         <span className="w-full max-w-lg text-base text-gray-700">
-          A Lock is a membership smart contract you create, deploy, and own on
-          Unlock Protocol
+          {t('events.description')}
         </span>
         {account && (
           <Button
@@ -32,7 +33,7 @@ const Events: NextPage = () => {
             className="md:auto"
             size="large"
           >
-            Create Lock
+            {t('events.create')}
           </Button>
         )}
       </div>
@@ -46,7 +47,7 @@ const Events: NextPage = () => {
     )
   }
   return (
-    <AppLayout title="Events" description={<Description />}>
+    <AppLayout title={t("menu.events")} description={<Description />}>
       <LocksListPage />
     </AppLayout>
   )

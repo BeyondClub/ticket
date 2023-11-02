@@ -14,6 +14,7 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { usePlacesWidget } from 'react-google-autocomplete'
 import { Controller, FormProvider, useForm, useWatch } from 'react-hook-form'
+import { useTranslation } from 'next-i18next'
 import { BiLogoZoom as ZoomIcon } from 'react-icons/bi'
 import { BsArrowLeft as ArrowBackIcon } from 'react-icons/bs'
 import { BalanceWarning } from '~/components/interface/locks/Create/elements/BalanceWarning'
@@ -148,6 +149,8 @@ export const Form = ({ onSubmit }: FormProps) => {
   const minEndDate = dayjs(ticket?.event_start_date).format('YYYY-MM-DD')
 
   const router = useRouter()
+  const { t } = useTranslation()
+
   return (
     <FormProvider {...methods}>
       <div className="grid grid-cols-[50px_1fr_50px] items-center mb-4">
@@ -159,21 +162,21 @@ export const Form = ({ onSubmit }: FormProps) => {
           />
         </Button>
         <h1 className="text-xl font-bold text-center text-brand-dark">
-          Creating your Event
+          {t("events.creating")}
         </h1>
       </div>
 
       <form className="mb-6" onSubmit={methods.handleSubmit(onSubmit)}>
         <div className="grid gap-6">
-          <Disclosure label="Basic Information" defaultOpen>
+          <Disclosure label={t("events.form.basicInfo.title")} defaultOpen>
             <p className="mb-5">
-              All of these fields can also be adjusted later.
+              {t("events.form.basicInfo.description")}
             </p>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div className="order-2 md:order-1">
                 <ImageUpload
-                  description="This illustration will be used for the NFT tickets. Use 512 by 512 pixels for best results."
+                  description={t("events.form.basicInfo.imgDescription")}
                   isUploading={isUploading}
                   preview={metadataImage!}
                   onChange={async (fileOrFileUrl: any) => {
@@ -195,14 +198,14 @@ export const Form = ({ onSubmit }: FormProps) => {
                   {...register('lock.name', {
                     required: {
                       value: true,
-                      message: 'Name is required',
+                      message: t("events.form.basicInfo.name.error"),
                     },
                   })}
                   type="text"
-                  placeholder="Name"
-                  label="Event name"
+                  placeholder={t("common.name")}
+                  label={t("common.eventName")}
                   description={
-                    'Enter the name of your event. It will appear on the NFT tickets.'
+                    t("events.form.basicInfo.name.description")
                   }
                   error={errors.lock?.name?.message}
                 />
@@ -211,21 +214,21 @@ export const Form = ({ onSubmit }: FormProps) => {
                   {...register('metadata.description', {
                     required: {
                       value: true,
-                      message: 'Please add a description for your event',
+                      message: t("events.form.basicInfo.desc.error"),
                     },
                   })}
-                  label="Description"
-                  placeholder="Write description here."
+                  label={t("common.description")}
+                  placeholder={t("events.form.basicInfo.desc.placeholder")}
                   description={
                     <p>
-                      Enter a description for your event.{' '}
+                      {t("events.form.basicInfo.desc.description.1")}{' '}
                       <a
                         className="text-brand-ui-primary hover:underline"
                         target="_blank"
                         rel="noopener noreferrer"
                         href="https://www.markdownguide.org/cheat-sheet"
                       >
-                        Markdown is supported.
+                        {t("events.form.basicInfo.desc.description.2")}
                       </a>
                     </p>
                   }
@@ -243,12 +246,11 @@ export const Form = ({ onSubmit }: FormProps) => {
                     )
                   }}
                   options={networkOptions}
-                  label="Network"
+                  label={t("common.network")}
                   defaultValue={network}
                   description={
                     <p>
-                      This is the network on which your ticketing contract will
-                      be deployed.{' '}
+                      {t("events.form.basicInfo.network.description.1")}{' '}
                       {details.network && (
                         <>{networkDescription(details.network)}</>
                       )}
@@ -267,11 +269,10 @@ export const Form = ({ onSubmit }: FormProps) => {
             </div>
           </Disclosure>
 
-          <Disclosure label="Location, Date and Time" defaultOpen>
+          <Disclosure label={t("events.form.location.title")} defaultOpen>
             <div className="grid">
               <p className="mb-5">
-                This information will be public and included on each of the NFT
-                tickets. Again, it can be adjusted later.
+                {t("events.form.location.description")}
               </p>
               <div className="grid items-center gap-4 align-top sm:grid-cols-2">
                 <div className="flex flex-col self-start gap-4 justify-top">
@@ -310,7 +311,7 @@ export const Form = ({ onSubmit }: FormProps) => {
                       }}
                       min={today}
                       type="date"
-                      label="Start date"
+                      label={t("events.form.location.startDate")}
                       error={
                         // @ts-expect-error Property 'event_start_date' does not exist on type 'FieldError | Merge<FieldError, FieldErrorsImpl<any>>'.
                         errors.metadata?.ticket?.event_start_date?.message || ''
@@ -319,7 +320,7 @@ export const Form = ({ onSubmit }: FormProps) => {
                     <Input
                       {...register('metadata.ticket.event_start_time', {})}
                       type="time"
-                      label="Start time"
+                      label={t("events.form.location.startTime")}
                       error={
                         // @ts-expect-error Property 'event_start_time' does not exist on type 'FieldError | Merge<FieldError, FieldErrorsImpl<any>>'.
                         errors.metadata?.ticket?.event_start_time?.message || ''
@@ -345,7 +346,7 @@ export const Form = ({ onSubmit }: FormProps) => {
                       })}
                       type="date"
                       min={minEndDate}
-                      label="End date"
+                      label={t("events.form.location.endDate")}
                       error={
                         // @ts-expect-error Property 'event_start_date' does not exist on type 'FieldError | Merge<FieldError, FieldErrorsImpl<any>>'.
                         errors.metadata?.ticket?.event_end_date?.message || ''
@@ -355,7 +356,7 @@ export const Form = ({ onSubmit }: FormProps) => {
                       {...register('metadata.ticket.event_end_time', {})}
                       type="time"
                       min={minEndTime}
-                      label="End time"
+                      label={t("events.form.location.endTime")}
                       error={
                         // @ts-expect-error Property 'event_end_time' does not exist on type 'FieldError | Merge<FieldError, FieldErrorsImpl<any>>'.
                         errors.metadata?.ticket?.event_end_time?.message || ''
@@ -385,7 +386,7 @@ export const Form = ({ onSubmit }: FormProps) => {
                               }
                             }
                           )}
-                          label="Timezone"
+                          label={t("events.form.location.timezone")}
                           defaultValue={value}
                         />
                       )
@@ -395,10 +396,10 @@ export const Form = ({ onSubmit }: FormProps) => {
                   <div className="mt-6">
                     <div className="flex items-center justify-between">
                       <label className="px-1 mb-2 text-base" htmlFor="">
-                        Location
+                        {t("events.form.location.address")}
                       </label>
                       <ToggleSwitch
-                        title="In person"
+                        title={t("events.form.location.inPerson")}
                         enabled={isInPerson}
                         setEnabled={setIsInPerson}
                         onChange={() => {
@@ -431,19 +432,18 @@ export const Form = ({ onSubmit }: FormProps) => {
             </div>
           </Disclosure>
 
-          <Disclosure label="Price and Capacity" defaultOpen>
+          <Disclosure label={t("events.form.price.title")} defaultOpen>
             <div className="grid ">
               <p>
-                These settings can also be changed, but only by sending on-chain
-                transactions.
+                {t("events.form.price.description")}
               </p>
               <div className="relative flex flex-col mt-4">
                 <div className="flex items-center justify-between">
                   <label className="" htmlFor="">
-                    Currency & Price:
+                    {t("events.form.price.currNPrice")}
                   </label>
                   <ToggleSwitch
-                    title="Free"
+                    title={t("common.free")}
                     enabled={isFree}
                     setEnabled={setIsFree}
                     onChange={(enable: boolean) => {
@@ -493,10 +493,10 @@ export const Form = ({ onSubmit }: FormProps) => {
 
               <div className="flex items-center justify-between mt-4">
                 <label className="" htmlFor="">
-                  Capacity:
+                  {t("events.form.price.capacity")}
                 </label>
                 <ToggleSwitch
-                  title="Unlimited"
+                  title={t("common.unlimited")}
                   enabled={isUnlimitedCapacity}
                   setEnabled={setIsUnlimitedCapacity}
                   onChange={(enabled) => {
@@ -520,9 +520,9 @@ export const Form = ({ onSubmit }: FormProps) => {
                 step={1}
                 pattern="\d+"
                 type="number"
-                placeholder="Capacity"
+                placeholder={t("events.form.price.capacity")}
                 description={
-                  'This is the maximum number of tickets for your event. '
+                  t("events.form.price.capacityDesc")
                 }
                 error={errors.lock?.maxNumberOfKeys?.message}
               />
@@ -532,14 +532,14 @@ export const Form = ({ onSubmit }: FormProps) => {
           <div className="flex flex-col justify-center gap-6">
             {Object.keys(errors).length > 0 && (
               <div className="px-2 text-red-600">
-                Please make sure you complete all the required fields.{' '}
+                {t("common.form.error.complete")}{' '}
               </div>
             )}
             <Button
               disabled={Object.keys(errors).length > 0}
               className="w-full"
             >
-              Create your event
+              {t("events.createYourEvent")}
             </Button>
           </div>
         </div>

@@ -27,13 +27,15 @@ interface DashboardLayoutProps {
 
 export const WalletNotConnected = () => {
   const { openConnectModal } = useConnectModal()
+  const { t } = useTranslation()
+
   return (
     <ImageBar
       src="/images/illustrations/wallet-not-connected.svg"
       description={
         <>
           <span>
-            Wallet is not connected yet.{' '}
+            {t("wallet.notConnected")}{' '}
             <button
               onClick={(event) => {
                 event.preventDefault()
@@ -41,7 +43,7 @@ export const WalletNotConnected = () => {
               }}
               className="cursor-pointer text-brand-ui-primary"
             >
-              Connect it now
+              {t("wallet.connectNow")}
             </button>
           </span>
         </>

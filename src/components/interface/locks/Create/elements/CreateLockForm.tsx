@@ -15,6 +15,7 @@ import { useConfig } from '~/utils/withConfig'
 import { useWeb3Service } from '~/utils/withWeb3Service'
 import { SelectCurrencyModal } from '../modals/SelectCurrencyModal'
 import { BalanceWarning } from './BalanceWarning'
+import { useTranslation } from 'next-i18next'
 
 export interface LockFormProps {
   name: string
@@ -36,24 +37,25 @@ interface CreateLockFormProps {
 
 export const networkDescription = (network: number) => {
   const { description, url, faucet, nativeCurrency } = networks[network!]
+  const { t } = useTranslation()
+
   return (
     <>
-      {description}{' '}
+      {t(`networks.description.${(description as string).trim().toLowerCase().replace(/[ .]/g, "_")}`)} {' '}
       {url && (
         <>
           <Link className="underline" href={url} target="_blank">
-            Learn more
+            {t("networks.description.learnMore")}
           </Link>
-          .
         </>
       )}
       {faucet && (
         <>
           {' '}
           <br />
-          Need some {nativeCurrency.name} to pay for gas?{' '}
+          {t("networks.description.faucet.1")} {nativeCurrency.name} {t("networks.description.faucet.2")}{' '}
           <Link className="underline" href={faucet} target="_blank">
-            Try this faucet
+            {t("networks.description.faucet.3")}
           </Link>
           .
         </>

@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'next-i18next'
 import { useConfig } from '~/utils/withConfig'
 
 interface LinkProps {
@@ -60,15 +61,16 @@ const CallToAction = ({ network }: { network: number }) => {
 
   const currency = config.networks[network!].nativeCurrency.symbol
   const networkName = config.networks[network!].name
+  const { t } = useTranslation()
+
   return (
     <WarningBar>
       <>
         {' '}
         <span>
-          {` You currently do not have any ${currency} token to pay for gas to deploy
-  on the ${networkName} network.`}
+          {`${t("networks.balanceWarning.description.1")} ${currency} ${t("networks.balanceWarning.description.2")} ${networkName}.`}
         </span>
-        <>
+        {/* <>
           <span>{` ${info?.label}`}</span>
           <a
             className="underline"
@@ -78,7 +80,7 @@ const CallToAction = ({ network }: { network: number }) => {
           >
             {info.ref}
           </a>
-        </>
+        </> */}
       </>
     </WarningBar>
   )

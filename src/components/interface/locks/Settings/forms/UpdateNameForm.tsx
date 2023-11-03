@@ -62,7 +62,7 @@ export const UpdateNameForm = ({
   }
 
   const disabledInput = disabled || changeNameMutation.isLoading
-  const updateMetadataUrl = `/locks/metadata?lockAddress=${lockAddress}&network=${network}`
+  const updateMetadataUrl = `/events/metadata?lockAddress=${lockAddress}&network=${network}`
   return (
     <form className="flex flex-col gap-6" onSubmit={handleSubmit(onChangeName)}>
       <div className="relative">

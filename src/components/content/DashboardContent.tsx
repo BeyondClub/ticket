@@ -6,7 +6,7 @@ export const DashboardContent = () => {
 
   useEffect(() => {
     // force redirect to new lock page
-    router.push('/locks')
+    router.push('/events')
   }, [router])
 
   return null

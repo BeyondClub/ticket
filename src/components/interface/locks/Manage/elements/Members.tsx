@@ -119,7 +119,7 @@ export const Members = ({
     filters?.filterKey !== 'owner' ||
     filters?.query?.length > 0
 
-  const checkoutLink = `/locks/checkout-url?lock=${lockAddress}&network=${network}`
+  const checkoutLink = `/events/checkout-url?lock=${lockAddress}&network=${network}`
 
   if (loading) {
     return (

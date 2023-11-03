@@ -13,6 +13,7 @@ import deployErrorAnimation from '~/animations/deploy-error.json'
 import { durationsAsTextFromSeconds } from '~/utils/durations'
 import { ONE_DAY_IN_SECONDS } from '~/constants'
 import { useAuth } from '~/contexts/AuthenticationContext'
+import { useTranslation } from 'next-i18next'
 
 interface DeployStatusProps {
   title: string
@@ -30,31 +31,6 @@ interface CreateLockFormSummaryProps {
 }
 
 export type DeployStatus = 'progress' | 'deployed' | 'txError'
-
-const DEPLOY_STATUS_MAPPING: Record<DeployStatus, DeployStatusProps> = {
-  progress: {
-    title: 'This will take few seconds...',
-    description: 'Feel free to wait here or return to main page.',
-    status: 'In progress...',
-    nextNext: 'Return to Lock list',
-    nextUrl: () => '/locks',
-  },
-  deployed: {
-    title: '🚀​ Your lock was successfully deployed',
-    description: "Let's start configuring it!",
-    status: 'Completed!',
-    nextNext: 'Start managing it!',
-    nextUrl: (lockAddress: string, network: string) =>
-      `/locks/lock?address=${lockAddress}&network=${network}`,
-  },
-  txError: {
-    title: 'Something went wrong...',
-    description: 'Please try again.',
-    status: 'Not completed.',
-    nextNext: 'Close',
-    nextUrl: () => '/locks',
-  },
-}
 
 export function AnimationContent({ status }: { status: DeployStatus }) {
   const animationClass = `h-60 md:h-96`
@@ -123,6 +99,8 @@ export const CreateLockFormSummary = ({
     }
   )
 
+  const { t } = useTranslation()
+
   const hasError = isError && data
   const isDeployed =
     (data?.confirmations || 0) > requiredConfirmations && !isError
@@ -130,8 +108,33 @@ export const CreateLockFormSummary = ({
   const currentStatus: DeployStatus = hasError
     ? 'txError'
     : isDeployed
-    ? 'deployed'
-    : 'progress'
+      ? 'deployed'
+      : 'progress'
+
+  const DEPLOY_STATUS_MAPPING: Record<DeployStatus, DeployStatusProps> = {
+    progress: {
+      title: t("progress.willTakeFewSec"),
+      description: t("progress.feelFreeWait"),
+      status: t("progress.inProgress"),
+      nextNext: t("progress.returnToEvents"),
+      nextUrl: () => '/events',
+    },
+    deployed: {
+      title: `🚀​ ${t("events.deploy.deployed.title")}`,
+      description: t("events.deploy.deployed.description"),
+      status: t("events.deploy.deployed.status"),
+      nextNext: t("events.deploy.deployed.next"),
+      nextUrl: (lockAddress: string, network: string) =>
+        `/events/lock?address=${lockAddress}&network=${network}`,
+    },
+    txError: {
+      title: t("events.deploy.error.title"),
+      description: t("events.deploy.error.description"),
+      status: t("events.deploy.error.status"),
+      nextNext: t("events.deploy.error.next"),
+      nextUrl: () => '/events',
+    },
+  }
 
   const { title, description, status, nextNext, nextUrl } =
     DEPLOY_STATUS_MAPPING[currentStatus]
@@ -139,8 +142,8 @@ export const CreateLockFormSummary = ({
 
   const durationAsText = formData?.expirationDuration
     ? durationsAsTextFromSeconds(
-        formData.expirationDuration * ONE_DAY_IN_SECONDS
-      )
+      formData.expirationDuration * ONE_DAY_IN_SECONDS
+    )
     : null
 
   return (
@@ -156,7 +159,7 @@ export const CreateLockFormSummary = ({
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2">
               <div className="flex flex-col">
-                <span className="text-base">Status</span>
+                <span className="text-base">{t("events.creation.status")}</span>
                 <span className="text-lg font-bold">{status}</span>
               </div>
               {transactionDetailUrl && (
@@ -166,7 +169,7 @@ export const CreateLockFormSummary = ({
                   className="inline-flex items-center gap-3 mt-3 text-lg font-bold lg:mt-auto lg:ml-auto text-brand-ui-primary"
                   href={transactionDetailUrl}
                 >
-                  <span>See on block explorer</span>
+                  <span>{t("events.creation.viewBlockExp")}</span>
                   <ExternalLinkIcon size={20} />
                 </a>
               )}
@@ -178,29 +181,29 @@ export const CreateLockFormSummary = ({
           className="flex flex-col gap-8 px-6 py-10 md:px-8 grow basis-0"
         >
           <div className="flex flex-col gap-2">
-            <span className="text-base">Network</span>
+            <span className="text-base">{t("common.network")}</span>
             <span className="text-xl font-bold">{networkName}</span>
           </div>
           <div className="flex flex-col gap-2">
-            <span className="text-base">Name</span>
+            <span className="text-base">{t("common.name")}</span>
             <span className="text-xl font-bold">{formData?.name}</span>
           </div>
           <div className="flex flex-col gap-2">
-            <span className="text-base">Membership duration</span>
+            <span className="text-base">{t("events.deploy.form.duration.title2")}</span>
             <span className="text-xl font-bold">
-              {unlimitedDuration ? 'Unlimited' : durationAsText}
+              {unlimitedDuration ? t("common.unlimited") : durationAsText}
             </span>
           </div>
           <div className="flex flex-col gap-2">
             <span className="text-base">
-              Maximum number of memberships for sale
+              {t("events.deploy.form.no.title2")}
             </span>
             <span className="text-xl font-bold">
-              {unlimitedQuantity ? 'Unlimited' : formData?.maxNumberOfKeys}
+              {unlimitedQuantity ? t("common.unlimited") : formData?.maxNumberOfKeys}
             </span>
           </div>
           <div className="flex flex-col gap-2">
-            <span className="text-base">Currency & Price</span>
+            <span className="text-base">{t("events.deploy.form.price.title")}</span>
             <KeyPrice price={formData?.keyPrice} symbol={symbol} />
           </div>
         </div>

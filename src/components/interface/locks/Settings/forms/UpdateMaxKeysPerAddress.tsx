@@ -74,7 +74,7 @@ export const UpdateMaxKeysPerAddress = ({
     updateMaxKeysPerAddressMutation.isLoading ||
     !canUpdateMaxKeysPerAddress
 
-  const updateVersionUrl = `/locks/settings?address=${lockAddress}&network=${network}&defaultTab=advanced`
+  const updateVersionUrl = `/events/settings?address=${lockAddress}&network=${network}&defaultTab=advanced`
 
   return (
     <form

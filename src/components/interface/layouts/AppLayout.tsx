@@ -200,27 +200,27 @@ export const AppLayout = ({
       >
         <div className="flex flex-col justify-center gap-4 bg-white">
           <span className="text-base">
-            No account required{' '}
+            {t("terms.noAcc")}{' '}
             <span role="img" aria-label="stars">
               ✨
             </span>
-            , but you need to agree to our{' '}
+            , {t("terms.needToAgree")}{' '}
             <a
               className="outline-none text-brand-ui-primary"
               href={`${config.unlockStaticUrl}/terms`}
             >
-              Terms of Service
+              {t("terms.terms")}
             </a>{' '}
-            and{' '}
+            {t("common.and")}{' '}
             <a
               className="outline-none text-brand-ui-primary"
               href={`${config.unlockStaticUrl}/privacy`}
             >
-              Privacy Policy
+              {t("terms.privacy")}
             </a>
             .
           </span>
-          <Button onClick={saveTermsAccepted}>I agree</Button>
+          <Button onClick={saveTermsAccepted}>{t("terms.agree")}</Button>
         </div>
       </Modal>
       <div className="w-full">

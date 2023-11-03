@@ -24,6 +24,7 @@ import { ReturningButton } from '../ReturningButton'
 import { Web3Service } from '@unlock-protocol/unlock-js'
 import { networks } from '@unlock-protocol/networks'
 import { sleeper } from '~/utils/promise'
+import { useTranslation } from 'next-i18next'
 
 interface MintingScreenProps {
   lockName: string
@@ -57,25 +58,26 @@ export const MintingScreen = ({
     }
   )
   const hasTokenId = !!tokenId
+  const { t } = useTranslation()
 
   const content = useMemo(() => {
     switch (mint?.status) {
       case 'PROCESSING': {
         return {
-          title: 'Minting NFT',
-          text: 'Minting NFT...',
+          title: t("minting.mintingNft"),
+          text: t("minting.mintingNft") + "...",
         }
       }
       case 'FINISHED': {
         return {
-          title: 'You have NFT!',
-          text: 'Successfully minted NFT',
+          title: t("minting.success"),
+          text: t("minting.successMsg"),
         }
       }
       case 'ERROR': {
         return {
-          title: 'Minting failed',
-          text: 'Failed to mint NFT',
+          title: t("minting.failed"),
+          text: t("minting.failedMsg"),
         }
       }
     }
@@ -92,7 +94,7 @@ export const MintingScreen = ({
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 text-sm text-brand-ui-primary hover:opacity-75"
         >
-          Open keychain
+          {t("ticket.open")}
           <Icon icon={ExternalLinkIcon} size="small" />
         </Link>
       )}
@@ -105,7 +107,7 @@ export const MintingScreen = ({
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 text-sm text-brand-ui-primary hover:opacity-75"
         >
-          See in the block explorer
+          {t("ticket.blockExp")}
           <Icon icon={ExternalLinkIcon} size="small" />
         </a>
       )}

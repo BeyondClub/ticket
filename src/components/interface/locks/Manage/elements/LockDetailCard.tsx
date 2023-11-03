@@ -176,8 +176,8 @@ export const LockDetailCard = ({
       }
     )
 
-  const settingsPageUrl = `/locks/settings?address=${lockAddress}&network=${network}`
-  const metadataPageUrl = `/locks/metadata?lockAddress=${lockAddress}&network=${network}`
+  const settingsPageUrl = `/events/settings?address=${lockAddress}&network=${network}`
+  const metadataPageUrl = `/events/metadata?lockAddress=${lockAddress}&network=${network}`
   return (
     <>
       <div className="flex flex-col">

@@ -11,6 +11,7 @@ import { useConfig } from '~/utils/withConfig'
 import { TransactionDetails } from './NewEvent'
 import { useEffect } from 'react'
 import { getEventPath } from './utils'
+import { useTranslation } from 'next-i18next'
 
 interface LockDeployingProps {
   transactionDetails: TransactionDetails
@@ -26,10 +27,11 @@ export const LockDeploying = ({
   const config = useConfig()
   const router = useRouter()
   const { hash: transactionHash, network } = transactionDetails
+  const { t } = useTranslation()
 
   let status: DeployStatus = 'progress'
-  let title = 'Waiting for your transaction to be mined'
-  let message = 'Please do not close this window'
+  let title = t("events.creation.waitingDesc")
+  let message = t("events.creation.plsDntClose")
 
   useEffect(() => {
     window?.scrollTo(0, 0) // force scroll start of page
@@ -37,9 +39,9 @@ export const LockDeploying = ({
 
   if (lockAddress) {
     status = 'deployed'
-    title = '🚀​ Your contract was successfully deployed'
+    title = `🚀​ ${t("events.creation.deploySuccess")}`
     message =
-      'Did you know that you can airdrop tickets to your fren by sending them email?'
+      t("events.creation.deploySuccessMsg")
   }
 
   const goToEventPage = () => {
@@ -62,9 +64,9 @@ export const LockDeploying = ({
         <AnimationContent status={status} />
         <div className="grid grid-cols-1 lg:grid-cols-2">
           <div className="flex flex-col">
-            <span className="text-base">Status</span>
+            <span className="text-base">{t("events.creation.status")}</span>
             <span className="text-lg font-bold">
-              {status === 'progress' ? 'In progress...' : 'Deployed'}
+              {status === 'progress' ? t("events.creation.inProgress") : t("events.creation.deployed")}
             </span>
           </div>
           {config.networks[network].explorer?.urls?.transaction && (
@@ -76,7 +78,7 @@ export const LockDeploying = ({
                 transactionHash
               )}
             >
-              View on block explorer
+              {t("events.creation.viewBlockExp")}
               <ExternalLinkIcon size={20} />
             </Link>
           )}
@@ -87,9 +89,9 @@ export const LockDeploying = ({
         <span className="mb-4 font-base">{message}</span>
         {status === 'deployed' && (
           <div className="flex flex-col items-center content-center text-center">
-            <p>We made a page for your event! Go check it out!</p>
+            <p>{t("events.creation.checkPg")}</p>
             <Button className="my-4" onClick={goToEventPage}>
-              View event page
+              {t("events.creation.viewEventPg")}
             </Button>
           </div>
         )}

@@ -54,7 +54,7 @@ export function ErrorFallback(props: Props) {
       <div className="flex flex-col gap-2 md:flex-row">
         <Button
           as="a"
-          href={new URL('/locks', window.location.href).toString()}
+          href={new URL('/events', window.location.href).toString()}
           size="small"
         >
           Go Back

@@ -6,6 +6,15 @@ import { AppLayout } from '~/components/interface/layouts/AppLayout'
 import { useRouter } from 'next/router'
 import { useAuth } from '~/contexts/AuthenticationContext'
 import { Picker } from '~/components/interface/Picker'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale)),
+    },
+  }
+}
 
 export type SettingTab =
   | 'general'

@@ -13,6 +13,7 @@ import { CreateLockForm, LockFormProps } from './elements/CreateLockForm'
 import { CreateLockFormSummary } from './elements/CreateLockFormSummary'
 import { BsArrowLeft as ArrowBack } from 'react-icons/bs'
 import { useRouter } from 'next/router'
+import { useTranslation } from 'next-i18next'
 
 export type Step = 'data' | 'summary' | 'deploy'
 
@@ -31,21 +32,6 @@ interface StatusMappingProps {
   backUrl: Step | null
 }
 
-const TITLE_BY_STATUS_MAPPING: Record<Step, StatusMappingProps> = {
-  data: {
-    title: 'Create a Lock',
-    backUrl: null,
-  },
-  summary: {
-    title: 'Create a Lock',
-    backUrl: 'data',
-  },
-  deploy: {
-    title: 'Deploying Lock',
-    backUrl: null,
-  },
-}
-
 export const CreateLockSteps = () => {
   const { getWalletService } = useAuth()
   const [step, setStep] = useState<Step>('data')
@@ -54,6 +40,21 @@ export const CreateLockSteps = () => {
   const [transactionHash, setTransactionHash] = useState<string | undefined>(
     undefined
   )
+  const { t } = useTranslation()
+  const TITLE_BY_STATUS_MAPPING: Record<Step, StatusMappingProps> = {
+    data: {
+      title: t("events.createAnEvent"),
+      backUrl: null,
+    },
+    summary: {
+      title: t("events.createAnEvent"),
+      backUrl: 'data',
+    },
+    deploy: {
+      title: t("events.deploying"),
+      backUrl: null,
+    },
+  }
   const { title, backUrl } = TITLE_BY_STATUS_MAPPING[step]
   const router = useRouter()
 
@@ -182,15 +183,17 @@ export const CreateLockSteps = () => {
 }
 
 const CreateLock = ({ onSubmit, defaultValues }: CreateLockProps) => {
+  const { t } = useTranslation()
+
   return (
     <div>
       <div className="grid gap-4 md:grid-cols-2 md:gap-28">
         <div className="flex-col hidden mx-auto md:flex md:max-w-lg">
           <h4 className="mb-4 text-5xl font-bold">
-            Deploy your membership contract
+            {t("events.deploy.title")}
           </h4>
           <span className="text-lg font-normal">
-            For creative communities and the humans who build them
+            {t("events.deploy.desciption")}
           </span>
           <img
             className="mt-9"
@@ -216,15 +219,17 @@ const CreateLockSummary = ({
       onSubmit(formData)
     }
   }
+  const { t } = useTranslation()
+
   return (
     <div>
       <div className="grid gap-4 md:grid-cols-2 md:gap-28">
         <div className="flex flex-col md:mx-auto md:max-w-lg">
           <h4 className="mb-4 text-3xl font-bold md:text-5xl md:block">
-            Ready to deploy?
+            {t("events.deploy.ready.title")}
           </h4>
           <span className="text-lg font-normal">
-            Here is the overview of your Lock
+            {t("events.deploy.ready.description")}
           </span>
           <img
             className="hidden max-w-xs mt-28 md:block"
@@ -235,12 +240,12 @@ const CreateLockSummary = ({
         <div className="md:max-w-lg">
           <CreateLockFormSummary formData={formData} />
           <div className="flex flex-col justify-between w-full gap-4 mt-8 md:mt-12 md:px-12">
-            <Button onClick={onHandleSubmit}>Looks good to me</Button>
+            <Button onClick={onHandleSubmit}>{t("common.looksGood")}</Button>
             <Button
               variant="transparent"
               onClick={() => setStep('data', formData)}
             >
-              Change
+              {t("common.change")}
             </Button>
           </div>
         </div>

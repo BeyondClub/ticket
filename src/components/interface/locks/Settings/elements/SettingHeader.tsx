@@ -25,7 +25,7 @@ export const SettingHeader = ({
     : '/images/svg/default-lock-logo.svg'
 
   const version = `v${(lock as any)?.publicLockVersion}`
-  const lockUrl = `/locks/lock?address=${lockAddress}&network=${network}`
+  const lockUrl = `/events/lock?address=${lockAddress}&network=${network}`
 
   return (
     <div className="flex flex-col items-start gap-4 md:gap-10">

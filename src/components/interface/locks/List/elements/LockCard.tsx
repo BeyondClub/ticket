@@ -99,7 +99,7 @@ export const LockCard = ({ lock, network }: LockCardProps) => {
 
   const symbol = tokenSymbol ?? baseCurrencySymbol
 
-  const lockUrl = `/locks/lock?address=${lockAddress}&network=${network}`
+  const lockUrl = `/events/lock?address=${lockAddress}&network=${network}`
 
   const duration =
     lock?.expirationDuration === MAX_UINT ? (

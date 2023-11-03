@@ -4,6 +4,15 @@ import { AppLayout } from '~/components/interface/layouts/AppLayout'
 import { UpdateMetadataForm } from '../../components/interface/locks/metadata'
 import { BsArrowLeft as BackIcon } from 'react-icons/bs'
 import { Button } from '@unlock-protocol/ui'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale)),
+    },
+  }
+}
 
 const Metadata: NextPage = () => {
   const router = useRouter()

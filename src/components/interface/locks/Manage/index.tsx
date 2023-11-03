@@ -172,8 +172,8 @@ const PopoverItem = ({
 const ToolsMenu = ({ lockAddress, network }: TopActionBarProps) => {
   const [airdropKeys, setAirdropKeys] = useState(false)
   const DEMO_URL = `/demo?network=${network}&lock=${lockAddress}`
-  const metadataPageUrl = `/locks/metadata?lockAddress=${lockAddress}&network=${network}`
-  const checkoutLink = `/locks/checkout-url?lock=${lockAddress}&network=${network}`
+  const metadataPageUrl = `/events/metadata?lockAddress=${lockAddress}&network=${network}`
+  const checkoutLink = `/events/checkout-url?lock=${lockAddress}&network=${network}`
   const verificationLink = `/verification`
 
   const { isManager } = useLockManager({
@@ -284,7 +284,7 @@ const TopActionBar = ({ lockAddress, network }: TopActionBarProps) => {
             <Button
               onClick={() => {
                 router.push(
-                  `/locks/settings?address=${lockAddress}&network=${network}`
+                  `/events/settings?address=${lockAddress}&network=${network}`
                 )
               }}
             >

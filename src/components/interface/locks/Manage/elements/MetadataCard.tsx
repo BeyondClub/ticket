@@ -333,7 +333,7 @@ export const MetadataCard = ({
     })
   }
 
-  const metadataPageUrl = `/locks/metadata?lockAddress=${lockAddress}&network=${network}&keyId=${tokenId}`
+  const metadataPageUrl = `/events/metadata?lockAddress=${lockAddress}&network=${network}&keyId=${tokenId}`
 
   const onMarkAsCheckIn = async () => {
     const { lockAddress, token: keyId } = data

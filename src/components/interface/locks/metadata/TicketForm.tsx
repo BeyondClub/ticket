@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { RiExternalLinkLine as ExternalLinkIcon } from 'react-icons/ri'
 import { getEventUrl } from '~/components/content/event/utils'
 import dayjs from 'dayjs'
+import { useTranslation } from 'next-i18next'
 
 interface Props {
   disabled?: boolean
@@ -26,6 +27,8 @@ export function TicketForm({ disabled, lockAddress, network }: Props) {
   const { ticket, name, slug } = useWatch({
     control,
   })
+
+  const { t } = useTranslation()
 
   const eventPageUrl = getEventUrl({
     lockAddress,
@@ -80,7 +83,7 @@ export function TicketForm({ disabled, lockAddress, network }: Props) {
               <div className="block overflow-hidden transition-all transform">
                 <Ticket
                   iconURL={`${config.locksmithHost}/lock/${lockAddress}/icon`}
-                  title={name || 'Lock Name'}
+                  title={name || 'Ticket Name'}
                   recipient="user.eth"
                   QRCodeURL="/images/qrcode.png"
                   network={network}
@@ -96,20 +99,19 @@ export function TicketForm({ disabled, lockAddress, network }: Props) {
         </Dialog>
       </Transition.Root>
 
-      <Disclosure label="Event ticketing">
+      <Disclosure label={t("events.metadata.form.ticketing.title")}>
         <>
           <p>
-            Add NFT properties for the event. These will be displayed on NFT
-            marketplaces and wallets that support them.
+            {t("events.metadata.form.ticketing.desc.1")}
           </p>
           <p className="">
-            These properties will also be displayed on{' '}
+            {t("events.metadata.form.ticketing.desc.2")}{' '}
             <Link
               className="inline-flex items-center underline "
               target="newline"
               href={eventPageUrl}
             >
-              your event page <ExternalLinkIcon className="ml-1" />
+              {t("events.metadata.form.ticketing.desc.3")} <ExternalLinkIcon className="ml-1" />
             </Link>
             .
           </p>
@@ -127,7 +129,7 @@ export function TicketForm({ disabled, lockAddress, network }: Props) {
                   setPreviewTicket(true)
                 }}
               >
-                Preview ticket
+                {t("events.metadata.form.ticketing.previewTicket")}
               </Button>
             </div>
             <div className="flex flex-col self-start gap-2 justify-top">
@@ -136,14 +138,14 @@ export function TicketForm({ disabled, lockAddress, network }: Props) {
                   {...register('ticket.event_start_date')}
                   disabled={disabled}
                   type="date"
-                  label="Start date"
+                  label={t("events.form.location.startDate")}
                   error={errors.ticket?.event_start_date?.message}
                 />
                 <Input
                   {...register('ticket.event_start_time')}
                   disabled={disabled}
                   type="time"
-                  label="Start time"
+                  label={t("events.form.location.startTime")}
                   error={errors.ticket?.event_start_time?.message}
                 />
               </div>
@@ -153,7 +155,7 @@ export function TicketForm({ disabled, lockAddress, network }: Props) {
                   {...register('ticket.event_end_date')}
                   disabled={disabled}
                   type="date"
-                  label="End date"
+                  label={t("events.form.location.endDate")}
                   min={minEndDate}
                   error={errors.ticket?.event_end_date?.message}
                 />
@@ -161,7 +163,7 @@ export function TicketForm({ disabled, lockAddress, network }: Props) {
                   {...register('ticket.event_end_time')}
                   disabled={disabled}
                   type="time"
-                  label="End time"
+                  label={t("events.form.location.endTime")}
                   min={minStartTime}
                   error={errors.ticket?.event_end_time?.message}
                 />
@@ -189,7 +191,7 @@ export function TicketForm({ disabled, lockAddress, network }: Props) {
                           }
                         }
                       )}
-                      label="Timezone"
+                      label={t("events.form.location.timezone")}
                       defaultValue={
                         value ||
                         Intl.DateTimeFormat().resolvedOptions().timeZone
@@ -204,12 +206,12 @@ export function TicketForm({ disabled, lockAddress, network }: Props) {
                 disabled={disabled}
                 type="text"
                 placeholder="123 1st street, 11217 Springfield, US"
-                label="Address for in person event"
+                label={t("events.form.location.addInPerson")}
                 error={errors.ticket?.event_address?.message}
               />
               <Input
                 disabled={disabled}
-                label="Meeting link (if any)"
+                label={t("events.form.location.meetLink")}
                 placeholder="https://"
                 {...register('ticket.event_url')}
                 type="url"

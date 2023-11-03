@@ -7,6 +7,7 @@ import { useDebounce } from 'react-use'
 import { getAddressForName } from '~/hooks/useEns'
 import React from 'react'
 import { FilterProps } from './Members'
+import { useTranslation } from 'next-i18next'
 
 interface FilterBarProps {
   setFilters?: (filters: FilterProps) => void
@@ -123,6 +124,8 @@ export const FilterBar = ({
 
   const disableSearch = filterKey === 'checkedInAt'
 
+  const { t } = useTranslation()
+
   return (
     <div className="flex flex-col gap-4 px-2 py-4 rounded-lg md:px-8 bg-ui-secondary-400">
       <div className="flex items-center md:h-12 md:justify-between">
@@ -132,7 +135,7 @@ export const FilterBar = ({
             onClick={() => setExpandFilter(!expandFilter)}
           >
             <div className="flex items-center gap-2">
-              <span className="text-sm">Filter</span>
+              <span className="text-sm">{t("common.filter")}</span>
               <FilterIcon size={18} />
             </div>
           </Button>
@@ -173,7 +176,7 @@ export const FilterBar = ({
               className="p-0"
             >
               <div className="flex items-center gap-2">
-                <span className="text-sm">Search</span>
+                <span className="text-sm">{t("common.search")}</span>
                 <SearchIcon size={18} />
               </div>
             </Button>

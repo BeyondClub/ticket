@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { ToastHelper } from '../helpers/toast.helper'
 import { Button, Input, Modal } from '@unlock-protocol/ui'
 import { useAuth } from '~/contexts/AuthenticationContext'
+import { useTranslation } from 'next-i18next'
 
 interface ExpireAndRefundProps {
   isOpen: boolean
@@ -23,6 +24,8 @@ export const ExpireAndRefundModal: React.FC<ExpireAndRefundProps> = ({
   const { getWalletService } = useAuth()
   const [refundAmount, setRefundAmount] = useState(0)
   const [loading, setLoading] = useState(false)
+
+  const { t } = useTranslation()
 
   const onAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRefundAmount(parseFloat(e.target.value))
@@ -46,7 +49,7 @@ export const ExpireAndRefundModal: React.FC<ExpireAndRefundProps> = ({
         amount,
       })
       onCloseCallback()
-      ToastHelper.success('Key successfully refunded.')
+      ToastHelper.success(t("events.cancel.success"))
       // reload page to show updated list of keys
       setTimeout(() => {
         window.location.reload()
@@ -55,8 +58,8 @@ export const ExpireAndRefundModal: React.FC<ExpireAndRefundProps> = ({
       onCloseCallback()
       ToastHelper.error(
         err?.error?.message ??
-          err?.message ??
-          'There was an error in refund process. Please try again.'
+        err?.message ??
+        t("events.cancel.error")
       )
     }
   }
@@ -64,7 +67,7 @@ export const ExpireAndRefundModal: React.FC<ExpireAndRefundProps> = ({
   return (
     <Modal isOpen={isOpen} setIsOpen={onCloseCallback}>
       <div className="flex flex-col gap-3">
-        <p className="text-sm">Set the amount you want to refund</p>
+        <p className="text-sm">{t("events.cancel.title")}</p>
         <Input
           className="my-2 text-right"
           type="number"
@@ -80,7 +83,7 @@ export const ExpireAndRefundModal: React.FC<ExpireAndRefundProps> = ({
           disabled={loading}
           loading={loading}
         >
-          Expire and Refund
+          {t("events.cancel.btn")}
         </Button>
       </div>
     </Modal>

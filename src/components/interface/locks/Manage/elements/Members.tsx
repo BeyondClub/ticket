@@ -12,6 +12,7 @@ import { storage } from '~/config/storage'
 import { Placeholder } from '@unlock-protocol/ui'
 import { useWeb3Service } from '~/utils/withWeb3Service'
 import { MEMBERS_PER_PAGE } from '~/constants'
+import { useTranslation } from 'next-i18next'
 
 interface MembersProps {
   lockAddress: string
@@ -43,6 +44,7 @@ export const Members = ({
   },
 }: MembersProps) => {
   const web3Service = useWeb3Service()
+  const { t } = useTranslation()
 
   const getMembers = async () => {
     const keys = await storage.keys(
@@ -138,7 +140,7 @@ export const Members = ({
       <ImageBar
         alt="Fetch error"
         src="/images/illustrations/no-member.svg"
-        description={<span>Unable to fetch lock members from subgraph.</span>}
+        description={<span>{t("events.details.fetchErr")}</span>}
       />
     )
   }
@@ -150,20 +152,20 @@ export const Members = ({
         alt="No members"
         description={
           <span>
-            Lock is deployed. You can{' '}
+            {t("events.details.info.1")}{' '}
             <button
               onClick={onAirdropKeys}
               className="outline-none cursor-pointer text-brand-ui-primary"
             >
-              Airdrop Keys
+              {t("events.details.info.2")}
             </button>{' '}
-            or{' '}
+            {t("common.or")}{' '}
             <Link href={checkoutLink}>
               <span className="outline-none cursor-pointer text-brand-ui-primary">
-                Share a purchase link
+                {t("events.details.info.3")}
               </span>
             </Link>{' '}
-            to your community.
+            {t("events.details.info.4")}
           </span>
         }
       />

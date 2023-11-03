@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form'
 import { MAX_UINT } from '~/constants'
 import dayjs from 'dayjs'
 import { useAuth } from '~/contexts/AuthenticationContext'
+import { useTranslation } from 'next-i18next'
 
 interface ExtendKeyDrawerProps {
   isOpen: boolean
@@ -64,6 +65,8 @@ const ExtendKeyDurationForm = ({
     ),
     neverExpires: MAX_UINT === currentExpiration,
   }
+
+  const { t } = useTranslation()
 
   const {
     register,
@@ -125,7 +128,7 @@ const ExtendKeyDurationForm = ({
       }
 
       if (typeof extendDuration === 'number' && extendDuration < 0) {
-        return ToastHelper.error(`The expiration date can't be pulled back.`)
+        return ToastHelper.error(t("events.extend.error.3"))
       }
 
       if (
@@ -138,14 +141,14 @@ const ExtendKeyDurationForm = ({
           tokenId,
         })
         await ToastHelper.promise(keyMutationPromise, {
-          loading: 'Extending key duration',
-          success: 'Keys duration extended',
-          error: 'Error with extending keys',
+          loading: t("events.extend.loading"),
+          success: t("events.extend.success"),
+          error: t("events.extend.error.1"),
         })
         onComplete()
         reset(defaultValues)
       } else {
-        ToastHelper.error(`Expiration date can't be in the past`)
+        ToastHelper.error(t("events.extend.error.2"))
       }
     }
   }
@@ -159,8 +162,8 @@ const ExtendKeyDurationForm = ({
     >
       <Input
         type="datetime-local"
-        placeholder="Key expiration date"
-        label="Key expiration date"
+        placeholder={t("events.extend.form.title")}
+        label={t("events.extend.form.title")}
         disabled={neverExpires || loading}
         min={new Date(parseInt(currentExpiration) * 1000)
           .toISOString()
@@ -170,7 +173,7 @@ const ExtendKeyDurationForm = ({
 
       <div>
         <label htmlFor="never-expires">
-          Never Expires
+          {t("events.extend.form.neverExp")}
           <input
             id="never-expires"
             className="ml-2 align-middle"
@@ -190,8 +193,8 @@ const ExtendKeyDurationForm = ({
         loading={extendKeyMutation.isLoading}
       >
         {!extendKeyMutation.isLoading
-          ? 'Extend key duration'
-          : 'Extend key duration...'}
+          ? t("events.extend.form.btn")
+          : `${t("events.extend.form.btn")}...`}
       </Button>
     </form>
   )
@@ -205,6 +208,8 @@ export const ExtendKeysDrawer = ({
 }: ExtendKeyDrawerProps) => {
   const owner = selectedKey?.owner
   const addressToEns = useEns(owner!)
+
+  const { t } = useTranslation()
 
   const {
     lockAddress,
@@ -223,19 +228,19 @@ export const ExtendKeysDrawer = ({
   }
 
   return (
-    <Drawer title="Extend Key" isOpen={isOpen} setIsOpen={setIsOpen}>
+    <Drawer title={t("events.extend.title")} isOpen={isOpen} setIsOpen={setIsOpen}>
       <p className="mb-6">
-        As a lock manager you can extend the key expiration with no charge.
+        {t("events.extend.description")}
       </p>
 
       <div className="flex flex-col flex-wrap gap-3 px-3 mb-6 -mx-3">
         <div className="flex flex-col gap-1">
           <div className="flex gap-2">
-            <span className="px-1 text-base font-semibold">Token:</span>
+            <span className="px-1 text-base font-semibold">{t("common.token")}:</span>
             <span>{selectedKey?.tokenId}</span>
           </div>
           <div className="flex gap-2">
-            <span className="px-1 text-base font-semibold">Owner:</span>
+            <span className="px-1 text-base font-semibold">{t("common.owner")}:</span>
             <span>
               {/* ens will not be minified when resolved */}
               {addressToEns === owner ? addressMinify(owner) : addressToEns}

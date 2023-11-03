@@ -13,6 +13,7 @@ import { useLockManager } from '~/hooks/useLockManager'
 import useEns from '~/hooks/useEns'
 import { addressMinify } from '~/utils/strings'
 import { Detail } from '@unlock-protocol/ui'
+import { useTranslation } from 'next-i18next'
 
 interface MemberCardProps {
   token: string
@@ -55,6 +56,8 @@ export const MemberCard = ({
     lockAddress,
     network,
   })
+
+  const { t } = useTranslation()
 
   useEffect(() => {
     if (!isCopied) return
@@ -102,14 +105,14 @@ export const MemberCard = ({
         <div className="grid justify-between grid-cols-3 gap-4 md:grid-cols-7 md:gap-0">
           <Detail
             className="col-span-3 md:col-span-1 grow"
-            label="Token ID"
+            label={t("common.tokenID")}
             valueSize="medium"
           >
             {token}
           </Detail>
           <Detail
             className="col-span-3 md:col-span-2"
-            label="Owner"
+            label={t("common.owner")}
             valueSize="medium"
           >
             <div className="flex self-start gap-2">
@@ -127,7 +130,7 @@ export const MemberCard = ({
           </Detail>
           <Detail
             className="col-span-3 md:col-span-2"
-            label="Expiration"
+            label={t("common.expiration")}
             valueSize="medium"
           >
             {expirationAsDate(expiration)}
@@ -146,7 +149,7 @@ export const MemberCard = ({
                     setExpireAndRefundOpen(true)
                   }}
                 >
-                  Cancel
+                  {t("common.cancel")}
                 </Button>
               )}
               {canExtendKey && (
@@ -156,7 +159,7 @@ export const MemberCard = ({
                   onClick={() => setExtendKeysOpen(true)}
                   className="mt-1"
                 >
-                  Extend
+                  {t("common.extend")}
                 </Button>
               )}
             </div>

@@ -6,6 +6,7 @@ import { MetadataFormData } from '../utils'
 import { AddPropertyModal, Property } from './AddProperty'
 import { AddLevelModal, Level } from './AddLevel'
 import { AddStatModal, Stat } from './AddStat'
+import { useTranslation } from 'next-i18next'
 
 export interface Props {
   disabled?: boolean
@@ -16,6 +17,8 @@ export function LockCustomForm() {
   const [addProperties, setAddProperties] = useState(false)
   const [addStats, setAddStats] = useState(false)
   const [addLevels, setAddLevels] = useState(false)
+
+  const { t } = useTranslation()
 
   const properties = useWatch({
     control,
@@ -40,15 +43,14 @@ export function LockCustomForm() {
       <AddPropertyModal isOpen={addProperties} setIsOpen={setAddProperties} />
       <AddLevelModal isOpen={addLevels} setIsOpen={setAddLevels} />
       <AddStatModal isOpen={addStats} setIsOpen={setAddStats} />
-      <Disclosure label="Custom">
+      <Disclosure label={t("events.metadata.form.custom.title")}>
         <div className="space-y-6">
           <div className="py-2 border-b border-gray-300">
             <div className="flex items-center justify-between">
               <div className="space-y-1">
-                <h3 className="text-lg font-bold">Properties</h3>
+                <h3 className="text-lg font-bold">{t("events.metadata.form.custom.properties.title")}</h3>
                 <p className="text-sm text-gray-700">
-                  Custom attribute that will display as text and rectangles on
-                  NFT market places.
+                  {t("events.metadata.form.custom.properties.desc")}
                 </p>
               </div>
               <button
@@ -71,9 +73,9 @@ export function LockCustomForm() {
           <div className="py-2 border-b border-gray-300">
             <div className="flex items-center justify-between">
               <div className="space-y-1">
-                <h3 className="text-lg font-bold">Levels</h3>
+                <h3 className="text-lg font-bold">{t("events.metadata.form.custom.levels.title")}</h3>
                 <p className="text-sm text-gray-700">
-                  Numerical attribute that will display as progress bar.
+                  {t("events.metadata.form.custom.levels.desc")}
                 </p>
               </div>
               <button
@@ -98,9 +100,9 @@ export function LockCustomForm() {
           <div className="py-2 border-b border-gray-300">
             <div className="flex items-center justify-between">
               <div className="space-y-1">
-                <h3 className="text-lg font-bold">Stats</h3>
+                <h3 className="text-lg font-bold">{t("events.metadata.form.custom.stats.title")}</h3>
                 <p className="text-sm text-gray-700">
-                  Custom attribute that will display as numbers.
+                  {t("events.metadata.form.custom.stats.desc")}
                 </p>
               </div>
               <button

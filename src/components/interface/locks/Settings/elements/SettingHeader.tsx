@@ -1,4 +1,5 @@
 import { Button, Placeholder } from '@unlock-protocol/ui'
+import { useTranslation } from 'next-i18next'
 import Link from 'next/link'
 import { IoMdClose as CloseIcon } from 'react-icons/io'
 import { AddressLink } from '~/components/interface/AddressLink'
@@ -27,6 +28,8 @@ export const SettingHeader = ({
   const version = `v${(lock as any)?.publicLockVersion}`
   const lockUrl = `/events/lock?address=${lockAddress}&network=${network}`
 
+  const { t } = useTranslation()
+
   return (
     <div className="flex flex-col items-start gap-4 md:gap-10">
       <Link href={lockUrl}>
@@ -49,7 +52,7 @@ export const SettingHeader = ({
           </div>
           <div className="flex flex-col">
             <span className="text-xl font-bold text-brand-dark">
-              {lock?.name} / Lock Settings
+              {lock?.name} / {t("events.settings.title")}
             </span>
             <div className="flex gap-4">
               <div className="px-4 py-1 bg-lime-200 rounded-2xl">{version}</div>

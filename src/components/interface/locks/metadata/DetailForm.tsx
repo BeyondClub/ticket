@@ -4,6 +4,7 @@ import { MetadataFormData } from './utils'
 import { useImageUpload } from '~/hooks/useImageUpload'
 import { SLUG_REGEXP } from '~/constants'
 import { storage } from '~/config/storage'
+import { useTranslation } from 'next-i18next'
 
 interface Props {
   disabled?: boolean
@@ -19,45 +20,47 @@ export function DetailForm({ disabled, defaultValues }: Props) {
   } = useFormContext<MetadataFormData>()
   const { mutateAsync: uploadImage, isLoading: isUploading } = useImageUpload()
 
+  const { t } = useTranslation()
+
   const { image } = useWatch({
     control,
   })
 
   const NameDescription = () => (
     <p>
-      This will appear as each NFT&apos;s name on OpenSea on other marketplaces.{' '}
+      {t("events.metadata.form.basic.name.desc.1")}{' '}
       <a
         className="text-brand-ui-primary hover:underline"
         target="_blank"
         rel="noopener noreferrer"
         href="https://www.youtube.com/watch?v=s_Lo2RxPYGA"
       >
-        Edit your collection on Opensea.
+        {t("events.metadata.form.basic.name.desc.2")}
       </a>
     </p>
   )
 
   const DescDescription = () => (
     <p>
-      This is each NFT&apos;s description on OpenSea and other marketplaces.{' '}
+      {t("events.metadata.form.basic.desc.desc.1")}{' '}
       <a
         className="text-brand-ui-primary hover:underline"
         target="_blank"
         rel="noopener noreferrer"
         href="https://www.markdownguide.org/cheat-sheet"
       >
-        Markdown is supported.
+        {t("events.metadata.form.basic.desc.desc.2")}
       </a>
     </p>
   )
 
   return (
-    <Disclosure label="Basic" defaultOpen>
+    <Disclosure label={t("events.metadata.form.basic.title")} defaultOpen>
       <div className="grid gap-6">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <div className="order-2 md:order-1">
             <ImageUpload
-              description="This will appear as each NFT's image on OpenSea on other marketplaces. Use 512 by 512 pixels for best results."
+              description={t("events.metadata.form.basic.imgDesc")}
               isUploading={isUploading}
               preview={image!}
               onChange={async (fileOrFileUrl: any) => {
@@ -79,21 +82,21 @@ export function DetailForm({ disabled, defaultValues }: Props) {
               {...register('name', {
                 required: {
                   value: true,
-                  message: 'Name is required',
+                  message: t("events.metadata.form.basic.name.error"),
                 },
               })}
               error={errors.name?.message}
               disabled={disabled}
               type="text"
-              placeholder="Name"
-              label="Name"
+              placeholder={t("events.metadata.form.basic.name.title")}
+              label={t("events.metadata.form.basic.name.title")}
               description={<NameDescription />}
             />
             <TextBox
               {...register('description')}
               disabled={disabled}
-              label="Description"
-              placeholder="Write description here."
+              label={t("events.metadata.form.basic.desc.title")}
+              placeholder={t("events.metadata.form.basic.desc.placeholder")}
               description={<DescDescription />}
               error={errors.description?.message}
               rows={4}
@@ -102,7 +105,7 @@ export function DetailForm({ disabled, defaultValues }: Props) {
               {...register('slug', {
                 pattern: {
                   value: SLUG_REGEXP,
-                  message: 'Slug format is not valid',
+                  message: t("events.metadata.form.basic.slug.error.1"),
                 },
                 validate: async (slug: string | undefined) => {
                   const slugChanged = defaultValues?.slug !== slug
@@ -110,7 +113,7 @@ export function DetailForm({ disabled, defaultValues }: Props) {
                     const data = (await storage.getLockSettingsBySlug(slug))
                       .data
                     return data
-                      ? 'Slug already used, please use another one'
+                      ? t("events.metadata.form.basic.slug.error.2")
                       : true
                   }
                   return true
@@ -118,18 +121,18 @@ export function DetailForm({ disabled, defaultValues }: Props) {
               })}
               disabled={disabled || defaultValues?.slug}
               type="text"
-              label="Custom URL"
+              label={t("events.metadata.form.basic.slug.title")}
               error={errors.slug?.message}
-              description="Custom URL that will be used for the page."
+              description={t("events.metadata.form.basic.slug.desc")}
             />
             <Input
               {...register('external_url')}
               disabled={disabled}
               type="url"
               placeholder="https://"
-              label="External URL"
+              label={t("events.metadata.form.basic.extUrl.title")}
               error={errors.external_url?.message}
-              description="Include a link in the NFT, so members can learn more about it."
+              description={t("events.metadata.form.basic.extUrl.desc")}
             />
           </div>
         </div>

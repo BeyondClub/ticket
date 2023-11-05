@@ -12,6 +12,7 @@ import { ToastHelper } from '~/components/helpers/toast.helper'
 import { useAuth } from '~/contexts/AuthenticationContext'
 import { KeyManager } from '@unlock-protocol/unlock-js'
 import { useConfig } from '~/utils/withConfig'
+import { useTranslation } from 'next-i18next'
 
 const MAX_SIZE = 50
 
@@ -29,6 +30,7 @@ export function AirdropBulkForm({ lock, onConfirm, emailRequired }: Props) {
   const { account } = useAuth()
   const [isConfirming, setIsConfirming] = useState(false)
   const [isLoadingMembers, setIsLoadingMembers] = useState(false)
+  const { t } = useTranslation()
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       'text/plain': ['.csv'],
@@ -210,19 +212,14 @@ export function AirdropBulkForm({ lock, onConfirm, emailRequired }: Props) {
             <div className="space-y-6">
               <div className="space-y-2">
                 <p>
-                  Once you upload the csv, you can see all the list of
-                  memberships to be granted.
+                  {t("airdrop.csv.desc.1")}
                 </p>
                 <p>
-                  Due to block size limit, you can only airdrop at most{' '}
-                  {MAX_SIZE} NFT at once, but you can re-upload the same file
-                  multiple times and the duplicates will automatically
-                  discarded.
+                  {t("airdrop.csv.desc.2.1")}{' '}
+                  {MAX_SIZE} {t("airdrop.csv.desc.2.2")}
                 </p>
                 <p>
-                  If you don&apos;t have wallet address of the user, leave the
-                  field blank and fill out their email. We will airdrop the NFT
-                  to their email.
+                  {t("airdrop.csv.desc.3")}
                 </p>
                 <div>
                   <a
@@ -231,7 +228,7 @@ export function AirdropBulkForm({ lock, onConfirm, emailRequired }: Props) {
                     rel="noopener noreferrer"
                     className="text-sm font-semibold text-brand-ui-primary"
                   >
-                    Download .CSV template
+                    {t("airdrop.csv.desc.4")}
                   </a>
                 </div>
               </div>
@@ -243,11 +240,10 @@ export function AirdropBulkForm({ lock, onConfirm, emailRequired }: Props) {
                 <input {...getInputProps()} />
                 <div className="max-w-xs space-y-2 text-center">
                   <h3 className="text-lg font-medium">
-                    Drop your CSV file here
+                    {t("airdrop.csv.drop")}
                   </h3>
                   <p className="text-sm text-gray-600">
-                    Download the template file and fill out the values in the
-                    format.
+                    {t("airdrop.csv.desc.5")}
                   </p>
                 </div>
               </div>
@@ -266,7 +262,7 @@ export function AirdropBulkForm({ lock, onConfirm, emailRequired }: Props) {
                 clear()
               }}
             >
-              Clear
+              {t("common.clear")}
             </Button>
           </div>
           <div className="space-y-2">
@@ -298,7 +294,7 @@ export function AirdropBulkForm({ lock, onConfirm, emailRequired }: Props) {
               setIsConfirming(false)
             }}
           >
-            Confirm aidrop
+            {t("airdrop.confDrop")}
           </Button>
           {error && <p>{error}</p>}
         </div>

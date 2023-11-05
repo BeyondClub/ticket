@@ -12,6 +12,7 @@ import { ToastHelper } from '~/components/helpers/toast.helper'
 import { config as AppConfig } from '~/config/app'
 import { parseDomain } from 'parse-domain'
 import { Button } from '@unlock-protocol/ui'
+import { useTranslation } from 'next-i18next'
 
 const getVerificationConfigFromURL = async (content?: string) => {
   try {
@@ -48,6 +49,7 @@ const getVerificationConfigFromURL = async (content?: string) => {
 export function Scanner() {
   const [membershipVerificationConfig, setMembershipVerificationConfig] =
     useState<MembershipVerificationConfig | null>(null)
+  const { t } = useTranslation()
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const [isProcessing, setIsProcessing] = useState(false)
   const { getInputProps, getRootProps } = useDropzone({
@@ -124,7 +126,7 @@ export function Scanner() {
       <div className="grid justify-center w-full">
         <div className="grid gap-6">
           <div className="space-y-2 text-center ">
-            <h3 className="font-medium">Scan to check in ticket</h3>
+            <h3 className="font-medium">{t("tools.verification.scan")}</h3>
             {!membershipVerificationConfig && (
               <video
                 ref={videoRef}
@@ -142,7 +144,7 @@ export function Scanner() {
               loading={isProcessing}
               {...getRootProps()}
             >
-              <span>Select Ticket QR code image</span>
+              <span>{t("tools.verification.select")}</span>
             </Button>
           </div>
         </div>

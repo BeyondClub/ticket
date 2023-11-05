@@ -218,21 +218,21 @@ const ToolsMenu = ({ lockAddress, network }: TopActionBarProps) => {
                   <div className="relative grid gap-8 bg-white p-7">
                     <a href={DEMO_URL} target="_blank" rel="noreferrer">
                       <PopoverItem
-                        label="Preview"
-                        description="Preview the checkout experience"
+                        label={t("tools.preview.title")}
+                        description={t("tools.preview.desc")}
                         icon={WebsiteIcon}
                       />
                     </a>
                     <Link href={checkoutLink} className="text-left">
                       <PopoverItem
-                        label="Create Checkout URL"
-                        description="Customize your member's purchase journey"
+                        label={t("tools.checkout.title")}
+                        description={t("tools.checkout.desc")}
                         icon={RightArrowIcon}
                       />
                     </Link>
                     <PopoverItem
-                      label="Airdrop Keys"
-                      description="Send memberships to your members"
+                      label={t("tools.airdrop.title")}
+                      description={t("tools.airdrop.desc")}
                       onClick={() => setAirdropKeys(!airdropKeys)}
                       icon={PlantIcon}
                     />
@@ -240,8 +240,8 @@ const ToolsMenu = ({ lockAddress, network }: TopActionBarProps) => {
                       <>
                         <Link href={metadataPageUrl}>
                           <PopoverItem
-                            label="Edit NFT Properties"
-                            description="Edit & update NFT metadata that will display in platforms such as Opensea"
+                            label={t("tools.edit.title")}
+                            description={t("tools.edit.desc")}
                             icon={EditIcon}
                           />
                         </Link>
@@ -249,8 +249,8 @@ const ToolsMenu = ({ lockAddress, network }: TopActionBarProps) => {
                     )}
                     <Link href={verificationLink} className="text-left">
                       <PopoverItem
-                        label="Verification"
-                        description="Scan and verify the authentication of tickets for your events"
+                        label={t("tools.verification.title")}
+                        description={t("tools.verification.desc")}
                         icon={ScanIcon}
                       />
                     </Link>

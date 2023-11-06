@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import { Button, Input } from '@unlock-protocol/ui'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'next-i18next'
 import { ToastHelper } from '~/components/helpers/toast.helper'
 import { useSaveLockSettings } from '~/hooks/useLockSettings'
 
@@ -30,6 +31,7 @@ export const EmailSettingsForm = ({
       emailSender: lockSettings?.emailSender,
     },
   })
+  const { t } = useTranslation()
 
   const { mutateAsync: saveSettingsMutation } = useSaveLockSettings()
 
@@ -48,7 +50,7 @@ export const EmailSettingsForm = ({
 
   const onSubmit = async (fields: FormProps) => {
     await updateReplyToMutation.mutateAsync(fields)
-    ToastHelper.success('Email settings updated.')
+    ToastHelper.success(t("events.settings.emails.options.settings.success"))
   }
 
   return (
@@ -59,23 +61,22 @@ export const EmailSettingsForm = ({
             <Input
               type="email"
               placeholder="your@email.com"
-              label="Reply-to:"
+              label={t("events.settings.emails.options.settings.replyTo")}
               disabled={disabledInput}
               {...register('replyTo')}
             />
             <span className="text-sm text-gray-600">
-              Set the email address that will appear on the Reply-To field when
-              users respond to the email we send.
+              {t("events.settings.emails.options.settings.replyDesc")}
             </span>
           </div>
           <div className="flex flex-col gap-1">
             <Input
               type="text"
-              placeholder="Your name"
-              label="Email sender name:"
+              placeholder={t("events.settings.emails.options.settings.name.placeholder")}
+              label={t("events.settings.emails.options.settings.name.title")}
               disabled={disabledInput}
               autoComplete="off"
-              description="Set the email sender name that will appear on the email sent. Emails will be sent from the address hello@unlock-protocol.com."
+              description={t("events.settings.emails.options.settings.name.desc")}
               {...register('emailSender')}
             />
           </div>
@@ -86,7 +87,7 @@ export const EmailSettingsForm = ({
             loading={updateReplyToMutation.isLoading}
             size="small"
           >
-            Apply
+            {t("common.apply")}
           </Button>
         </form>
       )}

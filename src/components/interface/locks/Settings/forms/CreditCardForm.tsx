@@ -18,6 +18,7 @@ import { useUSDPricing } from '~/hooks/useUSDPricing'
 import { useLockData } from '~/hooks/useLockData'
 import CreditCardCustomPrice from './CreditCardCustomPrice'
 import CreditCardUnlockFee from './CreditCardUnlockFee'
+import { useTranslation } from 'next-i18next'
 
 enum ConnectStatus {
   CONNECTED = 1,
@@ -56,18 +57,20 @@ const DisconnectStripe = ({
   onDisconnect,
   disabled,
 }: DisconnectStripeProps) => {
+  const { t } = useTranslation()
+
   return (
     <div className="flex flex-col gap-4">
       <span className="text-xs">
         <SettingCardDetail
-          title="Credit card payment ready"
-          description="Member of this Lock can now pay with credit card or crypto as they wish. "
+          title={t("events.settings.payments.credit.ready")}
+          description={t("events.settings.payments.credit.readyDesc")}
         />
       </span>
       <div className="flex flex-col items-center gap-4 md:gap-8 md:flex-row">
         <Badge variant="green" className="justify-center w-full md:w-1/3">
           <div className="flex items-center gap-2">
-            <span>Card payments enabled</span>
+            <span>{t("events.settings.payments.credit.enabled")}</span>
             <CheckCircleIcon />
           </div>
         </Badge>
@@ -79,7 +82,7 @@ const DisconnectStripe = ({
             disabled={disabled}
             onClick={onDisconnect}
           >
-            Disconnect Stripe
+            {t("events.settings.payments.credit.stripe.disconnect")}
           </Button>
         )}
       </div>
@@ -98,6 +101,7 @@ const ConnectStripe = ({
   const [stripeAccount, setStripeAccount] = useState<string>()
   const { getWalletService, account } = useAuth()
   const web3Service = useWeb3Service()
+  const { t } = useTranslation()
 
   const {
     data: stripeConnections = [],
@@ -136,9 +140,9 @@ const ConnectStripe = ({
   const onGrantKeyRole = async () => {
     const keyGrantPromise = grantKeyGrantorRoleMutation.mutateAsync()
     await ToastHelper.promise(keyGrantPromise, {
-      error: `Can't grant role, please try again.`,
-      success: 'Key granted',
-      loading: 'Allow key granting',
+      error: t("events.settings.payments.credit.grantKey.error"),
+      success: t("events.settings.payments.credit.grantKey.success"),
+      loading: t("events.settings.payments.credit.grantKey.loading"),
     })
     await refetchCheckKeyGranter()
   }
@@ -158,30 +162,24 @@ const ConnectStripe = ({
   return (
     <div className="flex flex-col gap-4">
       <SettingCardDetail
-        title="Enable Contract to Accept Credit Card"
+        title={t("events.settings.payments.credit.form.title")}
         description={
           <div className="flex flex-col gap-2">
             <span>
-              {`Credit card processing is not part of the core protocol.
-                Unlock Labs processes non-crypto payments via our Stripe
-                integration and includes fees that are applied on top of your
-                lock's key price.`}
+              {t("events.settings.payments.credit.form.desc1")}
             </span>
             <span>
-              If you enable credit card payments for your lock, your members
-              will usually be charged a higher amount than the amount for your
-              lock. The Unlock Labs fee is 10%, which must be added to the
-              Stripe fees and gas costs.
+              {t("events.settings.payments.credit.form.desc2")}
             </span>
             <span>
-              For more details see{' '}
+              {t("events.settings.payments.credit.form.desc3")}{' '}
               <Link
                 className="font-semibold text-brand-ui-primary"
                 href="https://unlock-protocol.com/guides/enabling-credit-cards/"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Enabling Credit Cards guide
+                {t("events.settings.payments.credit.form.desc4")}
               </Link>
               .
             </span>
@@ -212,10 +210,10 @@ const ConnectStripe = ({
                       }
                     })
                     .concat({
-                      label: 'Connect a new Stripe account',
+                      label: t("events.settings.payments.credit.stripe.connectAcc"),
                       value: '',
                     })}
-                  label="Use a Stripe account you previously connected to another contract:"
+                  label={t("events.settings.payments.credit.stripe.connectAccDesc")}
                 />
               )}
               <Button
@@ -223,7 +221,7 @@ const ConnectStripe = ({
                 type="submit"
                 disabled={disabled}
               >
-                Connect Stripe
+                {t("events.settings.payments.credit.stripe.connect")}
               </Button>
             </form>
           ) : (
@@ -234,7 +232,7 @@ const ConnectStripe = ({
               onClick={onGrantKeyRole}
               disabled={grantKeyGrantorRoleMutation.isLoading}
             >
-              Accept
+              {t("common.accept")}
             </Button>
           )}
         </div>
@@ -253,12 +251,12 @@ const StripeNotReady = ({
   ConnectStripe & {
     connectedStripeAccount?: any
   }) => {
+  const { t } = useTranslation()
+
   return (
     <span className="grid gap-2 text-sm">
       <span className="font-semibold text-red-500">
-        Your Stripe account is connected but not ready to process charges yet.
-        Make sure that all the details you entered on Stripe are valid and your
-        email has been verified from Stripe.
+        {t("events.settings.payments.credit.stripe.notReady")}
       </span>
       <div className="flex items-center gap-0.5">
         <div className="w-full md:w-1/3">
@@ -269,7 +267,7 @@ const StripeNotReady = ({
             }}
             size="small"
           >
-            Resume Stripe Setup
+            {t("events.settings.payments.credit.stripe.resume")}
           </Button>
         </div>
         {isManager && (
@@ -281,7 +279,7 @@ const StripeNotReady = ({
               disabled={disabled}
               onClick={onDisconnect}
             >
-              Disconnect Stripe
+              {t("events.settings.payments.credit.stripe.disconnect")}
             </Button>
           </div>
         )}
@@ -297,6 +295,7 @@ export const CreditCardForm = ({
   disabled,
 }: CardPaymentProps) => {
   const storageService = useStorageService()
+  const { t } = useTranslation()
 
   const {
     isLoading,
@@ -353,9 +352,9 @@ export const CreditCardForm = ({
     event.preventDefault()
     const disconnectStripePromise = disconnectStipeMutation.mutateAsync()
     await ToastHelper.promise(disconnectStripePromise, {
-      error: 'Stripe disconnection failed.',
-      success: 'Stripe disconnected.',
-      loading: 'Disconnecting Stripe.',
+      error: t("events.settings.payments.credit.disconn.error"),
+      success: t("events.settings.payments.credit.disconn.success"),
+      loading: t("events.settings.payments.credit.disconn.loading"),
     })
     await refetchStripeConnectionDetails()
   }
@@ -368,12 +367,12 @@ export const CreditCardForm = ({
           if (connect?.url) {
             window.location.assign(connect.url)
           } else {
-            ToastHelper.success('Stripe connection succeeded!')
+            ToastHelper.success(t("events.settings.payments.credit.conn.success"))
             refetchStripeConnectionDetails()
           }
         },
         onError: () => {
-          ToastHelper.error('Stripe connection failed')
+          ToastHelper.error(t("events.settings.payments.credit.conn.error"))
         },
       }
     )
@@ -419,7 +418,7 @@ export const CreditCardForm = ({
           />
           {connectedStripeAccount && (
             <span>
-              You will receive payments on your Stripe account{' '}
+              {t("events.settings.payments.credit.conn.desc")}{' '}
               <code>{connectedStripeAccount.id}</code>
             </span>
           )}
@@ -461,8 +460,7 @@ export const CreditCardForm = ({
       <Status />
       {isPricingLow && (
         <span className="text-sm text-red-600">
-          Your current price is too low for us to process credit cards. It needs
-          to be at least $0.50.
+          {t("events.settings.payments.credit.priceLow")}
         </span>
       )}
     </div>

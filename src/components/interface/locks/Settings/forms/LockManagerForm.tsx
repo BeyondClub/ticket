@@ -14,6 +14,7 @@ import { useAuth } from '~/contexts/AuthenticationContext'
 import { useEffect, useState } from 'react'
 import { Transition, Dialog } from '@headlessui/react'
 import { onResolveName } from '~/utils/resolvers'
+import { useTranslation } from 'next-i18next'
 interface LockManagerFormProps {
   lockAddress: string
   network: number
@@ -49,6 +50,7 @@ const RenounceModal = ({
       confirm: '',
     },
   })
+  const { t } = useTranslation()
 
   useEffect(() => {
     const subscription = watch((value) =>
@@ -99,12 +101,10 @@ const RenounceModal = ({
                     </div>
                     <div className="flex flex-col gap-4">
                       <h3 className="text-4xl font-bold text-brand-dark">
-                        Hold Your Horses
+                        {t("events.settings.roles.evntMgr.renounce.hold")}
                       </h3>
                       <span className="text-base text-brand-dark">
-                        You are about to permanently renounce yourself as Lock
-                        manager. You will not be able to revert this action.
-                        Please type “renounce” to confirm.
+                        {t("events.settings.roles.evntMgr.renounce.desc")}
                       </span>
                     </div>
                     <Input
@@ -118,14 +118,14 @@ const RenounceModal = ({
                         variant="outlined-primary"
                         onClick={() => setIsOpen(false)}
                       >
-                        Cancel
+                        {t("common.cancel")}
                       </Button>
                       <Button
                         className="w-full"
                         type="submit"
                         disabled={!confirmMatch}
                       >
-                        Confirm
+                        {t("common.confirm")}
                       </Button>
                     </div>
                   </form>
@@ -147,6 +147,7 @@ const LockManagerCard = ({
 }: LockManagerCardProps) => {
   const [renounceModal, setRenounceModal] = useState(false)
   const { account, getWalletService } = useAuth()
+  const { t } = useTranslation()
 
   const isLoggedUser = account?.toLowerCase() === manager?.toLowerCase()
 
@@ -162,9 +163,9 @@ const LockManagerCard = ({
   const onRenounce = async () => {
     const renounceLockManagerPromise = renounceLockManagerMutation.mutateAsync()
     await ToastHelper.promise(renounceLockManagerPromise, {
-      loading: `Removing Lock Manager status.`,
-      success: `Lock manager renounced for ${minifyAddress(manager)}.`,
-      error: `Can't renounce Lock manager for ${minifyAddress(manager)}`,
+      loading: t("events.settings.roles.evntMgr.renounce.loading"),
+      success: `${t("events.settings.roles.evntMgr.renounce.success")} ${minifyAddress(manager)}.`,
+      error: `${t("events.settings.roles.evntMgr.renounce.error")} ${minifyAddress(manager)}`,
     })
   }
 
@@ -188,13 +189,13 @@ const LockManagerCard = ({
           <span className="text-base text-brand-dark">{manager}</span>
           {isLoggedUser && (
             <span className="text-sm font-semibold text-brand-ui-primary">
-              {`That's you`}
+              {t("events.settings.roles.evntMgr.thatsYou")}
             </span>
           )}
         </div>
         {isLoggedUser && (
           <Button size="small" variant="outlined-primary" onClick={renounce}>
-            Renounce
+            {t("events.settings.roles.evntMgr.renounce.title")}
           </Button>
         )}
       </div>
@@ -209,6 +210,7 @@ export const LockManagerForm = ({
   disabled,
 }: LockManagerFormProps) => {
   const localForm = useForm<{ manager: string }>()
+  const { t } = useTranslation()
 
   const { handleSubmit, control, setValue } = localForm
   const { getWalletService } = useAuth()
@@ -239,9 +241,9 @@ export const LockManagerForm = ({
       userAddress: address,
     })
     await ToastHelper.promise(addManagerPromise, {
-      loading: `Adding ${managerAddress} as Lock Manager.`,
-      success: `${managerAddress} added as Lock Manager.`,
-      error: ` Impossible to add ${managerAddress} as Lock Manager, please try again.`,
+      loading: `${t("events.settings.roles.evntMgr.add.loading1")} ${managerAddress} ${t("events.settings.roles.evntMgr.add.loading2")}`,
+      success: `${managerAddress} ${t("events.settings.roles.evntMgr.add.success")}`,
+      error: `${t("events.settings.roles.evntMgr.add.error1")} ${managerAddress} ${t("events.settings.roles.evntMgr.add.error2")}`,
     })
   }
 
@@ -279,12 +281,12 @@ export const LockManagerForm = ({
       <div className="flex flex-col gap-4">
         {noManagers && !isLoading && (
           <span className="text-red-500">
-            This lock does not have any Lock Manager.
+            {t("events.settings.roles.evntMgr.noMgr")}
           </span>
         )}
         {managers?.length > 0 && (
           <div className="grid gap-1">
-            <span className="font-semibold">Lock Managers</span>
+            <span className="font-semibold">{t("events.settings.roles.evntMgr.mgrTitle")}</span>
             <div className="grid gap-2">
               {managers?.map((manager) => (
                 <LockManagerCard
@@ -322,8 +324,8 @@ export const LockManagerForm = ({
                       withIcon
                       value={manager}
                       disabled={disabled}
-                      label="Add manager, please enter the wallet address of theirs."
-                      description="Enter a wallet address or an ens name"
+                      label={t("events.settings.roles.evntMgr.form.title")}
+                      description={t("events.settings.roles.evntMgr.form.desc")}
                       onChange={(value: any) => {
                         setValue('manager', value)
                       }}
@@ -340,7 +342,7 @@ export const LockManagerForm = ({
             disabled={disableInput}
             loading={addLockManagerMutation.isLoading}
           >
-            Add
+            {t("common.add")}
           </Button>
         </form>
       )}

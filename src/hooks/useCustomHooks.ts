@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { useTranslation } from 'next-i18next'
 import { ZERO } from '~/components/interface/locks/Create/modals/SelectCurrencyModal'
 import { HookMapping } from '~/components/interface/locks/Settings/forms/UpdateHooksForm'
 import { useWeb3Service } from '~/utils/withWeb3Service'
@@ -14,13 +15,14 @@ export function useCustomHook({
   network,
   version,
 }: GetHookValuesProps) {
+  const {t} = useTranslation()
   const web3Service = useWeb3Service()
 
   const getHookValues = async () => {
     let values = {}
 
     await Promise.all([
-      ...Object.entries(HookMapping).map(
+      ...Object.entries(HookMapping(t)).map(
         async ([fieldName, { hookName, fromPublicLockVersion = 0 }]) => {
           const hasRequiredVersion: boolean =
             (version ?? 0) >= fromPublicLockVersion ?? false

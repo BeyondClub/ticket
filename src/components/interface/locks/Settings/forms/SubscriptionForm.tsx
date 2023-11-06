@@ -5,6 +5,7 @@ import { MAX_UINT } from '~/constants'
 import useLock from '~/hooks/useLock'
 import { useLockSettings } from '~/hooks/useLockSettings'
 import { useTabSettings } from '..'
+import { useTranslation } from 'react-i18next'
 
 interface SubscriptionFormProps {
   lockAddress: string
@@ -26,6 +27,7 @@ export const SubscriptionForm = ({
   const [isRecurring, setIsRecurring] = useState(false)
   const { setTab } = useTabSettings()
   const { getIsRecurringPossible } = useLockSettings()
+  const { t } = useTranslation()
 
   const {
     data: { gasRefund = 0, isRecurringPossible = false } = {},
@@ -78,7 +80,7 @@ export const SubscriptionForm = ({
   if (isRecurring) {
     return (
       <Badge variant="green" className="flex justify-center w-full md:w-1/3">
-        <span>Recurring enabled</span>
+        <span>{t("events.settings.payments.renewal.enabled")}</span>
       </Badge>
     )
   }
@@ -91,14 +93,13 @@ export const SubscriptionForm = ({
       return (
         <div className="grid  gap-1.5">
           <small className="text-sm text-brand-dark">
-            Recurring memberships are only available for locks that are using an
-            ERC20 currency for which a gas refund value is set.
+            {t("events.settings.payments.renewal.desc1")}
           </small>
           <ul className="ml-2 list-disc">
             {gasRefund <= 0 && (
               <li>
                 <span className="text-red-500">
-                  Gas refund value is not set. You can change it from{' '}
+                  {t("events.settings.payments.renewal.desc2")}{' '}
                   <button
                     onClick={(event) => {
                       event.preventDefault()
@@ -106,7 +107,7 @@ export const SubscriptionForm = ({
                     }}
                     className="font-semibold text-brand-ui-primary hover:underline"
                   >
-                    Membership terms settings.
+                    {t("events.settings.payments.renewal.desc3")}
                   </button>
                 </span>
               </li>
@@ -114,8 +115,7 @@ export const SubscriptionForm = ({
             {lock?.expirationDuration == -1 && (
               <li>
                 <span className="text-red-500">
-                  The memberships on this lock do not expire, so they cannot be
-                  renewed. You can change it from{' '}
+                  {t("events.settings.payments.renewal.desc4")}{' '}
                   <button
                     onClick={(event) => {
                       event.preventDefault()
@@ -123,7 +123,7 @@ export const SubscriptionForm = ({
                     }}
                     className="font-semibold text-brand-ui-primary hover:underline"
                   >
-                    Membership terms settings.
+                    {t("events.settings.payments.renewal.desc5")}
                   </button>
                 </span>
               </li>
@@ -131,7 +131,7 @@ export const SubscriptionForm = ({
             {(lock?.currencyContractAddress ?? '')?.length === 0 && (
               <li>
                 <span className="text-red-500">
-                  {`This lock uses the chain's default currency which cannot be used for recurring memberships. Please change to use an ERC20 current from the "Price" tab.`}
+                  {t("events.settings.payments.renewal.desc6")}
                 </span>
               </li>
             )}
@@ -153,7 +153,7 @@ export const SubscriptionForm = ({
   return (
     <div className="flex flex-col gap-6">
       <ToggleSwitch
-        title="Enable recurring"
+        title={t("events.settings.payments.renewal.enable")}
         description={<RecurringDescription />}
         disabled={disabledInput}
         enabled={recurring}
@@ -166,7 +166,7 @@ export const SubscriptionForm = ({
           onClick={handleApproveRecurring}
           loading={isLoading}
         >
-          Apply
+          {t("common.apply")}
         </Button>
       )}
     </div>

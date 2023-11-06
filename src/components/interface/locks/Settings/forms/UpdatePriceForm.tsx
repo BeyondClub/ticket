@@ -10,6 +10,7 @@ import { lockTickerSymbol } from '~/utils/checkoutLockUtils'
 import { useConfig } from '~/utils/withConfig'
 import { useWeb3Service } from '~/utils/withWeb3Service'
 import { SelectCurrencyModal } from '../../Create/modals/SelectCurrencyModal'
+import { useTranslation } from 'next-i18next'
 
 interface EditFormProps {
   keyPrice?: string
@@ -44,6 +45,7 @@ export const UpdatePriceForm = ({
   const [changeCurrencyOpen, setChangeCurrencyModal] = useState(false)
   const [selectedToken, setSelectedToken] = useState<Token | null>(null)
   const baseCurrencySymbol = networks?.[network].nativeCurrency.symbol
+  const { t } = useTranslation()
 
   const {
     register,
@@ -90,12 +92,12 @@ export const UpdatePriceForm = ({
   const onHandleSubmit = async (fields: EditFormProps) => {
     if (isValid) {
       await ToastHelper.promise(updatePriceMutation.mutateAsync(fields), {
-        loading: 'Updating price...',
-        success: 'Price updated',
-        error: 'We could not update the price for this lock.',
+        loading: t("events.settings.payments.price.form.loading"),
+        success: t("events.settings.payments.price.form.success"),
+        error: t("events.settings.payments.price.form.error1"),
       })
     } else {
-      ToastHelper.error('Form is not valid')
+      ToastHelper.error(t("common.formNotValid"))
       reset()
     }
   }
@@ -132,10 +134,10 @@ export const UpdatePriceForm = ({
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <label className="block px-1 text-base" htmlFor="">
-              Currency & Price:
+              {t("events.settings.payments.price.form.title")}:
             </label>
             <ToggleSwitch
-              title="Free"
+              title={t('common.free')}
               enabled={isFree}
               setEnabled={setIsFree}
               disabled={disabledInput}
@@ -155,9 +157,8 @@ export const UpdatePriceForm = ({
                   if (disabled) return
                   setChangeCurrencyModal(true)
                 }}
-                className={`${
-                  disabled ? 'bg-gray-100' : 'bg-white'
-                } box-border flex items-center flex-1 w-full gap-2 pl-4 text-base text-left transition-all border border-gray-400 rounded-lg shadow-sm cursor-pointer hover:border-gray-500 focus:ring-gray-500 focus:border-gray-500 focus:outline-none`}
+                className={`${disabled ? 'bg-gray-100' : 'bg-white'
+                  } box-border flex items-center flex-1 w-full gap-2 pl-4 text-base text-left transition-all border border-gray-400 rounded-lg shadow-sm cursor-pointer hover:border-gray-500 focus:ring-gray-500 focus:border-gray-500 focus:outline-none`}
               >
                 <CryptoIcon symbol={symbol} />
                 <span>{symbol}</span>
@@ -177,18 +178,14 @@ export const UpdatePriceForm = ({
                   required: !isFree,
                   min: 0,
                 })}
-                error={errors?.keyPrice && 'Please enter a positive number'}
+                error={errors?.keyPrice && t("events.settings.payments.price.form.error2")}
               />
             </div>
           </div>
         </div>
 
         <span className="text-sm text-gray-600">
-          When changing the price, please remember that users who have approved
-          recurring memberships will need to manually renew in order to approve
-          the price change. Similarly if users cancel their membership, they
-          will receive a refund in the new currency, and an amount calculated
-          based on the new pricing, not the old one.
+          {t("events.settings.payments.price.form.desc")}
         </span>
 
         {isManager && (
@@ -198,7 +195,7 @@ export const UpdatePriceForm = ({
             loading={updatePriceMutation.isLoading}
             disabled={disabledInput}
           >
-            Update
+            {t("common.update")}
           </Button>
         )}
       </form>

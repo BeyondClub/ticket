@@ -4,6 +4,7 @@ import { EmailTemplatePreview } from './EmailTemplatePreview'
 import { SettingCard } from './SettingCard'
 import { useMetadata } from '~/hooks/metadata'
 import { SendCustomEmail } from '../forms/SendCustomEmail'
+import { useTranslation } from 'next-i18next'
 
 interface SettingEmailProps {
   lockAddress: string
@@ -20,52 +21,6 @@ interface TemplateProps {
   templateId: string
   customize?: boolean
 }
-const TemplateByLockType: Record<keyof LockType, TemplateProps[]> = {
-  isEvent: [
-    {
-      label: 'Event key purchased',
-      description:
-        'Customize the content of the email sent when a event ticket is purchased. Emails are only sent if you selected the Collect Email option on the checkout.',
-      templateId: 'eventKeyMined',
-    },
-    {
-      label: 'Event key airdropped',
-      description:
-        'Customize the content of the email sent when an event ticket has been airdropped. Emails are only sent if you supplied them when you airdropped the memberships.',
-      templateId: 'eventKeyAirdropped',
-    },
-  ],
-  isCertification: [
-    {
-      label: 'Certificate key purchased',
-      description:
-        'Customize the content of the email sent when a certificate is purchased. Emails are only sent when email is present.',
-      templateId: 'certificationKeyMined',
-    },
-    {
-      label: 'Certificate key airdropped',
-      description:
-        'Customize the content of the email sent when a certificate is airdropped.',
-      templateId: 'certificationKeyAirdropped',
-    },
-  ],
-  isStamp: [],
-}
-
-const DEFAULT_EMAIL_TEMPLATES: TemplateProps[] = [
-  {
-    label: 'Key purchased template',
-    description:
-      'Customize the content of the email sent when a new membership has been purchased. Emails are only sent if you selected the Collect Email option on the checkout.',
-    templateId: 'keyMined',
-  },
-  {
-    label: 'Key airdropped template',
-    description:
-      'Customize the content of the email sent when a new membership has been airdropped. Emails are only sent if you supplied them when you airdropped the memberships.',
-    templateId: 'keyAirdropped',
-  },
-]
 
 export const SettingEmail = ({
   isManager,
@@ -77,8 +32,56 @@ export const SettingEmail = ({
     lockAddress,
     network,
   })
+  const { t } = useTranslation()
 
   const types = getLockTypeByMetadata(metadata)
+
+  const TemplateByLockType: Record<keyof LockType, TemplateProps[]> = {
+    isEvent: [
+      {
+        label: t("events.settings.emails.keyPurchase.title"),
+        description:
+          t("events.settings.emails.keyPurchase.desc"),
+        templateId: 'eventKeyMined',
+      },
+      {
+        label: t("events.settings.emails.keyAirdrop.title"),
+        description:
+          t("events.settings.emails.keyAirdrop.desc"),
+        templateId: 'eventKeyAirdropped',
+      },
+    ],
+    isCertification: [
+      {
+        label: t("events.settings.emails.certKeyPurchase.title"),
+        description:
+          t("events.settings.emails.certKeyPurchase.desc"),
+        templateId: 'certificationKeyMined',
+      },
+      {
+        label: t("events.settings.emails.certKeyAirdrop.title"),
+        description:
+          t("events.settings.emails.certKeyAirdrop.desc"),
+        templateId: 'certificationKeyAirdropped',
+      },
+    ],
+    isStamp: [],
+  }
+
+  const DEFAULT_EMAIL_TEMPLATES: TemplateProps[] = [
+    {
+      label: t("events.settings.emails.keyPurchase.template"),
+      description:
+        t("Key airdropped template"),
+      templateId: 'keyMined',
+    },
+    {
+      label: t("events.settings.emails.keyAirdrop.template"),
+      description:
+        t("events.settings.emails.keyAirdrop.templateDesc"),
+      templateId: 'keyAirdropped',
+    },
+  ]
 
   // find lock type
   const [template] =
@@ -91,8 +94,8 @@ export const SettingEmail = ({
   return (
     <div className="grid grid-cols-1 gap-6">
       <SettingCard
-        label="Email Options"
-        description={`Enable or disable emails sent by Unlock Labs for a lock and customize options.`}
+        label={t("events.settings.emails.options.title")}
+        description={t("events.settings.emails.options.desc")}
         isLoading={isLoading}
       >
         <SendEmailForm
@@ -122,8 +125,8 @@ export const SettingEmail = ({
       })}
       <SettingCard
         disabled={!isManager}
-        label="Send Email"
-        description="Send email to all members"
+        label={t("events.settings.emails.send.title")}
+        description={t("events.settings.emails.send.desc")}
         isLoading={isLoading}
       >
         <SendCustomEmail lockAddress={lockAddress} network={network} />

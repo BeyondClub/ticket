@@ -4,6 +4,7 @@ import { Button, Placeholder, ToggleSwitch } from '@unlock-protocol/ui'
 import { useState } from 'react'
 import { EmailSettingsForm } from './EmailSettingsForm'
 import { useSaveLockSettings } from '~/hooks/useLockSettings'
+import { useTranslation } from 'next-i18next'
 
 interface SubscriptionFormProps {
   lockAddress: string
@@ -21,6 +22,7 @@ export const SendEmailForm = ({
   const [sendEmail, setSendEmail] = useState(true)
   const [changed, setChanged] = useState(false)
   const { mutateAsync: saveSettingsMutation } = useSaveLockSettings()
+  const { t } = useTranslation()
 
   const updateRequireEmail = async () => {
     if (!isManager) return
@@ -64,14 +66,14 @@ export const SendEmailForm = ({
   return (
     <div className="flex flex-col gap-6">
       <ToggleSwitch
-        title="Send email"
+        title={t("events.settings.emails.options.send.title")}
         disabled={disabledInput}
         enabled={sendEmail}
         description={
           <span className="mt-2 text-base font-semibold text-black">
             {!sendEmailValue
-              ? 'Emails are disabled, Unlock Labs will not send emails to users.'
-              : 'Emails are enabled, Unlock Labs will send emails to user when their membership status changes.'}
+              ? t("events.settings.emails.options.send.desc1")
+              : t("events.settings.emails.options.send.desc2")}
           </span>
         }
         setEnabled={(enabled: boolean) => {
@@ -88,7 +90,7 @@ export const SendEmailForm = ({
           disabled={disabledInput || !changed || !isManager}
           className="w-full md:w-1/3"
         >
-          Apply
+          {t("common.apply")}
         </Button>
       )}
       {sendEmail && (

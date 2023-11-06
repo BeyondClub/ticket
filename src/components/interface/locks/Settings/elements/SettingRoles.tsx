@@ -1,3 +1,4 @@
+import { useTranslation } from 'next-i18next'
 import { LockManagerForm } from '../forms/LockManagerForm'
 import { VerifierForm } from '../forms/VerifierForm'
 import { SettingCard } from './SettingCard'
@@ -15,11 +16,13 @@ export const SettingRoles = ({
   isManager,
   isLoading,
 }: SettingRolesProps) => {
+  const { t } = useTranslation()
+
   return (
     <div className="grid grid-cols-1 gap-6">
       <SettingCard
-        label="Lock Manager"
-        description="By default, the creator of a Lock is the first Lock Manager, granting them the highest level of permissions for the lock. You can also assign this role to other wallets. Be careful: this role can’t be revoked, but only renounced."
+        label={t("events.settings.roles.evntMgr.title")}
+        description={t("events.settings.roles.evntMgr.desc")}
         isLoading={isLoading}
       >
         <LockManagerForm
@@ -31,8 +34,8 @@ export const SettingRoles = ({
       </SettingCard>
 
       <SettingCard
-        label="Verifier"
-        description="Best use for in person event. Verifiers are trusted users at an event who can use a smart phone camera to scan a ticket QR code at the check-in to a venue and mark a ticket as checked-in."
+        label={t("events.settings.roles.verifier.title")}
+        description={t("events.settings.roles.verifier.desc")}
         isLoading={isLoading}
       >
         <VerifierForm

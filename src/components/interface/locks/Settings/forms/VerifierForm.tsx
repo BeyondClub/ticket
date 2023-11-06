@@ -13,6 +13,7 @@ import { getAddressForName } from '~/hooks/useEns'
 import { useState } from 'react'
 import { storage } from '~/config/storage'
 import { onResolveName } from '~/utils/resolvers'
+import { useTranslation } from 'next-i18next'
 
 interface VerifierProps {
   address: string
@@ -49,6 +50,7 @@ const VerifierCard = ({
   disabled,
 }: VerifierCardProps) => {
   const { account } = useAuth()
+  const { t } = useTranslation()
 
   const isCurrentAccount =
     account?.toLowerCase() === verifier?.address?.toLowerCase()
@@ -61,7 +63,7 @@ const VerifierCard = ({
         <span className="text-base text-brand-dark">{address}</span>
         {isCurrentAccount && (
           <span className="text-sm font-semibold text-brand-ui-primary">
-            {`That's you`}
+            {t("events.settings.roles.evntMgr.thatsYou")}
           </span>
         )}
       </div>
@@ -72,7 +74,7 @@ const VerifierCard = ({
           onClick={() => onDeleteVerifier(address)}
           disabled={isLoading || disabled}
         >
-          Remove
+          {t("common.remove")}
         </Button>
       )}
     </div>
@@ -86,6 +88,7 @@ export const VerifierForm = ({
   disabled,
 }: VerifierFormProps) => {
   const [verifiers, setVerifiers] = useState<VerifierProps[]>([])
+  const { t } = useTranslation()
 
   const localForm = useForm<VerifierFormDataProps>()
 
@@ -120,14 +123,14 @@ export const VerifierForm = ({
       if (res?.message) {
         ToastHelper.error(res?.message)
       } else {
-        ToastHelper.success(`Verifier added to list`)
+        ToastHelper.success(t("events.settings.roles.verifier.add.success"))
         setValue('verifier', '')
       }
     },
     onError: (err: any) => {
       ToastHelper.error(
         err?.error ??
-          'There was a problem adding the verifier address, please re-load and try again'
+        t("events.settings.roles.verifier.add.error")
       )
     },
   })
@@ -137,7 +140,7 @@ export const VerifierForm = ({
       if (res?.message) {
         ToastHelper.error(res?.message)
       } else {
-        ToastHelper.success(`${minifyAddress(verifier)} deleted from list`)
+        ToastHelper.success(`${minifyAddress(verifier)} ${t("events.settings.roles.verifier.delSuccess")}`)
       }
     },
   })
@@ -160,7 +163,7 @@ export const VerifierForm = ({
       onError: (err: any) => {
         ToastHelper.error(
           err?.error ??
-            'We could not load the list of verifiers for your lock. Please reload to to try again.'
+          t("events.settings.roles.verifier.loadErr")
         )
       },
     }
@@ -187,13 +190,13 @@ export const VerifierForm = ({
         {noVerifiers && !isLoading && (
           <span>
             {isManager
-              ? 'This lock currently does not have any verifier.'
-              : 'Only lock manager can access verifiers list.'}
+              ? t("events.settings.roles.verifier.noVerifier")
+              : t("events.settings.roles.verifier.noAccess")}
           </span>
         )}
         {!noVerifiers && !isLoading && (
           <div className="grid gap-1">
-            <span className="font-semibold">Verifiers</span>
+            <span className="font-semibold">{t("events.settings.roles.verifier.verifiers")}</span>
             <div className="grid gap-2">
               {(verifiers ?? [])?.map((verifier: VerifierProps) => (
                 <VerifierCard
@@ -231,7 +234,7 @@ export const VerifierForm = ({
                       withIcon
                       value={verifier}
                       disabled={disabled}
-                      label="To add a verifier, please enter their wallet address or ENS name"
+                      label={t("events.settings.roles.verifier.add.title")}
                       autoComplete="off"
                       onChange={(value: any) => {
                         setValue('verifier', value)
@@ -249,7 +252,7 @@ export const VerifierForm = ({
             disabled={isLoading || disabled}
             loading={addVerifierMutation.isLoading}
           >
-            Add
+            {t("common.add")}
           </Button>
         </form>
       )}

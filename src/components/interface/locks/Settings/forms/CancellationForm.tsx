@@ -6,6 +6,7 @@ import { ToastHelper } from '~/components/helpers/toast.helper'
 import { useWeb3Service } from '~/utils/withWeb3Service'
 import { SettingCardDetail } from '../elements/SettingCard'
 import { useAuth } from '~/contexts/AuthenticationContext'
+import { useTranslation } from 'next-i18next'
 
 interface CancellationFormProps {
   lockAddress: string
@@ -57,6 +58,7 @@ export const CancellationForm = ({
     setValue,
     formState: { isValid, errors },
   } = useForm<FormProps>()
+  const { t } = useTranslation()
 
   const updateRefundPenalty = async ({
     freeTrialLength = 0,
@@ -79,10 +81,10 @@ export const CancellationForm = ({
         updateRefundPenaltyMutation.mutateAsync(fields)
 
       await ToastHelper.promise(updateRefundPenaltyPromise, {
-        loading: 'Updating the refund policy.',
-        success: 'Penalty policy updated!',
+        loading: t("events.settings.memTerms.cancellation.form.loading"),
+        success: t("events.settings.memTerms.cancellation.form.success"),
         error:
-          'There was an issue updating the refund policy. Please try again.',
+          t("events.settings.memTerms.cancellation.form.error1"),
       })
     } else {
       ToastHelper.error('Form is not valid.')
@@ -111,7 +113,7 @@ export const CancellationForm = ({
       {
         queryFn: async () => getFreeTrialLength(),
         onError: () => {
-          ToastHelper.error('Impossible to retrieve freeTrialLength value.')
+          ToastHelper.error(t("events.settings.memTerms.cancellation.form.error2"))
         },
         queryKey: [
           'getFreeTrialLength',
@@ -124,7 +126,7 @@ export const CancellationForm = ({
         queryFn: async () => getRefundPenaltyBasisPoints(),
         onError: () => {
           ToastHelper.error(
-            'Impossible to retrieve refundPenaltyBasisPoints value.'
+            t("events.settings.memTerms.cancellation.form.error3")
           )
         },
         queryKey: [
@@ -173,12 +175,12 @@ export const CancellationForm = ({
     >
       <div className="flex flex-col gap-6">
         <SettingCardDetail
-          title="Allow Trial"
-          description="If you enable a free trial period, users will be able to get a full refund when they cancel their memberships. It is strongly advised to add transfer penalties when enabling free trials to avoid risks of people stealing funds from your contract."
+          title={t("events.settings.memTerms.cancellation.allow.title")}
+          description={t("events.settings.memTerms.cancellation.allow.desc")}
         />
         <div className="relative">
           <div className="flex items-center justify-between">
-            <span className="text-base">Free trial duration (in days)</span>
+            <span className="text-base">{t("events.settings.memTerms.cancellation.allow.freeTrial")}</span>
             <ToggleSwitch
               disabled={disabledInput}
               enabled={allowTrial}
@@ -190,7 +192,7 @@ export const CancellationForm = ({
             type="number"
             disabled={disabledInput || !allowTrial}
             step={1}
-            error={errors?.freeTrialLength && 'This field is required'}
+            error={errors?.freeTrialLength && t("events.settings.memTerms.cancellation.allow.error")}
             {...register('freeTrialLength', {
               valueAsNumber: true,
               required: true,
@@ -201,12 +203,12 @@ export const CancellationForm = ({
       </div>
       <div className="flex flex-col gap-6">
         <SettingCardDetail
-          title="Cancel Penalty"
-          description="Enable this feature if you wish to apply a cancellation penalty. The penalty is a percentage of the membership cost. The refund amount is pro-rated after the penalty has been applied. If you select 100%, the users will not receive any refund."
+          title={t("events.settings.memTerms.cancellation.cancel.title")}
+          description={t("events.settings.memTerms.cancellation.cancel.desc")}
         />
         <div className="relative">
           <div className="flex items-center justify-between">
-            <span className="text-base">Penalty fee</span>
+            <span className="text-base">{t("events.settings.memTerms.cancellation.cancel.penalty")}</span>
             <ToggleSwitch
               disabled={disabledInput}
               enabled={cancelPenalty}
@@ -219,7 +221,7 @@ export const CancellationForm = ({
             step={1}
             error={
               errors?.refundPenaltyPercentage &&
-              'This field accept percentage value between 0 and 100.'
+              t("events.settings.memTerms.cancellation.cancel.error")
             }
             {...register('refundPenaltyPercentage', {
               valueAsNumber: true,
@@ -237,7 +239,7 @@ export const CancellationForm = ({
           loading={updateRefundPenaltyMutation.isLoading}
           disabled={disabledInput}
         >
-          Apply
+          {t("common.apply")}
         </Button>
       )}
     </form>

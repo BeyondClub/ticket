@@ -21,6 +21,7 @@ import { LocksForm } from './elements/LocksForm'
 import { ChooseConfiguration, CheckoutConfig } from './ChooseConfiguration'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useDebounce } from 'react-use'
+import { useTranslation } from 'next-i18next'
 
 export type Configuration = 'new' | 'existing'
 interface ConfigurationFormProps {
@@ -28,12 +29,12 @@ interface ConfigurationFormProps {
 }
 
 const Header = () => {
+  const { t } = useTranslation()
   return (
     <header className="flex flex-col gap-4">
-      <h1 className="text-4xl font-bold">Checkout Builder</h1>
+      <h1 className="text-4xl font-bold">{t("checkout.title")}</h1>
       <span className="text-base text-gray-700">
-        Customize your membership checkout experience. The preview on the left
-        is updated in realtime.
+        {t("checkout.desc")}
       </span>
     </header>
   )
@@ -42,6 +43,7 @@ const Header = () => {
 export const CheckoutUrlPage = () => {
   const router = useRouter()
   const query = router.query
+  const { t } = useTranslation()
   const [checkoutUrl, setCheckoutUrl] = useState('')
   const { lock: lockAddress, network } = query ?? {}
   const [isDeleteConfirmation, setDeleteConfirmation] = useState(false)
@@ -84,11 +86,11 @@ export const CheckoutUrlPage = () => {
       locks:
         network && lockAddress
           ? {
-              [lockAddress as string]: {
-                network: parseInt(`${network!}`),
-                skipRecipient: true,
-              },
-            }
+            [lockAddress as string]: {
+              network: parseInt(`${network!}`),
+              skipRecipient: true,
+            },
+          }
           : {},
       icon: '',
       pessimistic: true,
@@ -104,12 +106,12 @@ export const CheckoutUrlPage = () => {
       locks:
         network && lockAddress
           ? {
-              [lockAddress as string]: {
-                network: parseInt(`${network!}`),
-                skipRecipient: true,
-                recurringPayments,
-              },
-            }
+            [lockAddress as string]: {
+              network: parseInt(`${network!}`),
+              skipRecipient: true,
+              recurringPayments,
+            },
+          }
           : {},
       icon: '',
       pessimistic: true,
@@ -301,7 +303,7 @@ export const CheckoutUrlPage = () => {
     }
 
     if (!checkoutConfig?.id) {
-      ToastHelper.error('Please select a configuration or create a new one.')
+      ToastHelper.error(t("checkout.config.error"))
       return Promise.reject() // no config selected, prevent skip to next step
     }
   }
@@ -338,11 +340,9 @@ export const CheckoutUrlPage = () => {
     <>
       <Modal isOpen={isDeleteConfirmation} setIsOpen={setDeleteConfirmation}>
         <div className="flex flex-col gap-4">
-          <h1 className="text-2xl font-bold">Delete {checkoutConfig.name}</h1>
+          <h1 className="text-2xl font-bold">{t("common.delete")} {checkoutConfig.name}</h1>
           <span className="text-base text-gray-700">
-            Are you sure you want to delete this checkout configuration? This
-            will break any links that use this configuration and cannot be
-            undone.
+            {t("checkout.config.delete")}
           </span>
           <div className="grid w-full">
             <Button
@@ -352,7 +352,7 @@ export const CheckoutUrlPage = () => {
                 deleteConfigurationMutation.mutateAsync()
               }}
             >
-              Delete {checkoutConfig.name}
+              {t("common.delete")} {checkoutConfig.name}
             </Button>
           </div>
         </div>
@@ -373,9 +373,9 @@ export const CheckoutUrlPage = () => {
             <Tabs
               tabs={[
                 {
-                  title: 'Choose a configuration',
+                  title: t("checkout.config.choose.title"),
                   description:
-                    'Create a new configuration or continue enhance the existing one for your checkout modal',
+                    t("checkout.config.choose.desc"),
                   children: (
                     <div className="flex items-center w-full gap-4 p-2">
                       <div className="w-full">
@@ -412,7 +412,7 @@ export const CheckoutUrlPage = () => {
                           }}
                           size="small"
                         >
-                          Delete
+                          {t("common.delete")}
                         </Button>
                       </div>
                     </div>
@@ -421,9 +421,9 @@ export const CheckoutUrlPage = () => {
                     await submitConfigurationMutation.mutateAsync(),
                 },
                 {
-                  title: 'Configure the basics',
+                  title: t("checkout.config.basic.title"),
                   description:
-                    'Customize the checkout modal interaction & additional behavior',
+                    t("checkout.config.basic.desc"),
                   disabled: !hasSelectedConfig,
                   loading,
                   children: (
@@ -434,9 +434,9 @@ export const CheckoutUrlPage = () => {
                   ),
                 },
                 {
-                  title: 'Configured locks',
+                  title: t("checkout.config.events.title"),
                   description:
-                    'Select the locks that you would like to featured in this configured checkout modal',
+                    t("checkout.config.events.desc"),
                   disabled: !hasSelectedConfig,
                   loading,
                   children: (
@@ -451,9 +451,9 @@ export const CheckoutUrlPage = () => {
                 },
                 {
                   title:
-                    'Share the checkout link or download the configuration',
+                    t("checkout.config.link.title"),
                   description:
-                    'Copy the checkout URL to share, or download a JSON file for your implementation',
+                    t("checkout.config.link.desc"),
                   children: (
                     <CheckoutShareOrDownload
                       paywallConfig={checkoutConfig.config}

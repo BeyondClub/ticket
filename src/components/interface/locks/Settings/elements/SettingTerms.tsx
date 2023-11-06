@@ -7,6 +7,7 @@ import { UpdateQuantityForm } from '../forms/UpdateQuantityForm'
 import { UpdateTransferFee } from '../forms/UpdateTransferFee'
 import { SettingCard } from './SettingCard'
 import { UNLIMITED_KEYS_DURATION } from '~/constants'
+import { useTranslation } from 'next-i18next'
 
 interface SettingTermsProps {
   lockAddress: string
@@ -33,12 +34,13 @@ export const SettingTerms = ({
   publicLockVersion,
 }: SettingTermsProps) => {
   const unlimitedDuration = lock?.expirationDuration === UNLIMITED_KEYS_DURATION
+  const { t } = useTranslation()
 
   const settings: SettingProps[] = [
     {
-      label: 'Transfers',
+      label: t("events.settings.memTerms.transfers.title"),
       description:
-        'Make tokens non-transferable (soulbound) or apply fees on transfers.',
+        t("events.settings.memTerms.transfers.desc"),
       children: (
         <UpdateTransferFee
           lockAddress={lockAddress}
@@ -50,8 +52,8 @@ export const SettingTerms = ({
       ),
     },
     {
-      label: 'Duration',
-      description: 'Set up how long each membership lasts. ',
+      label: t("events.settings.memTerms.duration.title"),
+      description: t("events.settings.memTerms.duration.desc"),
       children: (
         <UpdateDurationForm
           lockAddress={lockAddress}
@@ -63,9 +65,9 @@ export const SettingTerms = ({
       ),
     },
     {
-      label: 'Quantity',
+      label: t("events.settings.memTerms.quantity.title"),
       description:
-        'The maximum number of memberships that can be sold from your contract. Note: there is no limit to the number of memberships that can be airdropped by a lock manager or key granter.',
+        t("events.settings.memTerms.quantity.desc"),
       children: (
         <UpdateQuantityForm
           lockAddress={lockAddress}
@@ -77,9 +79,9 @@ export const SettingTerms = ({
       ),
     },
     {
-      label: 'Maximum number of keys per address',
+      label: t("events.settings.memTerms.no.title"),
       description:
-        'The maximum number of keys a specific address can own. By default, a given address can only own a single key.',
+        t("events.settings.memTerms.no.desc"),
       children: (
         <UpdateMaxKeysPerAddress
           isManager={isManager}
@@ -92,9 +94,9 @@ export const SettingTerms = ({
       ),
     },
     {
-      label: 'Cancellation',
+      label: t("events.settings.memTerms.cancellation.title"),
       description:
-        'Select how your contract should handle cancellations and optionally issue refunds.',
+        t("events.settings.memTerms.cancellation.desc"),
       children: (
         <CancellationForm
           lockAddress={lockAddress}

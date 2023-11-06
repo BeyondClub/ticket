@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query'
 import { Button, Input } from '@unlock-protocol/ui'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'next-i18next'
 import { ToastHelper } from '~/components/helpers/toast.helper'
 import { useAuth } from '~/contexts/AuthenticationContext'
 
@@ -35,6 +36,7 @@ export const UpdateNameForm = ({
       name: lockName,
     },
   })
+  const { t } = useTranslation()
 
   const changeName = async (name: string) => {
     const walletService = await getWalletService(network)
@@ -51,12 +53,12 @@ export const UpdateNameForm = ({
     if (isValid) {
       const changeNamePromise = changeNameMutation.mutateAsync(name)
       await ToastHelper.promise(changeNamePromise, {
-        loading: 'Updating lock name.',
-        success: 'Lock name updated.',
-        error: 'There is an issue updating the lock name.',
+        loading: t("events.settings.general.contractName.form.loading"),
+        success: t("events.settings.general.contractName.form.success"),
+        error: t("events.settings.general.contractName.form.error1"),
       })
     } else {
-      ToastHelper.error('Form is not valid.')
+      ToastHelper.error(t("common.formNotValid"))
       reset()
     }
   }
@@ -71,21 +73,20 @@ export const UpdateNameForm = ({
             minLength: 3,
             required: true,
           })}
-          error={errors?.name && 'Lock name should have at least 3 characters.'}
+          error={errors?.name && t("events.settings.general.contractName.form.error3")}
           autoComplete="off"
           disabled={disabledInput}
           description={
             <span>
               <span className="flex gap-1">
                 <span>
-                  This value will be set on the contract but the NFT metadata
-                  will remain unchanged if you have set a value there.
+                  {t("events.settings.general.contractName.form.desc1")}
                 </span>
                 <Link
                   href={updateMetadataUrl}
                   className="font-bold cursor-pointer text-brand-ui-primary"
                 >
-                  Edit NFT properties
+                  {t("events.settings.general.contractName.form.desc2")}
                 </Link>
               </span>
             </span>
@@ -100,7 +101,7 @@ export const UpdateNameForm = ({
           disabled={disabledInput}
           loading={changeNameMutation.isLoading}
         >
-          Update
+          {t("common.update")}
         </Button>
       )}
     </form>

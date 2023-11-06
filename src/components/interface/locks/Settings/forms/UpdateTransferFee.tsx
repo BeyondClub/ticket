@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Button, Input, ToggleSwitch } from '@unlock-protocol/ui'
+import { useTranslation } from 'next-i18next'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { ToastHelper } from '~/components/helpers/toast.helper'
@@ -26,6 +27,7 @@ export const UpdateTransferFee = ({
   unlimitedDuration,
 }: UpdateTransferFeeProps) => {
   const [allowTransfer, setAllowTransfer] = useState(false)
+  const { t } = useTranslation()
 
   const {
     handleSubmit,
@@ -52,12 +54,12 @@ export const UpdateTransferFee = ({
       )
 
       await ToastHelper.promise(updateTransferFeePromise, {
-        loading: 'Updating transfer fee',
-        error: 'Failed to update the values, please try again.',
-        success: 'Transfer fee updated.',
+        loading: t("events.settings.memTerms.transfers.form.loading"),
+        error: t("events.settings.memTerms.transfers.form.error"),
+        success: t("events.settings.memTerms.transfers.form.success"),
       })
     } else {
-      ToastHelper.error('Form is not valid.')
+      ToastHelper.error(t("common.formNotValid"))
     }
   }
 
@@ -94,20 +96,20 @@ export const UpdateTransferFee = ({
           setAllowTransfer(enabled)
           setValue('transferFeePercentage', 0)
         }}
-        title="Transfer authorized"
+        title={t("events.settings.memTerms.transfers.toggle.title")}
         description={
           allowTransfer
-            ? 'Members can transfer their valid key(s) to any other wallet.'
-            : 'Transfers are disabled and tokens are soul-bound.'
+            ? t("events.settings.memTerms.transfers.toggle.desc1")
+            : t("events.settings.memTerms.transfers.toggle.desc2")
         }
         disabled={disabledInput}
       />
       {allowTransfer && !unlimitedDuration && (
         <>
           <Input
-            label="Transfer fee (%)"
+            label={t("events.settings.memTerms.transfers.form.title")}
             type="number"
-            description="You can set up a fee when member transfer their key to another account or wallet. The fee is taken in time."
+            description={t("events.settings.memTerms.transfers.form.desc")}
             min="0"
             max="100"
             placeholder="10%"
@@ -127,7 +129,7 @@ export const UpdateTransferFee = ({
           className="w-full md:w-1/3"
           disabled={disabledInput}
         >
-          Apply
+          {t("common.apply")}
         </Button>
       )}
     </form>

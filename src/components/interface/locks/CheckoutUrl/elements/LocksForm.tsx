@@ -27,6 +27,7 @@ import { getLocksByNetwork } from '~/hooks/useLocksByManager'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckBoxInput } from './BasicConfigForm'
+import { useTranslation } from 'next-i18next'
 
 interface LockListItemProps {
   address: string
@@ -285,6 +286,7 @@ export const LocksForm = ({
   const [recurring, setRecurring] = useState<string | number>('')
   const [recurringUnlimited, setRecurringUnlimited] = useState(false)
   const [lockRecurring, setLockRecurring] = useState<RecurringByLock>({})
+  const { t } = useTranslation()
 
   const { getIsRecurringPossible } = useLockSettings()
 
@@ -546,9 +548,9 @@ export const LocksForm = ({
     <div className="flex flex-col">
       <div className="flex flex-col gap-2">
         <div className="flex flex-col gap-1">
-          <Card.Title>Featured in this modal</Card.Title>
+          <Card.Title>{t("checkout.config.events.featured")}</Card.Title>
           <Card.Description>
-            Adjust each lock & behavior by click on the gear icon
+            {t("checkout.config.events.featuredDesc")}
           </Card.Description>
         </div>
         <div className="flex flex-col gap-4">
@@ -699,7 +701,7 @@ export const LocksForm = ({
             onClick={() => setAddLock(true)}
           >
             <span className="text-lg font-bold text-brand-ui-primary">
-              Add a lock
+              {t("checkout.config.events.addAnEvent")}
             </span>
             <PlusIcon className="text-brand-ui-primary" size={25} />
           </button>

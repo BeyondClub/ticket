@@ -1,9 +1,10 @@
 import { classed } from '@tw-classed/react'
-import { InputHTMLAttributes, ReactNode, useRef, useState } from 'react'
+import { InputHTMLAttributes, ReactNode, use, useRef, useState } from 'react'
 import { Button, Props as ButtonProps } from '../Button/Button'
 import { QueryClientProvider, useMutation } from '@tanstack/react-query'
 import { DEFAULT_QUERY_CLIENT_OPTIONS } from '../constants'
 import { Placeholder } from '../Placeholder'
+import { useTranslation } from 'next-i18next'
 
 interface TabProps {
   title: ReactNode
@@ -93,7 +94,7 @@ const Tab = ({
   tabIndex,
   children,
   onNext,
-  onNextLabel = 'Next',
+  onNextLabel,
   showButton = true,
   isLast = false,
   setTab,
@@ -110,6 +111,8 @@ const Tab = ({
 }) => {
   const tabNumber = tabIndex + 1 // incrementing number of the tab
   const tabRef = useRef<HTMLDivElement | null>(null)
+  const { t } = useTranslation()
+  if (!onNextLabel) onNextLabel = t('common.next')
 
   const scrollIntoView = () => {
     // force scroll start of tab

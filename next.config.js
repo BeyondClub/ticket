@@ -43,10 +43,10 @@ const config = {
   },
   output: 'standalone',
   i18n,
-  experimental: {
-    // this includes files from the monorepo base directory up
-    outputFileTracingRoot: path.join(__dirname, '../'),
-  },
+  // experimental: {
+  //   // this includes files from the monorepo base directory up
+  //   outputFileTracingRoot: path.join(__dirname, '../'),
+  // },
 }
 
 module.exports = withSentryConfig(withTM(config))

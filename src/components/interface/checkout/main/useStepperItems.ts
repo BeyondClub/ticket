@@ -7,6 +7,7 @@ import {
 } from './checkoutMachine'
 import { UnlockAccountService } from '../UnlockAccount/unlockAccountMachine'
 import { shouldSkip } from './utils'
+import { useTranslation } from 'next-i18next'
 
 export function useStepperItems(
   service: CheckoutService | UnlockAccountService,
@@ -23,17 +24,19 @@ export function useStepperItems(
   } = {}
 ) {
   const [state] = useActor(service)
+  const {t} = useTranslation()
+  
   if (isUnlockAccount) {
     return [
       {
-        name: 'Enter email',
+        name: t("checkout.preview.enterEmail"),
         to: 'ENTER_EMAIL',
       },
       {
-        name: 'Password',
+        name: t("common.password"),
       },
       {
-        name: 'Signed in',
+        name: t("checkout.preview.signedIn"),
       },
     ]
   }
@@ -71,16 +74,16 @@ export function useStepperItems(
   const isMember = existingMember || isExistingMember
   const checkoutItems: StepItem[] = [
     {
-      name: 'Select',
+      name: t("checkout.items.select"),
       to: 'SELECT',
     },
     {
-      name: 'Choose quantity',
+      name: t("checkout.items.quantity"),
       skip: (!hasOneLock ? skipQuantity : skipLockQuantity) || isExpired,
       to: 'QUANTITY',
     },
     {
-      name: 'Add recipients',
+      name: t("checkout.items.addRecipients"),
       to: 'METADATA',
       skip:
         (!hasOneLock
@@ -88,45 +91,45 @@ export function useStepperItems(
           : skipLockQuantity && skipLockRecipient && !isMember) || isExpired,
     },
     {
-      name: 'Sign message',
+      name: t("checkout.items.signMsg"),
       skip: !paywallConfig.messageToSign,
       to: 'MESSAGE_TO_SIGN',
     },
     isPassword
       ? {
-          name: 'Submit password',
+          name: t("checkout.items.subPassword"),
           to: 'PASSWORD',
         }
       : isPromo
       ? {
-          name: 'Enter promo code',
+          name: t("checkout.items.promoCode"),
           to: 'PROMO',
         }
       : isGuild
       ? {
-          name: 'Guild',
+          name: t("checkout.items.guild"),
           to: 'GUILD',
         }
       : {
-          name: 'Solve captcha',
+          name: t("checkout.items.captcha"),
           to: 'CAPTCHA',
           skip: !isCaptcha,
         },
     {
-      name: 'Payment method',
+      name: t("checkout.items.paymentMethod"),
       to: 'PAYMENT',
     },
     {
-      name: 'Add card',
+      name: t("checkout.items.addCard"),
       to: 'CARD',
       skip: !['card', 'universal_card'].includes(payment?.method),
     },
     {
-      name: 'Confirm',
+      name: t("common.confirm"),
       to: 'CONFIRM',
     },
     {
-      name: 'Minting NFT',
+      name: t("minting.mintingNft"),
     },
   ]
 

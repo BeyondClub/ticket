@@ -8,6 +8,7 @@ import {
   EmailSubscriptionForm,
   EmailSubscriptionFormProps,
 } from './EmailSubscriptionForm'
+import { useTranslation } from 'next-i18next'
 
 export interface FooterItem {
   label: ReactNode
@@ -22,13 +23,13 @@ export interface MenuItemsProps {
 
 export type ActionsProps =
   | {
-      label: string
-      url: string
-    }
+    label: string
+    url: string
+  }
   | {
-      label: string
-      onClick: () => void
-    }
+    label: string
+    onClick: () => void
+  }
 
 export interface FooterProps {
   logo: {
@@ -94,6 +95,7 @@ export const Footer = ({
 }: FooterProps) => {
   const logoImageUrl = logo?.src
   const logoUrl = logo.url || '#'
+  const { t } = useTranslation()
 
   return (
     <footer className="flex flex-col w-full gap-16 md:gap-24">
@@ -149,7 +151,7 @@ export const Footer = ({
               target="_blank"
               rel="noopener noreferrer"
             >
-              Privacy Policy
+              {t("terms.privacy")}
             </Link>
           )}
           {termsUrl && (
@@ -159,7 +161,7 @@ export const Footer = ({
               target="_blank"
               rel="noopener noreferrer"
             >
-              Term of Service
+              {t("terms.terms")}
             </Link>
           )}
         </div>

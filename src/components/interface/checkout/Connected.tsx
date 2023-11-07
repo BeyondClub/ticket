@@ -11,6 +11,7 @@ import { detectInjectedProvider } from '~/utils/wallet'
 import { DownloadWallet } from '../DownloadWallet'
 import { ConnectService } from './Connect/connectMachine'
 import { CheckoutService } from './main/checkoutMachine'
+import { useTranslation } from 'next-i18next'
 interface SignedInProps {
   onDisconnect?: () => void
   isUnlockAccount: boolean
@@ -26,15 +27,17 @@ export function SignedIn({
   account,
   isDisconnecting,
 }: SignedInProps) {
+  const { t } = useTranslation()
+
   let userText: string
   let signOutText: string
 
   if (isUnlockAccount && email) {
-    userText = `User: ${minifyEmail(email)}`
-    signOutText = 'Sign out'
+    userText = `${t("common.user")}: ${minifyEmail(email)}`
+    signOutText = t("common.signOut")
   } else {
-    userText = `Wallet: ${addressMinify(account!)}`
-    signOutText = 'Disconnect'
+    userText = `${t("common.wallet")}: ${addressMinify(account!)}`
+    signOutText = t("wallet.disconnect")
   }
 
   return (
@@ -42,9 +45,8 @@ export function SignedIn({
       <p> {userText}</p>
       <Tooltip
         side="top"
-        tip={`${
-          isUnlockAccount ? 'Signing out' : 'Disconnecting'
-        } will reset the flow`}
+        tip={`${isUnlockAccount ? t("common.signOut") : t("wallet.disconnect")
+          } ${t("checkout.preview.willReset")}`}
       >
         {onDisconnect && (
           <Button
@@ -80,11 +82,14 @@ export function SignedOut({
   onUnlockAccount,
   authenticateWithProvider,
   injectedProvider,
-  title = 'Have a crypto wallet?',
+  title,
 }: SignedOutProps) {
   const iconButtonClass =
     'inline-flex items-center w-10 h-10 justify-center hover:[box-shadow:_0px_4px_15px_rgba(0,0,0,0.08)] [box-shadow:_0px_8px_30px_rgba(0,0,0,0.08)] rounded-full'
   const [isDownloadWallet, setIsDownloadWallet] = useState(false)
+  const { t } = useTranslation()
+
+  if (!title) title = t("checkout.preview.haveWallet")
 
   const ButtonIcon = useMemo(() => {
     const walletIcons = {
@@ -154,7 +159,7 @@ export function SignedOut({
         <div className="h-full border-l"></div>
       </div>
       <div className="grid items-center col-span-5 space-y-2 justify-items-center">
-        <h4 className="text-sm">No crypto wallet?</h4>
+        <h4 className="text-sm">{t("checkout.preview.noWallet")}</h4>
         <Button
           onClick={(event) => {
             event.preventDefault()
@@ -164,7 +169,7 @@ export function SignedOut({
           variant="outlined-primary"
           className="w-full"
         >
-          Get started
+          {t("checkout.preview.getStarted")}
         </Button>
       </div>
     </div>
@@ -188,6 +193,7 @@ export function Connected({
   const { account, email, isUnlockAccount, deAuthenticate, connected } =
     useAuth()
   const [signing, setSigning] = useState(false)
+  const { t } = useTranslation()
 
   const { authenticateWithProvider } = useAuthenticate({
     injectedProvider,
@@ -223,7 +229,7 @@ export function Connected({
   useEffect(() => {
     if (!account) {
       console.debug('Not connected')
-    } else console.debug(`Connected as ${account}`)
+    } else console.debug(`${t("checkout.preview.connectedAs")} ${account}`)
   }, [account])
 
   if (useDelegatedProvider) {
@@ -261,7 +267,7 @@ export function Connected({
         }}
         iconLeft={<Icon icon={EthereumIcon} size="medium" key="ethereum" />}
       >
-        Sign message to Continue
+        {t("checkout.preview.signMsg")}
       </Button>
     </div>
   ) : (
@@ -272,7 +278,7 @@ export function Connected({
           send('UNLOCK_ACCOUNT')
         }}
         authenticateWithProvider={authenticateWithProvider}
-        title="Have a crypto wallet?"
+        title={t("checkout.preview.haveWallet")}
       />
     </div>
   )

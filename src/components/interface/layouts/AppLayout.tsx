@@ -81,8 +81,8 @@ const FOOTER = (title: string, description: string) => {
     logo: {
       url: config.unlockStaticUrl,
     },
-    privacyUrl: `${config.unlockStaticUrl}/privacy`,
-    termsUrl: `${config.unlockStaticUrl}/terms`,
+    privacyUrl: `https://beyondclub.notion.site/Brand-Privacy-Policy-60bda5e2c8ab427dbb0fc2314f46e24b`,
+    termsUrl: `https://beyondclub.notion.site/Customer-Terms-of-Use-a8188ecc12c740e5b2e2df5bcb436539`,
     menuSections: [],
     // menuSections: [
     //   {

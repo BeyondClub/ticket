@@ -1,6 +1,7 @@
 import { RiExternalLinkLine as ExternalLinkIcon } from 'react-icons/ri'
 import { useConfig } from '~/utils/withConfig'
 import { Icon } from '@unlock-protocol/ui'
+import { useTranslation } from "next-i18next"
 
 interface ViewContractProps {
   lockAddress: string
@@ -8,6 +9,7 @@ interface ViewContractProps {
 }
 
 export const ViewContract = ({ lockAddress, network }: ViewContractProps) => {
+  const { t } = useTranslation()
   const config = useConfig()
   const networkConfig = config.networks[network]
   return (
@@ -17,7 +19,7 @@ export const ViewContract = ({ lockAddress, network }: ViewContractProps) => {
       rel="noopener noreferrer"
       className="inline-flex items-center gap-1 text-xs text-brand-ui-primary hover:opacity-75"
     >
-      View contract ({networkConfig.name}){' '}
+      {t('common.viewContract')} ({networkConfig.name}){' '}
       <span>
         <Icon icon={ExternalLinkIcon} size="small" />
       </span>

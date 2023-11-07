@@ -22,6 +22,7 @@ import { PoweredByUnlock } from '../../PoweredByUnlock'
 import { ViewContract } from '../../ViewContract'
 import { CheckoutService } from './../checkoutMachine'
 import { PricingData } from './PricingData'
+import { useTranslation } from 'next-i18next'
 
 interface Props {
   injectedProvider: unknown
@@ -52,6 +53,7 @@ export function ConfirmCrypto({
     data,
     renew,
   } = state.context
+  const { t } = useTranslation()
 
   const { address: lockAddress, network: lockNetwork, keyPrice } = lock!
 
@@ -63,8 +65,8 @@ export function ConfirmCrypto({
 
   const totalApproval =
     typeof recurringPayment === 'string' &&
-    recurringPayment.toLowerCase() === 'forever' &&
-    payment.method === 'crypto'
+      recurringPayment.toLowerCase() === 'forever' &&
+      payment.method === 'crypto'
       ? MAX_UINT
       : undefined
 
@@ -225,9 +227,9 @@ export function ConfirmCrypto({
 
   if (isFree) {
     if (isConfirming) {
-      buttonLabel = 'Claiming'
+      buttonLabel = t("checkout.claiming")
     } else {
-      buttonLabel = 'Claim'
+      buttonLabel = t("checkout.claim")
     }
   } else {
     if (isConfirming) {
@@ -287,8 +289,8 @@ export function ConfirmCrypto({
               pricingData.total <= 0
                 ? 'FREE'
                 : `${formatNumber(
-                    pricingData.total
-                  ).toLocaleString()} ${symbol}`
+                  pricingData.total
+                ).toLocaleString()} ${symbol}`
             }
             isCardEnabled={!!creditCardEnabled}
           />

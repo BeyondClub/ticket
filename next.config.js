@@ -2,6 +2,7 @@ const dotenv = require('dotenv')
 const path = require('path')
 const { withSentryConfig } = require('@sentry/nextjs')
 const withTM = require('next-transpile-modules')(['@tw-classed/react'])
+const { i18n } = require('./next-i18next.config');
 
 const unlockEnv = process.env.NEXT_PUBLIC_UNLOCK_ENV || 'dev'
 
@@ -41,10 +42,11 @@ const config = {
     unoptimized: true,
   },
   output: 'standalone',
-  experimental: {
-    // this includes files from the monorepo base directory up
-    outputFileTracingRoot: path.join(__dirname, '../'),
-  },
+  i18n,
+  // experimental: {
+  //   // this includes files from the monorepo base directory up
+  //   outputFileTracingRoot: path.join(__dirname, '../'),
+  // },
 }
 
 module.exports = withSentryConfig(withTM(config))

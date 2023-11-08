@@ -5,6 +5,7 @@ import { SubscriptionForm } from '../forms/SubscriptionForm'
 import { UpdatePriceForm } from '../forms/UpdatePriceForm'
 import { SettingCard } from './SettingCard'
 import { UpdateGasRefundForm } from '../forms/UpdateGasRefundForm'
+import { useTranslation } from 'next-i18next'
 
 interface SettingPaymentsProps {
   lockAddress: string
@@ -21,11 +22,13 @@ export const SettingPayments = ({
   isLoading,
   lock,
 }: SettingPaymentsProps) => {
+  const { t } = useTranslation()
+
   return (
     <div className="grid grid-cols-1 gap-6">
       <SettingCard
-        label="Price"
-        description="The price that the lock contract is charging for one membership, whether it is a new one or a renewal."
+        label={t("events.settings.payments.price.title")}
+        description={t("events.settings.payments.price.desc")}
         isLoading={isLoading}
       >
         <UpdatePriceForm
@@ -38,8 +41,8 @@ export const SettingPayments = ({
       </SettingCard>
 
       <SettingCard
-        label="Credit Card Payment"
-        description="Accept credit cards, Apple Pay and Google Pay. Service & Credit card processing fees will be applied to the price paid by the member."
+        label={t("events.settings.payments.credit.title")}
+        description={t("events.settings.payments.credit.desc")}
         isLoading={isLoading}
       >
         <CreditCardForm
@@ -51,8 +54,8 @@ export const SettingPayments = ({
       </SettingCard>
 
       <SettingCard
-        label="Gas Refunds"
-        description="Set up a gas refund. This is required for renewals."
+        label={t("events.settings.payments.refund.title")}
+        description={t("events.settings.payments.refund.desc")}
       >
         <UpdateGasRefundForm
           lockAddress={lockAddress}
@@ -61,8 +64,8 @@ export const SettingPayments = ({
         />
       </SettingCard>
       <SettingCard
-        label="Renewals"
-        description="Automatically renew memberships when they expire. Users will need to have the previously approved the renewals, as well as have a sufficient amount of tokens in their wallets."
+        label={t("events.settings.payments.renewal.title")}
+        description={t("events.settings.payments.renewal.desc")}
         isLoading={isLoading}
       >
         <SubscriptionForm
@@ -75,8 +78,8 @@ export const SettingPayments = ({
       </SettingCard>
 
       <SettingCard
-        label="Receipts"
-        description="Update the supplier information to be shown on receipts."
+        label={t("events.settings.payments.receipt.title")}
+        description={t("events.settings.payments.receipt.desc")}
         isLoading={isLoading}
       >
         <ReceiptBaseForm

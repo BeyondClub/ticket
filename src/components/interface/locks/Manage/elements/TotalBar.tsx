@@ -7,6 +7,7 @@ import { CryptoIcon } from '@unlock-protocol/crypto-icon'
 import { VscGraphLine as GraphIcon } from 'react-icons/vsc'
 import { useLockManager } from '~/hooks/useLockManager'
 import { WithdrawFundModal } from './WithdrawFundModal'
+import { useTranslation } from 'next-i18next'
 
 interface TotalsProps {
   lockAddress: string
@@ -63,16 +64,17 @@ export const TotalBar = ({ lockAddress, network }: TotalsProps) => {
     'pt-4 pb-4 md:pb-0 first-of-type:pt-0 md:py-0 md:pl-4 grow shrink-0 basis-0'
 
   const Stats = () => {
+    const { t } = useTranslation()
     return (
       <>
         <div className="grid w-full grid-cols-1 divide-y md:gap-0 md:grid-cols-3 md:divide-y-0 md:divide-x divide-x-gray-500">
           <div className={wrapperClass}>
-            <Detail label="Total members" loading={loading} valueSize="large">
+            <Detail label={t("common.totMembers")} loading={loading} valueSize="large">
               {numberOfOwners}
             </Detail>
           </div>
           <div className={wrapperClass}>
-            <Detail label="Key Sold" loading={loading} valueSize="large">
+            <Detail label={t("common.keySold")} loading={loading} valueSize="large">
               {keySold}
             </Detail>
           </div>
@@ -80,7 +82,7 @@ export const TotalBar = ({ lockAddress, network }: TotalsProps) => {
             <Detail
               label={
                 <div className="flex items-start gap-4">
-                  <span>Balance</span>
+                  <span>{t("common.balance")}</span>
                   {isManager && (
                     <Button
                       variant="outlined-primary"
@@ -89,7 +91,7 @@ export const TotalBar = ({ lockAddress, network }: TotalsProps) => {
                       disabled={withdrawDisabled}
                     >
                       <div className="flex gap-1 flex-items-center">
-                        <span>Withdraw</span>
+                        <span>{t("common.withdraw")}</span>
                       </div>
                     </Button>
                   )}
@@ -129,14 +131,12 @@ export const TotalBar = ({ lockAddress, network }: TotalsProps) => {
         <Stats />
       </div>
       <div
-        className={`flex ${
-          showStats ? 'flex-col-reverse' : 'flex-col'
-        } px-4 py-3 md:hidden`}
+        className={`flex ${showStats ? 'flex-col-reverse' : 'flex-col'
+          } px-4 py-3 md:hidden`}
       >
         <button
-          className={`flex ${
-            showStats ? 'mt-4' : ''
-          } items-center justify-between md:hidden`}
+          className={`flex ${showStats ? 'mt-4' : ''
+            } items-center justify-between md:hidden`}
           onClick={() => setShowStats(!showStats)}
         >
           <span className="text-sm font-semibold">

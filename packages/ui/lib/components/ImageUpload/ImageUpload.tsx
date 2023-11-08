@@ -4,17 +4,7 @@ import { Tab } from '@headlessui/react'
 import { CgSpinner as SpinnerIcon } from 'react-icons/cg'
 import { Input } from '../Form'
 import { classed } from '@tw-classed/react'
-
-const tabs = [
-  {
-    id: 1,
-    name: 'Upload File',
-  },
-  {
-    id: 2,
-    name: 'Insert image URL',
-  },
-]
+import { useTranslation } from 'next-i18next'
 
 const ImageUploadWrapper = classed.div('grid gap-6 p-2 bg-white rounded-xl', {
   variants: {
@@ -71,6 +61,8 @@ export const ImageUpload = ({
     },
     onDropAccepted: onChange,
   })
+  const { t } = useTranslation()
+
   return (
     <ImageUploadWrapper size={size} className={className}>
       <ImageContainer imageRatio={imageRatio}>
@@ -91,7 +83,7 @@ export const ImageUpload = ({
               alt="NFT"
             />
           ) : (
-            <div className="text-xs">No image selected</div>
+            <div className="text-xs">{t("imgUpload.notSelected")}</div>
           ))}
       </ImageContainer>
       <Tab.Group>
@@ -100,12 +92,20 @@ export const ImageUpload = ({
             <p className="text-sm text-gray-600">{description}</p>
           )}
           <Tab.List className="grid grid-cols-2 border-b border-gray-300">
-            {tabs.map((tab) => (
+            {[
+              {
+                id: 1,
+                name: t("imgUpload.uploadFile"),
+              },
+              {
+                id: 2,
+                name: t("imgUpload.insertUrl"),
+              },
+            ].map((tab) => (
               <Tab
                 key={tab.id}
                 className={({ selected }) =>
-                  `w-full text-sm py-2 font-semibold leading-5 ${
-                    selected && 'text-ui-main-500 border-b border-ui-main-500'
+                  `w-full text-sm py-2 font-semibold leading-5 ${selected && 'text-ui-main-500 border-b border-ui-main-500'
                   }`
                 }
               >
@@ -122,7 +122,7 @@ export const ImageUpload = ({
               >
                 <input {...getInputProps()} />
                 <Button size="small" type="button" variant="outlined-primary">
-                  Select a file
+                  {t("imgUpload.selectFile")}
                 </Button>
               </div>
             </Tab.Panel>

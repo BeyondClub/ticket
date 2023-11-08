@@ -3,6 +3,7 @@ import { UpdateBaseTokenURI } from '../forms/UpdateBaseTokenURI'
 import { UpdateNameForm } from '../forms/UpdateNameForm'
 import { UpdateSymbolForm } from '../forms/UpdateSymbolForm'
 import { SettingCard } from './SettingCard'
+import { useTranslation } from 'next-i18next'
 
 interface SettingGeneralProps {
   lockAddress: string
@@ -19,11 +20,13 @@ export const SettingGeneral = ({
   isLoading,
   lock,
 }: SettingGeneralProps) => {
+  const { t } = useTranslation()
+
   return (
     <div className="grid grid-cols-1 gap-6">
       <SettingCard
-        label="Contract name"
-        description="Customize the contract name on chain."
+        label={(t("events.settings.general.contractName.title"))}
+        description={t("events.settings.general.contractName.desc")}
         isLoading={isLoading}
       >
         <UpdateNameForm
@@ -36,8 +39,8 @@ export const SettingGeneral = ({
       </SettingCard>
 
       <SettingCard
-        label="Ticker Symbol"
-        description="Default: KEY. Customize your membership experience by changing the token symbol (sometimes called 'ticker')."
+        label={t("events.settings.general.ticker.title")}
+        description={t("events.settings.general.ticker.desc")}
         isLoading={isLoading}
       >
         <UpdateSymbolForm
@@ -49,8 +52,8 @@ export const SettingGeneral = ({
       </SettingCard>
 
       <SettingCard
-        label="Base token URI"
-        description="Update the base token URI of the lock that is used to create the individual token's URIs."
+        label={t("events.settings.general.baseUri.title")}
+        description={t("events.settings.general.baseUri.desc")}
         isLoading={isLoading}
       >
         <UpdateBaseTokenURI

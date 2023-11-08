@@ -25,6 +25,7 @@ import { CertificationMetadataForm } from './CertificationMetadataForm'
 import { useSaveLockSettings } from '~/hooks/useLockSettings'
 import { addressMinify } from '~/utils/strings'
 import { getLockTypeByMetadata } from '@unlock-protocol/core'
+import { useTranslation } from 'next-i18next'
 interface Props {
   lockAddress?: string
   network?: number
@@ -49,9 +50,10 @@ export const Form = ({
     shouldUnregister: false,
   })
 
-  const image = `${config.locksmithHost}/lock/${lockAddress}/icon${
-    keyId ? `?id=${keyId}` : ''
-  }`
+  const image = `${config.locksmithHost}/lock/${lockAddress}/icon${keyId ? `?id=${keyId}` : ''
+    }`
+
+  const { t } = useTranslation()
 
   const {
     formState: { errors },
@@ -119,8 +121,7 @@ export const Form = ({
           <div className="flex flex-col justify-center gap-6">
             {errorFields.length > 0 && (
               <div className="px-2 text-red-600">
-                You need fix the issues in the following fields before saving
-                metadata: {errorFields.join(',')}
+                {t("events.metadata.fixIssues")}: {errorFields.join(',')}
               </div>
             )}
             <Button
@@ -128,7 +129,7 @@ export const Form = ({
               loading={isMetadataUpdating}
               className="w-full"
             >
-              Save Properties
+              {t("events.metadata.saveProperties")}
             </Button>
           </div>
         </div>
@@ -140,6 +141,7 @@ export const Form = ({
 export function UpdateMetadataForm({ lockAddress, network, keyId }: Props) {
   const { account, getWalletService } = useAuth()
   const web3Service = useWeb3Service()
+  const { t } = useTranslation()
 
   const [selected, setSelected] = useState<PickerState>({
     lockAddress,
@@ -193,10 +195,10 @@ export function UpdateMetadataForm({ lockAddress, network, keyId }: Props) {
       },
       onError(error) {
         console.error(error)
-        ToastHelper.error('Failed to update base token URI. Retry again.')
+        ToastHelper.error(t("events.metadata.error"))
       },
       onSuccess() {
-        ToastHelper.success('Base token URI updated successfully.')
+        ToastHelper.success(t("events.metadata.success"))
         refetch()
       },
     })
@@ -218,21 +220,20 @@ export function UpdateMetadataForm({ lockAddress, network, keyId }: Props) {
     }
   }, [tokenURI, isTokenURILoading])
 
-  let title = `Edit default properties`
+  let title = t("events.metadata.title.1")
   let description = (
     <>
-      You are editing the default properties for all the tokens from the
-      contract {addressMinify(lockAddress!)}.
+      {t("events.metadata.description.1")} {addressMinify(lockAddress!)}.
     </>
   )
 
   // AddressLink
   if (selected.keyId) {
-    title = `Edit properties for #${selected.keyId}`
+    title = `${t("events.metadata.title.2")} #${selected.keyId}`
     description = (
       <>
-        You are editing the specific properties for the token #{selected.keyId}{' '}
-        from the contract {addressMinify(lockAddress!)}.
+        {t("events.metadata.description.2.1")} #{selected.keyId}{' '}
+        {t("events.metadata.description.2.2")} {addressMinify(lockAddress!)}.
       </>
     )
   }
@@ -250,7 +251,7 @@ export function UpdateMetadataForm({ lockAddress, network, keyId }: Props) {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-brand-ui-primary hover:underline"
             >
-              Learn about the OpenSea metadata.
+              {t("events.metadata.openSeaMetadata")}
               <ExternalLinkIcon />
             </a>
           </p>
@@ -261,11 +262,9 @@ export function UpdateMetadataForm({ lockAddress, network, keyId }: Props) {
         <Card variant="secondary">
           <div className="grid gap-6">
             <div className="space-y-1">
-              <h3 className="text-lg font-bold">Metadata</h3>
+              <h3 className="text-lg font-bold">{t("common.metadata")}</h3>
               <p className="text-gray-600">
-                Select the Lock or Key you want to edit properties for. If you
-                save metadata for lock only, it will be used for all keys which
-                do not have any metadata set.
+                {t("events.metadata.description.3")}
               </p>
             </div>
             <Picker
@@ -296,11 +295,10 @@ export function UpdateMetadataForm({ lockAddress, network, keyId }: Props) {
               </div>
               <div className="space-y-1">
                 <h3 className="text-xl font-bold text-red-900">
-                  Unexpected Base Token URI
+                  {t("events.metadata.baseUriError.title")}
                 </h3>
                 <p className="text-gray-600">
-                  You need to change your base token URI to be editable by the
-                  Unlock Dashboard.
+                  {t("events.metadata.baseUriError.desc")}
                 </p>
               </div>
             </div>
@@ -312,7 +310,7 @@ export function UpdateMetadataForm({ lockAddress, network, keyId }: Props) {
                 await update(baseTokenURI)
               }}
             >
-              Change Base Token URI
+              {t("events.metadata.baseUriError.btn")}
             </Button>
           </div>
         </Card>

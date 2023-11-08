@@ -5,6 +5,7 @@ import { useCallback, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Web3Service } from '@unlock-protocol/unlock-js'
 import { networks } from '@unlock-protocol/networks'
+import { useTranslation } from 'next-i18next'
 
 interface Props {
   lockAddress: string
@@ -29,6 +30,8 @@ export function UpdateGasRefundForm({ lockAddress, network, disabled }: Props) {
       amount: '0',
     },
   })
+
+  const { t } = useTranslation()
 
   const {
     data: gasRefundValue,
@@ -65,7 +68,7 @@ export function UpdateGasRefundForm({ lockAddress, network, disabled }: Props) {
     <form className="space-y-6" onSubmit={handleSubmit(onSetGasRefund)}>
       <Input
         disabled={disabled || isSubmitting}
-        label="Gas Refund Value"
+        label={t("events.settings.payments.refund.form.title")}
         {...register('amount', {
           valueAsNumber: true,
         })}
@@ -74,11 +77,11 @@ export function UpdateGasRefundForm({ lockAddress, network, disabled }: Props) {
         step="any"
         min={0}
         error={errors.amount?.message}
-        description="The amount of tokens to refund when someone sends a renewal transaction for users. This is paid using the currency of the lock."
+        description={t("events.settings.payments.refund.form.desc")}
       />
       <div></div>
       <Button disabled={disabled} loading={isSubmitting} type="submit">
-        Set Gas Refund Value
+        {t("events.settings.payments.refund.form.set")}
       </Button>
     </form>
   )

@@ -13,6 +13,7 @@ import { CaptchaContractHook } from './hooksComponents/CaptchaContractHook'
 import { CustomContractHook } from './hooksComponents/CustomContractHook'
 import { GuildContractHook } from './hooksComponents/GuildContractHook'
 import { PasswordContractHook } from './hooksComponents/PasswordContractHook'
+import { TFunction, useTranslation } from 'next-i18next'
 
 interface UpdateHooksFormProps {
   lockAddress: string
@@ -64,59 +65,61 @@ const GENERAL_OPTIONS: OptionProps[] = [
   },
 ]
 
-export const HookMapping: Record<FormPropsKey, HookValueProps> = {
-  keyPurchase: {
-    label: 'Key purchase hook',
-    fromPublicLockVersion: 7,
-    hookName: 'onKeyPurchaseHook',
-    options: [
-      {
-        label: 'Password',
-        value: HookType.PASSWORD,
-        component: (args) => <PasswordContractHook {...args} />,
-      },
-      {
-        label: 'Captcha required',
-        value: HookType.CAPTCHA,
-        component: (args) => <CaptchaContractHook {...args} />,
-      },
-      {
-        label: 'Guild.xyz',
-        value: HookType.GUILD,
-        component: (args) => <GuildContractHook {...args} />,
-      },
-    ],
-  },
-  keyCancel: {
-    label: 'Key cancel hook',
-    fromPublicLockVersion: 7,
-    hookName: 'onKeyCancelHook',
-  },
-  validKey: {
-    label: 'Valid key hook',
-    fromPublicLockVersion: 9,
-    hookName: 'onValidKeyHook',
-  },
-  tokenURI: {
-    label: 'Token URI hook',
-    fromPublicLockVersion: 9,
-    hookName: 'onTokenURIHook',
-  },
-  keyTransfer: {
-    label: 'Key transfer hook',
-    fromPublicLockVersion: 11,
-    hookName: 'onKeyTransferHook',
-  },
-  keyExtend: {
-    label: 'Key extend hook',
-    fromPublicLockVersion: 12,
-    hookName: 'onKeyExtendHook',
-  },
-  keyGrant: {
-    label: 'Key grant hook',
-    fromPublicLockVersion: 12,
-    hookName: 'onKeyGrantHook',
-  },
+export const HookMapping: (t: TFunction) => Record<FormPropsKey, HookValueProps> = (t) => {
+  return {
+    keyPurchase: {
+      label: t("events.settings.advanced.hooks.keyPurchase"),
+      fromPublicLockVersion: 7,
+      hookName: 'onKeyPurchaseHook',
+      options: [
+        {
+          label: 'Password',
+          value: HookType.PASSWORD,
+          component: (args) => <PasswordContractHook {...args} />,
+        },
+        {
+          label: 'Captcha required',
+          value: HookType.CAPTCHA,
+          component: (args) => <CaptchaContractHook {...args} />,
+        },
+        {
+          label: 'Guild.xyz',
+          value: HookType.GUILD,
+          component: (args) => <GuildContractHook {...args} />,
+        },
+      ],
+    },
+    keyCancel: {
+      label: t("events.settings.advanced.hooks.keyCancel"),
+      fromPublicLockVersion: 7,
+      hookName: 'onKeyCancelHook',
+    },
+    validKey: {
+      label: t("events.settings.advanced.hooks.validKey"),
+      fromPublicLockVersion: 9,
+      hookName: 'onValidKeyHook',
+    },
+    tokenURI: {
+      label: t("events.settings.advanced.hooks.tokenUri"),
+      fromPublicLockVersion: 9,
+      hookName: 'onTokenURIHook',
+    },
+    keyTransfer: {
+      label: t("events.settings.advanced.hooks.keyTransfer"),
+      fromPublicLockVersion: 11,
+      hookName: 'onKeyTransferHook',
+    },
+    keyExtend: {
+      label: t("events.settings.advanced.hooks.keyExtend"),
+      fromPublicLockVersion: 12,
+      hookName: 'onKeyExtendHook',
+    },
+    keyGrant: {
+      label: t("events.settings.advanced.hooks.keyGrant"),
+      fromPublicLockVersion: 12,
+      hookName: 'onKeyGrantHook',
+    },
+  }
 }
 
 interface HookSelectProps {
@@ -141,6 +144,7 @@ const HookSelect = ({
   const firstRender = useRef(false)
   const { networks } = useConfig()
   const hooks = networks?.[network]?.hooks ?? {}
+  const { t } = useTranslation()
 
   const getHooks = () => {
     return hooks
@@ -163,11 +167,11 @@ const HookSelect = ({
     <ConnectForm>
       {({ setValue, getValues }: any) => {
         const value = getValues(name)
-        const hookOptionsByName = HookMapping[name]?.options ?? []
+        const hookOptionsByName = HookMapping(t)[name]?.options ?? []
         const options = [...GENERAL_OPTIONS, ...hookOptionsByName]
         const Option = options.find((option) => option.value === selectedOption)
 
-        const { hookName } = HookMapping[name]
+        const { hookName } = HookMapping(t)[name]
 
         let id = ''
 
@@ -237,6 +241,7 @@ export const UpdateHooksForm = ({
   version,
 }: UpdateHooksFormProps) => {
   const { getWalletService } = useAuth()
+  const { t } = useTranslation()
   const [defaultValues, setDefaultValues] = useState<HooksFormProps>()
 
   const { isLoading, refetch, getHookValues } = useCustomHook({
@@ -279,12 +284,12 @@ export const UpdateHooksForm = ({
     if (isValid) {
       const setEventsHooksPromise = setEventsHooksMutation.mutateAsync(fields)
       await ToastHelper.promise(setEventsHooksPromise, {
-        success: 'Event hooks updated.',
-        loading: 'Updating Event hooks.',
-        error: 'Impossible to update event hooks.',
+        success: t("events.settings.advanced.hooks.update.success"),
+        loading: t("events.settings.advanced.hooks.update.loading"),
+        error: t("events.settings.advanced.hooks.update.error"),
       })
     } else {
-      ToastHelper.error('Form is not valid')
+      ToastHelper.error(t("common.formNotValid"))
     }
   }
 
@@ -300,7 +305,7 @@ export const UpdateHooksForm = ({
           methods.trigger()
         }}
       >
-        {Object.entries(HookMapping)?.map(
+        {Object.entries(HookMapping(t))?.map(
           ([field, { label, fromPublicLockVersion = 0, hookName }]) => {
             const fieldName = field as FormPropsKey
             const hasRequiredVersion =
@@ -327,7 +332,7 @@ export const UpdateHooksForm = ({
             type="submit"
             loading={setEventsHooksMutation.isLoading}
           >
-            Apply
+            {t("common.apply")}
           </Button>
         )}
       </form>

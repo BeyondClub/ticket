@@ -12,6 +12,7 @@ import { ToastHelper } from '~/components/helpers/toast.helper'
 import { omit } from 'lodash'
 import { useLockData } from '~/hooks/useLockData'
 import { useUpdateUsersMetadata } from '~/hooks/useUserMetadata'
+import { useTranslation } from 'next-i18next'
 
 dayjs.extend(customParseFormat)
 
@@ -37,6 +38,8 @@ export const AirdropForm = ({
     lockAddress,
     network,
   })
+
+  const { t } = useTranslation()
 
   const handleConfirm = async (items: AirdropMember[]) => {
     // Create metadata
@@ -155,13 +158,12 @@ export const AirdropForm = ({
       ) : (
         <Tab.Group defaultIndex={0}>
           <Tab.List className="flex gap-6 p-2 border-b border-gray-400">
-            {['Manual', 'Bulk'].map((text) => (
+            {[t("airdrop.manual"), t("airdrop.bulk")].map((text) => (
               <Tab
                 key={text}
                 className={({ selected }) => {
-                  return `font-medium ${
-                    selected ? 'text-brand-ui-primary' : ''
-                  }`
+                  return `font-medium ${selected ? 'text-brand-ui-primary' : ''
+                    }`
                 }}
               >
                 {text}
@@ -196,8 +198,10 @@ export function AirdropKeysDrawer({
   isOpen,
   setIsOpen,
 }: Props) {
+  const { t } = useTranslation()
+
   return (
-    <Drawer isOpen={isOpen} setIsOpen={setIsOpen} title="Airdrop Keys">
+    <Drawer isOpen={isOpen} setIsOpen={setIsOpen} title={t("tools.airdrop.title")}>
       <div className="mt-2 space-y-6">
         <AirdropForm lockAddress={lockAddress} network={network}></AirdropForm>
       </div>

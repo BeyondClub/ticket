@@ -8,6 +8,16 @@ import { useRouter } from 'next/router'
 import { Input } from '@unlock-protocol/ui'
 import useWalletConnectClient from '~/hooks/useWalletConnectClient'
 import Loading from '~/components/interface/Loading'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale)),
+    },
+  }
+}
+
 
 const Wc: NextPage = () => {
   const { query } = useRouter()

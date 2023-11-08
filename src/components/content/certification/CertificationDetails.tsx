@@ -142,7 +142,7 @@ export const CertificationDetails = ({
 
   const onEdit = () => {
     return router.push(
-      `/locks/metadata?lockAddress=${lockAddress}&network=${network}`
+      `/events/metadata?lockAddress=${lockAddress}&network=${network}`
     )
   }
 

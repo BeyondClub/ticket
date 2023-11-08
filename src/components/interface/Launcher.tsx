@@ -1,8 +1,9 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { useTranslation } from 'next-i18next'
 import { FiExternalLink as ExternalLinkIcon } from 'react-icons/fi'
 
-const options = [
+const options = (cta1: string) => [
   {
     image: {
       src: '/images/illustrations/events/outmetaverse.svg',
@@ -10,34 +11,32 @@ const options = [
       height: 200,
       alt: 'organize event',
     },
-    cta: 'Organize an event and sell tickets',
+    cta: cta1,
     href: '/event/new',
   },
-  {
-    image: {
-      src: '/images/illustrations/certifications/img-handoffDoc.svg',
-      width: 250,
-      height: 200,
-      alt: 'create certification',
-    },
-    cta: 'Certify & Show the expertise on chain.',
-    href: '/certification/new',
-  },
+  // {
+  //   image: {
+  //     src: '/images/illustrations/certifications/img-handoffDoc.svg',
+  //     width: 250,
+  //     height: 200,
+  //     alt: 'create certification',
+  //   },
+  //   cta: 'Certify & Show the expertise on chain.',
+  //   href: '/certification/new',
+  // },
 ]
 
 export const Launcher = () => {
+  const { t } = useTranslation()
+
   return (
     <div className="flex flex-col items-center text-center">
-      <h1 className="text-3xl font-bold mb-2">
-        What do you want to achieve today?
-      </h1>
+      <h1 className="text-3xl font-bold mb-2">{t('home.heading1')}</h1>
       <h2 className="text-lg font-light text-center">
-        Let&apos;s begin by selecting a starting point that has easy and
-        <br />
-        manageable steps for you to follow! 😊
+        {t('home.heading2')} 😊
       </h2>
       <ul className="flex gap-4 mt-8 mb-12 flex-col md:flex-row">
-        {options.map(({ cta, image, href }) => (
+        {options(t('options.title.1')).map(({ cta, image, href }) => (
           <li
             key={image.alt}
             className="relative h-96 overflow-hidden bg-[#FFF7E8] w-96 rounded-lg duration-200 hover:drop-shadow-2xl"
@@ -61,12 +60,12 @@ export const Launcher = () => {
         ))}
       </ul>
       <p className="mb-12">
-        I am not sure yet,{' '}
+        {t('options.title.default.1')}{' '}
         <Link
           className="underline font-semibold text-brand-ui-primary"
-          href="/locks/create"
+          href="/events/create"
         >
-          let me create my own membership contract
+          {t('options.title.default.2')}
         </Link>
         .
       </p>

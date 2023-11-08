@@ -12,6 +12,7 @@ import { RiCloseLine as CloseIcon } from 'react-icons/ri'
 import { unified } from 'unified'
 import remarkParse from 'remark-parse'
 import remarkHtml from 'remark-html'
+import { useTranslation } from 'next-i18next'
 
 interface EmailTemplatePreviewProps {
   templateId: string
@@ -33,6 +34,7 @@ const markdownToHtml = async (content: string) => {
   try {
     const parsedContent = await unified()
       .use(remarkParse)
+      // @ts-ignore
       .use(remarkHtml, {
         sanitize: true,
       })
@@ -55,6 +57,7 @@ export const EmailTemplatePreview = ({
   const config = useConfig()
   const [showPreview, setShowPreview] = useState(true)
   const wedlocksService = useWedlockService()
+  const { t } = useTranslation()
 
   const {
     register,
@@ -78,9 +81,9 @@ export const EmailTemplatePreview = ({
       }
     )
     await ToastHelper.promise(saveEmailPromise, {
-      loading: 'Updating the custom section of the email.',
-      error: 'We could not update the custom section of the email.',
-      success: 'The custom section of the email was updated successfully!',
+      loading: t("events.settings.emails.keyPurchase.loading"),
+      error: t("events.settings.emails.keyPurchase.error"),
+      success: t("events.settings.emails.keyPurchase.success"),
     })
     reset({
       customContent: customContent || '',
@@ -138,9 +141,9 @@ export const EmailTemplatePreview = ({
       lockSettings?.emailSender
     )
     await ToastHelper.promise(promise, {
-      loading: 'Sending email preview...',
-      success: 'Email preview sent.',
-      error: `Can't send email preview`,
+      loading: t("events.settings.emails.keyPurchase.preview.loading"),
+      success: t("events.settings.emails.keyPurchase.preview.success"),
+      error: t("events.settings.emails.keyPurchase.preview.error"),
     })
     setShowPreview(false) // close modal after email is sent
   }
@@ -203,7 +206,7 @@ export const EmailTemplatePreview = ({
       <div className="flex flex-col justify-start gap-3">
         <div className="pb-2">
           <TextBox
-            placeholder="## Example content"
+            placeholder={"## " + t("events.settings.emails.keyPurchase.example.placeholder")}
             rows={8}
             disabled={disabled}
             {...register('customContent')}
@@ -215,9 +218,9 @@ export const EmailTemplatePreview = ({
               rel="noopener noreferrer"
               className="font-semibold text-brand-ui-primary"
             >
-              Markdown
+              {t("events.settings.emails.keyPurchase.example.desc1")}
             </a>{' '}
-            is supported for custom email content
+            {t("events.settings.emails.keyPurchase.example.desc2")}
           </div>
         </div>
         {isManager && (
@@ -230,7 +233,7 @@ export const EmailTemplatePreview = ({
               loading={saveCustomContent.isLoading}
               disabled={loading}
             >
-              Save
+              {t("common.save")}
             </Button>
             <Button
               size="small"
@@ -240,7 +243,7 @@ export const EmailTemplatePreview = ({
               }}
               disabled={disableShowPreview}
             >
-              Show email preview
+              {t("events.settings.emails.keyPurchase.showPreview")}
             </Button>
           </div>
         )}
@@ -250,7 +253,7 @@ export const EmailTemplatePreview = ({
               <div className="w-full max-w-xl mt-10">
                 <div className="flex items-center justify-between">
                   <h2 className="text-lg font-bold text-brand-ui-primary">
-                    Preview
+                    {t("events.settings.emails.keyPurchase.preview.title")}
                   </h2>
                   <div className="flex items-center justify-end">
                     <button
@@ -270,7 +273,7 @@ export const EmailTemplatePreview = ({
                   className="flex flex-col w-full gap-6 py-4"
                 >
                   <ul>
-                    <li>Email subject: {email?.subject}</li>
+                    <li>{t("events.settings.emails.keyPurchase.subject")} {email?.subject}</li>
                   </ul>
                   <div
                     dangerouslySetInnerHTML={{
@@ -287,13 +290,13 @@ export const EmailTemplatePreview = ({
                       {...register('email', {
                         required: {
                           value: true,
-                          message: 'This field is required.',
+                          message: t("common.fieldReq"),
                         },
                       })}
                       error={errors?.email?.message}
                     />
                     <Button type="submit" disabled={disabled}>
-                      Send email preview
+                      {t("events.settings.emails.keyPurchase.sendPreview")}
                     </Button>
                   </div>
                 </form>

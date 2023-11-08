@@ -7,6 +7,7 @@ import { useDebounce } from 'react-use'
 import { getAddressForName } from '~/hooks/useEns'
 import React from 'react'
 import { FilterProps } from './Members'
+import { useTranslation } from 'next-i18next'
 
 interface FilterBarProps {
   setFilters?: (filters: FilterProps) => void
@@ -24,18 +25,6 @@ interface Filter {
   hideSearch?: boolean
 }
 
-const FILTER_ITEMS: Filter[] = [
-  { key: 'owner', label: 'Owner' },
-  { key: 'tokenId', label: 'Token id' },
-  { key: 'email', label: 'Email', onlyLockManager: true },
-  {
-    key: 'checkedInAt',
-    label: 'Checked in time',
-    hideSearch: true,
-    onlyLockManager: true,
-  },
-]
-
 export enum ExpirationStatus {
   ALL = 'all',
   ACTIVE = 'active',
@@ -51,6 +40,8 @@ export const FilterBar = ({
   const [isTyping, setIsTyping] = useState(false)
   const [query, setQuery] = useState('')
   const [rawQueryValue, setRawQueryValue] = useState('')
+
+  const { t } = useTranslation()
 
   const [_isReady] = useDebounce(
     async () => {
@@ -79,6 +70,18 @@ export const FilterBar = ({
     defaultFilters?.filterKey ?? 'owner'
   )
 
+  const FILTER_ITEMS: Filter[] = [
+    { key: 'owner', label: t("common.owner") },
+    { key: 'tokenId', label: t("common.tokenID") },
+    { key: 'email', label: t("common.email"), onlyLockManager: true },
+    {
+      key: 'checkedInAt',
+      label: t("common.chkdInTime"),
+      hideSearch: true,
+      onlyLockManager: true,
+    },
+  ]
+
   // show only allowed filter, some filter are visible only to lockManager (`email` and `checkedInAt`)
   const filters = FILTER_ITEMS.filter(
     (filter: Filter) => !filter.onlyLockManager || true
@@ -100,7 +103,7 @@ export const FilterBar = ({
   const Expiration = () => {
     return (
       <div className="flex flex-col gap-4">
-        <span className="text-base">Expiration Status</span>
+        <span className="text-base">{t("common.expStatus")}</span>
         <div className="flex gap-3">
           {expirations.map((value: ExpirationStatus, index) => {
             const isActive = value === expiration
@@ -112,7 +115,7 @@ export const FilterBar = ({
                 variant={variant}
                 onClick={() => setExpiration(value)}
               >
-                {value?.toUpperCase()}
+                {t(`common.${value}`)?.toUpperCase()}
               </Button>
             )
           })}
@@ -132,7 +135,7 @@ export const FilterBar = ({
             onClick={() => setExpandFilter(!expandFilter)}
           >
             <div className="flex items-center gap-2">
-              <span className="text-sm">Filter</span>
+              <span className="text-sm">{t("common.filter")}</span>
               <FilterIcon size={18} />
             </div>
           </Button>
@@ -140,7 +143,7 @@ export const FilterBar = ({
             <div className="flex flex-col gap-2 md:flex-row">
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col items-start gap-2 md:items-center md:flex-row">
-                  <span className="mb-1">Filter by</span>
+                  <span className="mb-1">{t("common.filterBy")}</span>
                   <div className="w-full md:w-40">
                     <Select
                       size="small"
@@ -173,7 +176,7 @@ export const FilterBar = ({
               className="p-0"
             >
               <div className="flex items-center gap-2">
-                <span className="text-sm">Search</span>
+                <span className="text-sm">{t("common.search")}</span>
                 <SearchIcon size={18} />
               </div>
             </Button>

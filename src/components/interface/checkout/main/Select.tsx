@@ -30,6 +30,7 @@ import { getLockUsdPrice } from '~/hooks/useUSDPricing'
 import { shouldSkip } from './utils'
 import { AiFillWarning as WarningIcon } from 'react-icons/ai'
 import { useGetLockProps } from '~/hooks/useGetLockProps'
+import { useTranslation } from 'next-i18next'
 interface Props {
   injectedProvider: unknown
   checkoutService: CheckoutService
@@ -42,6 +43,7 @@ interface LockOptionProps {
 
 const LockOption = ({ disabled, lock }: LockOptionProps) => {
   const config = useConfig()
+  const { t } = useTranslation()
 
   const { data: creditCardEnabled } = useCreditCardEnabled({
     lockAddress: lock.address,
@@ -60,8 +62,7 @@ const LockOption = ({ disabled, lock }: LockOptionProps) => {
       key={lock.address}
       value={lock}
       className={({ checked, disabled }) =>
-        `flex flex-col p-2 w-full gap-2 items-center border border-gray-200 rounded-xl cursor-pointer relative ${
-          checked && 'border-ui-main-100 bg-gray-100'
+        `flex flex-col p-2 w-full gap-2 items-center border border-gray-200 rounded-xl cursor-pointer relative ${checked && 'border-ui-main-100 bg-gray-100'
         } ${disabled && `opacity-80 bg-gray-100 cursor-not-allowed`}`
       }
     >
@@ -132,11 +133,11 @@ const LockOption = ({ disabled, lock }: LockOptionProps) => {
                   )}
                   {formattedData?.formattedKeysAvailable !== 'Unlimited' && (
                     <LabeledItem
-                      label="Left"
+                      label={t("common.left")}
                       icon={QuantityIcon}
                       value={
                         formattedData?.isSoldOut
-                          ? 'Sold out'
+                          ? t("common.soldOut")
                           : formattedData?.formattedKeysAvailable
                       }
                     />
@@ -160,22 +161,22 @@ const LockOption = ({ disabled, lock }: LockOptionProps) => {
               </div>
               {lock.isMember && (
                 <div className="flex items-center justify-between w-full px-2 py-1 text-sm text-gray-500 border border-gray-300 rounded">
-                  You already have this membership{' '}
+                  {t("checkout.preview.memAlready")}{' '}
                   <Badge
                     size="tiny"
                     iconRight={<CheckMarkIcon />}
                     variant="green"
                   >
                     {' '}
-                    Valid{' '}
+                    {t("common.valid")}{' '}
                   </Badge>
                 </div>
               )}
               {lock.isExpired && (
                 <div className="flex items-center justify-between w-full px-2 py-1 text-sm text-gray-500 border border-gray-300 rounded">
-                  Your membership is expired.{' '}
+                  {t("checkout.preview.memExpired")}{' '}
                   <Badge size="tiny" iconRight={<WarningIcon />} variant="red">
-                    Expired
+                    {t("common.expired")}
                   </Badge>
                 </div>
               )}
@@ -189,6 +190,7 @@ const LockOption = ({ disabled, lock }: LockOptionProps) => {
 
 export function Select({ checkoutService, injectedProvider }: Props) {
   const [state, send] = useActor(checkoutService)
+  const { t } = useTranslation()
   const { paywallConfig, lock: selectedLock } = state.context
   const [lock, setLock] = useState<LockState | undefined>(selectedLock)
   const { isLoading: isLocksLoading, data: locks } = useQuery(
@@ -435,8 +437,7 @@ export function Select({ checkoutService, injectedProvider }: Props) {
           <div className="grid">
             {isNotExpectedAddress && (
               <p className="mb-2 text-sm text-center">
-                Switch to wallet address {minifyAddress(expectedAddress)} to
-                continue.
+                {t("checkout.preview.switchWallet.desc1")} {minifyAddress(expectedAddress)} {t("checkout.preview.switchWallet.desc2")}
               </p>
             )}
             <Button
@@ -460,7 +461,7 @@ export function Select({ checkoutService, injectedProvider }: Props) {
                 })
               }}
             >
-              Next
+              {t("common.next")}
             </Button>
           </div>
         </Connected>

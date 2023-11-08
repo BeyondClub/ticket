@@ -7,11 +7,13 @@ import LocksContext from '../../contexts/LocksContext'
 import { AppLayout } from '../interface/layouts/AppLayout'
 import { Scanner } from '../interface/verification/Scanner'
 import VerificationStatus from '../interface/VerificationStatus'
+import { useTranslation } from 'next-i18next'
 
 export const VerificationContent: React.FC<unknown> = () => {
   const { query } = useRouter()
   const [locks, setLocks] = useState({})
   const router = useRouter()
+  const { t } = useTranslation()
 
   const membershipVerificationConfig = getMembershipVerificationConfig({
     data: query.data?.toString(),
@@ -20,9 +22,9 @@ export const VerificationContent: React.FC<unknown> = () => {
 
   if (!membershipVerificationConfig) {
     return (
-      <AppLayout title="Verification" showLinks={false} authRequired={false}>
+      <AppLayout title={t("tools.verification.title")} showLinks={false} authRequired={false}>
         <Head>
-          <title>{pageTitle('Verification')}</title>
+          <title>{pageTitle(t("tools.verification.title"))}</title>
         </Head>
         <main>
           <Scanner />
@@ -39,9 +41,9 @@ export const VerificationContent: React.FC<unknown> = () => {
   }
 
   return (
-    <AppLayout title="Verification" showLinks={false} authRequired={false}>
+    <AppLayout title={t("tools.verification.title")} showLinks={false} authRequired={false}>
       <Head>
-        <title>{pageTitle('Verification')}</title>
+        <title>{pageTitle(t("tools.verification.title"))}</title>
       </Head>
       <LocksContext.Provider
         value={{

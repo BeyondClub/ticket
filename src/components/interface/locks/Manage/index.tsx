@@ -32,6 +32,7 @@ import { storage } from '~/config/storage'
 import { useMetadata } from '~/hooks/metadata'
 import { getLockTypeByMetadata } from '@unlock-protocol/core'
 import { MEMBERS_PER_PAGE } from '~/constants'
+import { useTranslation } from 'next-i18next'
 
 interface ActionBarProps {
   lockAddress: string
@@ -109,12 +110,13 @@ const ActionBar = ({ lockAddress, network, page }: ActionBarProps) => {
       errorMessage: 'Failed to download members list',
     },
   })
+  const { t } = useTranslation()
 
   return (
     <>
       <div className="flex items-center justify-between">
         <span className="text-xl font-bold text-brand-ui-primary">
-          {isEvent ? 'Attendees' : 'Members'}
+          {isEvent ? t("common.attendees") : t("common.members")}
         </span>
         {isManager && (
           <div className="flex gap-2">
@@ -126,7 +128,7 @@ const ActionBar = ({ lockAddress, network, page }: ActionBarProps) => {
               iconLeft={<CsvIcon className="text-brand-ui-primary" size={16} />}
               onClick={() => onDownloadMutation.mutate()}
             >
-              Download {isEvent ? 'attendee' : 'member'} list
+              {t("common.download")} {isEvent ? t("common.attendees") : t("common.members")} {t("common.list")}
             </Button>
           </div>
         )}
@@ -172,14 +174,15 @@ const PopoverItem = ({
 const ToolsMenu = ({ lockAddress, network }: TopActionBarProps) => {
   const [airdropKeys, setAirdropKeys] = useState(false)
   const DEMO_URL = `/demo?network=${network}&lock=${lockAddress}`
-  const metadataPageUrl = `/locks/metadata?lockAddress=${lockAddress}&network=${network}`
-  const checkoutLink = `/locks/checkout-url?lock=${lockAddress}&network=${network}`
+  const metadataPageUrl = `/events/metadata?lockAddress=${lockAddress}&network=${network}`
+  const checkoutLink = `/events/checkout-url?lock=${lockAddress}&network=${network}`
   const verificationLink = `/verification`
 
   const { isManager } = useLockManager({
     lockAddress,
     network: network!,
   })
+  const { t } = useTranslation()
 
   return (
     <>
@@ -197,7 +200,7 @@ const ToolsMenu = ({ lockAddress, network }: TopActionBarProps) => {
               <Button as="div" role="button">
                 <div className="flex items-center gap-2">
                   <Icon icon={ToolsIcon} size={20} />
-                  <span>Tools</span>
+                  <span>{t("common.tools")}</span>
                 </div>
               </Button>
             </Popover.Button>
@@ -215,21 +218,21 @@ const ToolsMenu = ({ lockAddress, network }: TopActionBarProps) => {
                   <div className="relative grid gap-8 bg-white p-7">
                     <a href={DEMO_URL} target="_blank" rel="noreferrer">
                       <PopoverItem
-                        label="Preview"
-                        description="Preview the checkout experience"
+                        label={t("tools.preview.title")}
+                        description={t("tools.preview.desc")}
                         icon={WebsiteIcon}
                       />
                     </a>
                     <Link href={checkoutLink} className="text-left">
                       <PopoverItem
-                        label="Create Checkout URL"
-                        description="Customize your member's purchase journey"
+                        label={t("tools.checkout.title")}
+                        description={t("tools.checkout.desc")}
                         icon={RightArrowIcon}
                       />
                     </Link>
                     <PopoverItem
-                      label="Airdrop Keys"
-                      description="Send memberships to your members"
+                      label={t("tools.airdrop.title")}
+                      description={t("tools.airdrop.desc")}
                       onClick={() => setAirdropKeys(!airdropKeys)}
                       icon={PlantIcon}
                     />
@@ -237,8 +240,8 @@ const ToolsMenu = ({ lockAddress, network }: TopActionBarProps) => {
                       <>
                         <Link href={metadataPageUrl}>
                           <PopoverItem
-                            label="Edit NFT Properties"
-                            description="Edit & update NFT metadata that will display in platforms such as Opensea"
+                            label={t("tools.edit.title")}
+                            description={t("tools.edit.desc")}
                             icon={EditIcon}
                           />
                         </Link>
@@ -246,8 +249,8 @@ const ToolsMenu = ({ lockAddress, network }: TopActionBarProps) => {
                     )}
                     <Link href={verificationLink} className="text-left">
                       <PopoverItem
-                        label="Verification"
-                        description="Scan and verify the authentication of tickets for your events"
+                        label={t("tools.verification.title")}
+                        description={t("tools.verification.desc")}
                         icon={ScanIcon}
                       />
                     </Link>
@@ -269,6 +272,7 @@ const TopActionBar = ({ lockAddress, network }: TopActionBarProps) => {
     lockAddress,
     network,
   })
+  const { t } = useTranslation()
   return (
     <>
       <div className="flex items-center justify-between">
@@ -284,13 +288,13 @@ const TopActionBar = ({ lockAddress, network }: TopActionBarProps) => {
             <Button
               onClick={() => {
                 router.push(
-                  `/locks/settings?address=${lockAddress}&network=${network}`
+                  `/events/settings?address=${lockAddress}&network=${network}`
                 )
               }}
             >
               <div className="flex items-center gap-2">
                 <Icon icon={SettingsIcon} size={20} />
-                <span>Settings</span>
+                <span>{t("common.settings")}</span>
               </div>
             </Button>
           )}
@@ -304,12 +308,11 @@ const TopActionBar = ({ lockAddress, network }: TopActionBarProps) => {
 
 const NotManagerBanner = () => {
   const { account } = useAuth()
+  const { t } = useTranslation()
 
   return (
     <div className="p-2 text-base text-center text-red-700 bg-red-100 border border-red-700 rounded-xl">
-      You are connected as {addressMinify(account!)} and this address is not a
-      manager for this lock. If you want to update details, please connect as
-      lock manager.
+      {t("events.notManager.1")} {addressMinify(account!)} {t("events.notManager.2")}
     </div>
   )
 }

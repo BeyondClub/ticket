@@ -6,11 +6,13 @@ import { ConnectUnlockAccount } from './UnlockAccount'
 import { useAuth } from '~/contexts/AuthenticationContext'
 import { ConnectedWallet } from './ConnectedWallet'
 import { useConnectModal } from '~/hooks/useConnectModal'
+import { useTranslation } from 'next-i18next'
 
 export const ConnectModal = () => {
   const { status, openConnectModal, closeConnectModal, open } =
     useConnectModal()
   const { connected } = useAuth()
+  const { t } = useTranslation()
 
   const useUnlockAccount = status === 'unlock_account'
   return (
@@ -49,10 +51,10 @@ export const ConnectModal = () => {
                   <div className="flex-1 font-bold ">
                     <h1 className="text-center">
                       {!connected
-                        ? 'Connect Account'
+                        ? t('wallet.connectAcc')
                         : useUnlockAccount
-                        ? 'Unlock Account'
-                        : 'Connected Wallet'}
+                          ? `Unlock ${t('wallet.acc')}`
+                          : t('wallet.connected')}
                     </h1>
                   </div>
                   <div>

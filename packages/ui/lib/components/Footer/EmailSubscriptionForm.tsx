@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Button } from '../Button/Button'
+import { useTranslation } from 'next-i18next'
 
 export interface EmailSubscriptionFormProps {
   onSubmit: (email: string) => void
@@ -14,6 +15,7 @@ export function EmailSubscriptionForm({
 }: EmailSubscriptionFormProps) {
   const [email, setEmail] = useState('')
   const [confirm, setConfirm] = useState(false)
+  const { t } = useTranslation()
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -35,7 +37,7 @@ export function EmailSubscriptionForm({
   const ConfirmButton = (props: any) => {
     return (
       <Button disabled={confirm} variant="secondary" type="submit" {...props}>
-        {confirm ? 'Subscribed' : 'Sign Up'}
+        {confirm ? t("common.subscribed") : t("common.signUp")}
       </Button>
     )
   }

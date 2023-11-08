@@ -147,7 +147,7 @@ export const EventDetails = ({
 
   const onEdit = () => {
     return router.push(
-      `/locks/metadata?lockAddress=${lockAddress}&network=${network}`
+      `/events/metadata?lockAddress=${lockAddress}&network=${network}`
     )
   }
 
@@ -205,41 +205,41 @@ export const EventDetails = ({
 
   const startDate = eventDate
     ? eventDate.toLocaleDateString(undefined, {
+      timeZone: eventData?.ticket?.event_timezone,
+      weekday: 'long',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    })
+    : null
+
+  const startTime =
+    eventDate && eventData.ticket?.event_start_time
+      ? eventDate.toLocaleTimeString(navigator.language || 'en-US', {
+        timeZone: eventData.ticket.event_timezone,
+        hour: '2-digit',
+        minute: '2-digit',
+      })
+      : undefined
+
+  const endDate =
+    eventEndDate && eventEndDate && !isSameDay
+      ? eventEndDate.toLocaleDateString(undefined, {
         timeZone: eventData?.ticket?.event_timezone,
         weekday: 'long',
         year: 'numeric',
         month: 'short',
         day: 'numeric',
       })
-    : null
-
-  const startTime =
-    eventDate && eventData.ticket?.event_start_time
-      ? eventDate.toLocaleTimeString(navigator.language || 'en-US', {
-          timeZone: eventData.ticket.event_timezone,
-          hour: '2-digit',
-          minute: '2-digit',
-        })
-      : undefined
-
-  const endDate =
-    eventEndDate && eventEndDate && !isSameDay
-      ? eventEndDate.toLocaleDateString(undefined, {
-          timeZone: eventData?.ticket?.event_timezone,
-          weekday: 'long',
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-        })
       : null
 
   const endTime =
     eventDate && eventData.ticket?.event_end_time && eventEndDate && isSameDay
       ? eventEndDate.toLocaleTimeString(navigator.language || 'en-US', {
-          timeZone: eventData.ticket.event_timezone,
-          hour: '2-digit',
-          minute: '2-digit',
-        })
+        timeZone: eventData.ticket.event_timezone,
+        hour: '2-digit',
+        minute: '2-digit',
+      })
       : null
 
   const hasLocation = (eventData?.ticket?.event_address || '')?.length > 0
@@ -500,7 +500,7 @@ export const EventDetails = ({
                         variant="black"
                         className="button border"
                         size="small"
-                        href={`/locks/lock?address=${lockAddress}&network=${network}`}
+                        href={`/events/lock?address=${lockAddress}&network=${network}`}
                       >
                         {label}
                       </Button>

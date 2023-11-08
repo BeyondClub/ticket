@@ -10,6 +10,8 @@ import { config } from '~/config/app'
 import { addressMinify } from '~/utils/strings'
 import { MdExitToApp as DisconnectIcon } from 'react-icons/md'
 import { useConnectModal } from '~/hooks/useConnectModal'
+import { useTranslation } from 'next-i18next'
+import LanguageSwitcher from '../LanguageSwitcher'
 
 interface DashboardLayoutProps {
   title?: ReactNode
@@ -25,13 +27,15 @@ interface DashboardLayoutProps {
 
 export const WalletNotConnected = () => {
   const { openConnectModal } = useConnectModal()
+  const { t } = useTranslation()
+
   return (
     <ImageBar
       src="/images/illustrations/wallet-not-connected.svg"
       description={
         <>
           <span>
-            Wallet is not connected yet.{' '}
+            {t("wallet.notConnected")}{' '}
             <button
               onClick={(event) => {
                 event.preventDefault()
@@ -39,7 +43,7 @@ export const WalletNotConnected = () => {
               }}
               className="cursor-pointer text-brand-ui-primary"
             >
-              Connect it now
+              {t("wallet.connectNow")}
             </button>
           </span>
         </>
@@ -48,92 +52,94 @@ export const WalletNotConnected = () => {
   )
 }
 
-const FOOTER = {
-  subscriptionForm: {
-    title: 'Sign up for Updates',
-    description:
-      'Receive fresh news about Unlock, including new features and opportunities to contribute',
-    onSubmit: async (email: string) => {
-      const { portalId, formGuid } = EMAIL_SUBSCRIPTION_FORM
-      const endpoint = `https://api.hsforms.com/submissions/v3/integration/submit/${portalId}/${formGuid}`
-      const options = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          fields: [
-            {
-              name: 'email',
-              value: email,
-            },
-          ],
-        }),
-      }
+const FOOTER = (title: string, description: string) => {
+  return {
+    subscriptionForm: {
+      title,
+      description,
+      onSubmit: async (email: string) => {
+        const { portalId, formGuid } = EMAIL_SUBSCRIPTION_FORM
+        const endpoint = `https://api.hsforms.com/submissions/v3/integration/submit/${portalId}/${formGuid}`
+        const options = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            fields: [
+              {
+                name: 'email',
+                value: email,
+              },
+            ],
+          }),
+        }
 
-      await fetch(endpoint, options)
+        await fetch(endpoint, options)
+      },
     },
-  },
-  logo: {
-    url: config.unlockStaticUrl,
-  },
-  privacyUrl: `${config.unlockStaticUrl}/privacy`,
-  termsUrl: `${config.unlockStaticUrl}/terms`,
-  menuSections: [
-    {
-      title: 'About',
-      options: [
-        { label: 'About Unlock', url: `${config.unlockStaticUrl}/about` },
-        {
-          label: 'Roadmap',
-          url: 'https://docs.unlock-protocol.com/governance/roadmap/',
-        },
-        {
-          label: 'Careers',
-          url: 'https://www.notion.so/unlockprotocol/Unlock-Jobs-907811d15c4d490091eb298f71b0954c',
-        },
-      ],
+    logo: {
+      url: config.unlockStaticUrl,
     },
-    {
-      title: 'Governance',
-      options: [
-        {
-          label: 'Unlock DAO',
-          url: 'https://unlock-protocol.com/blog/unlock-dao',
-        },
-        { label: 'Forum', url: 'https://unlock.community/' },
-        {
-          label: 'Snapshot',
-          url: 'https://snapshot.org/#/unlock-protocol.eth',
-        },
-      ],
-    },
-    {
-      title: 'Community',
-      options: [
-        { label: 'Showcase', url: 'https://showcase.unlock-protocol.com/' },
-        { label: 'Blog', url: `${config.unlockStaticUrl}/blog` },
-        { label: 'Events', url: `${config.unlockStaticUrl}/upcoming-events` },
-        { label: 'Grants', url: `${config.unlockStaticUrl}/grants` },
-      ],
-    },
-    {
-      title: 'Resources',
-      options: [
-        { label: 'Docs', url: 'https://docs.unlock-protocol.com/' },
-        { label: 'Developers', url: `${config.unlockStaticUrl}/developers` },
-        { label: 'Guides', url: `${config.unlockStaticUrl}/blog` },
-        {
-          label: 'Integrations',
-          url: 'https://docs.unlock-protocol.com/move-to-guides/plugins-and-integrations/',
-        },
-        {
-          label: 'Media kit',
-          url: 'https://unlockprotocol.notion.site/Press-Kit-35836bdcc88f400eb5bb429c477c3333',
-        },
-      ],
-    },
-  ],
+    privacyUrl: `https://beyondclub.notion.site/Brand-Privacy-Policy-60bda5e2c8ab427dbb0fc2314f46e24b`,
+    termsUrl: `https://beyondclub.notion.site/Customer-Terms-of-Use-a8188ecc12c740e5b2e2df5bcb436539`,
+    menuSections: [],
+    // menuSections: [
+    //   {
+    //     title: 'About',
+    //     options: [
+    //       { label: 'About Unlock', url: `${config.unlockStaticUrl}/about` },
+    //       {
+    //         label: 'Roadmap',
+    //         url: 'https://docs.unlock-protocol.com/governance/roadmap/',
+    //       },
+    //       {
+    //         label: 'Careers',
+    //         url: 'https://www.notion.so/unlockprotocol/Unlock-Jobs-907811d15c4d490091eb298f71b0954c',
+    //       },
+    //     ],
+    //   },
+    //   {
+    //     title: 'Governance',
+    //     options: [
+    //       {
+    //         label: 'Unlock DAO',
+    //         url: 'https://unlock-protocol.com/blog/unlock-dao',
+    //       },
+    //       { label: 'Forum', url: 'https://unlock.community/' },
+    //       {
+    //         label: 'Snapshot',
+    //         url: 'https://snapshot.org/#/unlock-protocol.eth',
+    //       },
+    //     ],
+    //   },
+    //   {
+    //     title: 'Community',
+    //     options: [
+    //       { label: 'Showcase', url: 'https://showcase.unlock-protocol.com/' },
+    //       { label: 'Blog', url: `${config.unlockStaticUrl}/blog` },
+    //       { label: 'Events', url: `${config.unlockStaticUrl}/upcoming-events` },
+    //       { label: 'Grants', url: `${config.unlockStaticUrl}/grants` },
+    //     ],
+    //   },
+    //   {
+    //     title: 'Resources',
+    //     options: [
+    //       { label: 'Docs', url: 'https://docs.unlock-protocol.com/' },
+    //       { label: 'Developers', url: `${config.unlockStaticUrl}/developers` },
+    //       { label: 'Guides', url: `${config.unlockStaticUrl}/blog` },
+    //       {
+    //         label: 'Integrations',
+    //         url: 'https://docs.unlock-protocol.com/move-to-guides/plugins-and-integrations/',
+    //       },
+    //       {
+    //         label: 'Media kit',
+    //         url: 'https://unlockprotocol.notion.site/Press-Kit-35836bdcc88f400eb5bb429c477c3333',
+    //       },
+    //     ],
+    //   },
+    // ],
+  }
 }
 
 export const AppLayout = ({
@@ -151,10 +157,11 @@ export const AppLayout = ({
   const { termsAccepted, saveTermsAccepted, termsLoading } = useTermsOfService()
   const config = useConfig()
   const { openConnectModal } = useConnectModal()
+  const { t } = useTranslation()
 
   const showLogin = authRequired && !account
 
-  const logoSrc = logoImageUrl || '/images/svg/unlock-logo.svg'
+  const logoSrc = logoImageUrl || '/images/svg/logo-beyondclub.svg'
   const logoRedirectUri = logoRedirectUrl || '/'
 
   const MENU = {
@@ -165,19 +172,19 @@ export const AppLayout = ({
     logo: { url: logoRedirectUri, src: logoSrc },
     menuSections: showLinks
       ? [
-          {
-            title: 'Locks',
-            url: '/locks',
-          },
-          {
-            title: 'Keys',
-            url: '/keychain',
-          },
-          {
-            title: 'Settings',
-            url: '/settings',
-          },
-        ]
+        {
+          title: t("menu.events"),
+          url: '/events',
+        },
+        {
+          title: t("menu.event_tickets"),
+          url: '/keychain',
+        },
+        {
+          title: t("menu.settings"),
+          url: '/settings',
+        },
+      ]
       : [],
   }
 
@@ -193,27 +200,27 @@ export const AppLayout = ({
       >
         <div className="flex flex-col justify-center gap-4 bg-white">
           <span className="text-base">
-            No account required{' '}
+            {t("terms.noAcc")}{' '}
             <span role="img" aria-label="stars">
               ✨
             </span>
-            , but you need to agree to our{' '}
+            , {t("terms.needToAgree")}{' '}
             <a
               className="outline-none text-brand-ui-primary"
               href={`${config.unlockStaticUrl}/terms`}
             >
-              Terms of Service
+              {t("terms.terms")}
             </a>{' '}
-            and{' '}
+            {t("common.and")}{' '}
             <a
               className="outline-none text-brand-ui-primary"
               href={`${config.unlockStaticUrl}/privacy`}
             >
-              Privacy Policy
+              {t("terms.privacy")}
             </a>
             .
           </span>
-          <Button onClick={saveTermsAccepted}>I agree</Button>
+          <Button onClick={saveTermsAccepted}>{t("terms.agree")}</Button>
         </div>
       </Modal>
       <div className="w-full">
@@ -223,35 +230,38 @@ export const AppLayout = ({
               {...MENU}
               actions={[
                 {
-                  content: account ? (
-                    <div className="flex gap-2">
-                      <button
+                  content: <div className='flex gap-x-3'>
+                    <LanguageSwitcher />
+                    {account ? (
+                      <div className="flex gap-2">
+                        <button
+                          onClick={(event) => {
+                            event.preventDefault()
+                            openConnectModal()
+                          }}
+                        >
+                          <div className="flex items-center gap-2">
+                            <span className="text-brand-ui-primary">
+                              {addressMinify(account)}
+                            </span>
+                            <DisconnectIcon
+                              className="text-brand-ui-primary"
+                              size={20}
+                            />
+                          </div>
+                        </button>
+                      </div>
+                    ) : (
+                      <Button
                         onClick={(event) => {
                           event.preventDefault()
                           openConnectModal()
                         }}
                       >
-                        <div className="flex items-center gap-2">
-                          <span className="text-brand-ui-primary">
-                            {addressMinify(account)}
-                          </span>
-                          <DisconnectIcon
-                            className="text-brand-ui-primary"
-                            size={20}
-                          />
-                        </div>
-                      </button>
-                    </div>
-                  ) : (
-                    <Button
-                      onClick={(event) => {
-                        event.preventDefault()
-                        openConnectModal()
-                      }}
-                    >
-                      Connect
-                    </Button>
-                  ),
+                        {t("wallet.connect")}
+                      </Button>
+                    )}
+                  </div>
                 },
               ]}
             />
@@ -287,7 +297,9 @@ export const AppLayout = ({
           </div>
         </div>
         <div className="px-4 mx-auto lg:container">
-          {showFooter && <Footer {...FOOTER} />}
+          {showFooter && (
+            <Footer {...FOOTER(t('footer.title'), t('footer.description'))} />
+          )}
         </div>
       </div>
     </div>

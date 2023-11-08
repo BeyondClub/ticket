@@ -172,7 +172,7 @@ export function Picker({
       ) : (
         <div>
           You have not deployed locks on this network yet.{' '}
-          <Link href="/locks/create">
+          <Link href="/events/create">
             <span className="font-medium underline cursor-pointer">
               Deploy one now
             </span>

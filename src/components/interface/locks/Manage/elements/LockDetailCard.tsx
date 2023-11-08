@@ -16,6 +16,7 @@ import Link from 'next/link'
 import { storage } from '~/config/storage'
 import { CryptoIcon } from '@unlock-protocol/crypto-icon'
 import { useLockManager } from '~/hooks/useLockManager'
+import { useTranslation } from 'next-i18next'
 interface LockDetailCardProps {
   network: number
   lockAddress: string
@@ -176,8 +177,10 @@ export const LockDetailCard = ({
       }
     )
 
-  const settingsPageUrl = `/locks/settings?address=${lockAddress}&network=${network}`
-  const metadataPageUrl = `/locks/metadata?lockAddress=${lockAddress}&network=${network}`
+  const { t } = useTranslation()
+
+  const settingsPageUrl = `/events/settings?address=${lockAddress}&network=${network}`
+  const metadataPageUrl = `/events/metadata?lockAddress=${lockAddress}&network=${network}`
   return (
     <>
       <div className="flex flex-col">
@@ -190,12 +193,12 @@ export const LockDetailCard = ({
             />
             {isManager && (
               <p className="p-2 text-sm leading-tight text-gray-500 ">
-                Need to update the icon? Use the{' '}
+                {t("events.edit.updateIcon")}{' '}
                 <Link
                   href={metadataPageUrl}
                   className="text-brand-ui-primary hover:underline"
                 >
-                  Metadata Editor
+                  {t("common.metadataEditor")}
                 </Link>
               </p>
             )}
@@ -226,22 +229,22 @@ export const LockDetailCard = ({
           )}
           <div className="flex flex-col mt-6 divide-y divide-black">
             <div className="py-2">
-              <Detail label="Network" loading={loading} inline>
+              <Detail label={t("common.network")} loading={loading} inline>
                 {networkName}
               </Detail>
             </div>
             <div className="py-2">
-              <Detail label="Key Duration" loading={loading} inline>
+              <Detail label={t("common.keyDuration")} loading={loading} inline>
                 {duration}
               </Detail>
             </div>
             <div className="py-2">
-              <Detail label="Keys for sale" loading={loading} inline>
+              <Detail label={t("common.keysForSale")} loading={loading} inline>
                 {numbersOfKeys}
               </Detail>
             </div>
             <div className="py-2">
-              <Detail label="Price" loading={loading} inline>
+              <Detail label={t("common.price")} loading={loading} inline>
                 <div className="flex items-center gap-2">
                   <CryptoIcon symbol={symbol} />
                   <span>{priceLabel}</span>
@@ -249,26 +252,26 @@ export const LockDetailCard = ({
               </Detail>
             </div>
             <div className="py-2">
-              <Detail label="Recurring" loading={loading} inline>
-                {isRecurring ? 'YES' : 'NO'}
+              <Detail label={t("common.recurring")} loading={loading} inline>
+                {isRecurring ? t("common.yes") : t("common.no")}
               </Detail>
             </div>
             <div className="py-2">
-              <Detail label="Credit Card Payment" loading={loading} inline>
-                {isConnected === 1 ? 'YES' : 'NO'}
+              <Detail label={t("common.credCardPayment")} loading={loading} inline>
+                {isConnected === 1 ? t("common.yes") : t("common.no")}
               </Detail>
             </div>
           </div>
           {isManager && (
             <div className="mt-8">
               <span className="text-sm leading-tight text-gray-500">
-                Need to update terms?{' '}
+                {t("events.edit.updateTerms.1")}{' '}
                 <Link href={settingsPageUrl}>
                   <span className="font-semibold cursor-pointer text-brand-ui-primary">
-                    Click here
+                    {t("events.edit.updateTerms.2")}
                   </span>
                 </Link>{' '}
-                to update your contract&apos;s settings.
+                {t("events.edit.updateTerms.3")}
               </span>
             </div>
           )}

@@ -10,14 +10,17 @@ import { Placeholder } from '@unlock-protocol/ui'
 import useLocksByManagerOnNetworks from '~/hooks/useLocksByManager'
 import { config } from '~/config/app'
 import { ImageBar } from '../../Manage/elements/ImageBar'
+import { useTranslation } from 'next-i18next'
 
 export const NoItems = () => {
+  const { t } = useTranslation()
+
   return (
     <ImageBar
       src="/images/illustrations/no-locks.svg"
       description={
         <>
-          <span>You have not create any membership contract yet. </span>
+          <span>{t("events.noContractCreated")}</span>
         </>
       }
     />

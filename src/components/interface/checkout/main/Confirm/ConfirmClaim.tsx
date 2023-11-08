@@ -16,6 +16,7 @@ import { usePricing } from '~/hooks/usePricing'
 import { usePurchaseData } from '~/hooks/usePurchaseData'
 import { useConfig } from '~/utils/withConfig'
 import { PricingData } from './PricingData'
+import { useTranslation } from 'next-i18next'
 
 interface Props {
   injectedProvider: unknown
@@ -32,6 +33,7 @@ export function ConfirmClaim({
 }: Props) {
   const [state] = useActor(checkoutService)
   const config = useConfig()
+  const { t } = useTranslation()
 
   const recaptchaRef = useRef<any>()
   const [isConfirming, setIsConfirming] = useState(false)
@@ -169,7 +171,7 @@ export function ConfirmClaim({
                 onConfirmClaim()
               }}
             >
-              {isConfirming ? 'Claiming' : 'Claim'}
+              {isConfirming ? t("checkout.claiming") : t("checkout.claim")}
             </Button>
           </div>
         </Connected>

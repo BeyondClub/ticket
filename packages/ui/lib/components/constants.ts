@@ -3,7 +3,7 @@ import { AxiosError } from 'axios'
 import { IconType } from 'react-icons'
 import {
   BsGithub as GithubIcon,
-  BsDiscord as DiscordIcon,
+  BsLinkedin as LinkedinIcon,
   BsTwitter as TwitterIcon,
 } from 'react-icons/bs'
 interface SocialLinkProps {
@@ -13,16 +13,16 @@ interface SocialLinkProps {
 
 export const SOCIAL_LINKS: SocialLinkProps[] = [
   {
-    url: 'https://github.com/unlock-protocol',
+    url: 'https://github.com/BeyondClub',
     icon: GithubIcon,
   },
   {
-    url: 'https://discord.com/invite/Ah6ZEJyTDp',
-    icon: DiscordIcon,
+    url: 'https://twitter.com/beyondclub_xyz',
+    icon: TwitterIcon,
   },
   {
-    url: 'https://twitter.com/UnlockProtocol',
-    icon: TwitterIcon,
+    url: 'https://www.linkedin.com/company/beyondclub',
+    icon: LinkedinIcon,
   },
 ]
 

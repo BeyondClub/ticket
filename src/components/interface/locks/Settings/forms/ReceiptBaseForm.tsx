@@ -9,6 +9,7 @@ import { useMutation } from '@tanstack/react-query'
 import { downloadAsCSV } from '../../Manage'
 import { storage } from '~/config/storage'
 import { FaFileCsv as CsvIcon } from 'react-icons/fa'
+import { useTranslation } from 'react-i18next'
 
 const SupplierSchema = z.object({
   vat: z.string().optional(),
@@ -65,6 +66,7 @@ export const ReceiptBaseForm = ({
   } = useForm<SupplierBodyProps>({
     mode: 'onChange',
   })
+  const { t } = useTranslation()
 
   const { data: receiptsBase, isLoading: isLoadingDetails } =
     useGetReceiptsBase({
@@ -102,7 +104,7 @@ export const ReceiptBaseForm = ({
     {
       mutationKey: ['downloadReceipts', lockAddress, network],
       meta: {
-        errorMessage: 'Failed to download receipts',
+        errorMessage: t("events.settings.payments.receipt.downloadErr"),
       },
     }
   )
@@ -110,12 +112,12 @@ export const ReceiptBaseForm = ({
   const onHandleSubmit = async (data: SupplierBodyProps) => {
     if (isValid) {
       await ToastHelper.promise(receiptBaseMutation(data), {
-        loading: 'Updating  supplier details.',
-        success: 'Supplier updated',
-        error: 'We could not update the details.',
+        loading: t("events.settings.payments.receipt.form.loading"),
+        success: t("events.settings.payments.receipt.form.success"),
+        error: t("events.settings.payments.receipt.form.error"),
       })
     } else {
-      ToastHelper.error('Form is not valid')
+      ToastHelper.error(t("common.formNotValid"))
       reset()
     }
   }
@@ -143,7 +145,7 @@ export const ReceiptBaseForm = ({
           iconLeft={<CsvIcon className="text-brand-ui-primary" size={16} />}
           onClick={() => onDownloadReceiptsMutation.mutate()}
         >
-          Download Receipts
+          {t("events.settings.payments.receipt.download")}
         </Button>
       </div>
       <form
@@ -153,24 +155,24 @@ export const ReceiptBaseForm = ({
         <div className="grid grid-cols-1 gap-2 md:gap-4 md:grid-cols-2">
           <Input
             disabled={disabledInput}
-            label="Supplier name"
+            label={t("events.settings.payments.receipt.form.name")}
             {...register('supplierName')}
           />
           <div className="grid grid-cols-1 col-span-2 gap-4 md:grid-cols-2">
             <div className="mt-1">
               <Input
                 disabled={disabledInput}
-                label="VAT number"
+                label={t("events.settings.payments.receipt.form.vatNo")}
                 {...register('vat')}
               />
             </div>
             <div>
               <div className="flex items-center justify-between">
                 <label className="px-1 text-base" htmlFor="">
-                  VAT rate (%)
+                  {t("events.settings.payments.receipt.form.vatRate")}
                 </label>
                 <ToggleSwitch
-                  title="Enable"
+                  title={t("common.enable")}
                   enabled={vatPercentage}
                   setEnabled={setVatPercentage}
                   onChange={(enabled) => {
@@ -193,7 +195,7 @@ export const ReceiptBaseForm = ({
                   valueAsNumber: true,
                   required: {
                     value: vatPercentage,
-                    message: 'This value is required.',
+                    message: t("events.settings.payments.receipt.form.vatRateErr"),
                   },
                 })}
               />
@@ -201,30 +203,30 @@ export const ReceiptBaseForm = ({
           </div>
           <Input
             disabled={disabledInput}
-            label="Address line 1"
+            label={"events.settings.payments.receipt.form.addr1"}
             {...register('addressLine1')}
           />
           <Input
             disabled={disabledInput}
-            label="Address line 2"
+            label={t("events.settings.payments.receipt.form.addr2")}
             {...register('addressLine2')}
           />
-          <Input disabled={disabledInput} label="City" {...register('city')} />
+          <Input disabled={disabledInput} label={t("events.settings.payments.receipt.form.city")} {...register('city')} />
           <Input
             disabled={disabledInput}
-            label="State"
+            label={t("events.settings.payments.receipt.form.state")}
             {...register('state')}
           />
-          <Input disabled={disabledInput} label="Zip" {...register('zip')} />
+          <Input disabled={disabledInput} label={t("events.settings.payments.receipt.form.zip")} {...register('zip')} />
           <Input
             disabled={disabledInput}
-            label="Country"
+            label={t("events.settings.payments.receipt.form.country")}
             {...register('country')}
           />
           <div className="col-span-2">
             <TextBox
               disabled={disabledInput}
-              label="Service performed"
+              label={t("events.settings.payments.receipt.form.service")}
               {...register('servicePerformed')}
             />
           </div>
@@ -237,7 +239,7 @@ export const ReceiptBaseForm = ({
             disabled={disabledInput}
             loading={isReceiptsBaseUpdating}
           >
-            Update
+            {t("common.update")}
           </Button>
         )}
       </form>

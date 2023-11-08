@@ -11,6 +11,7 @@ import {
 import { z } from 'zod'
 import { InputHTMLAttributes, forwardRef, useState } from 'react'
 import { useImageUpload } from '~/hooks/useImageUpload'
+import { useTranslation } from 'next-i18next'
 
 interface CheckBoxInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string
@@ -47,6 +48,7 @@ interface Props {
 export const BasicConfigForm = ({ onChange, defaultValues }: Props) => {
   const { mutateAsync: uploadImage, isLoading: isUploading } = useImageUpload()
   const [isOpen, setIsOpen] = useState(false)
+  const { t } = useTranslation()
 
   const {
     register,
@@ -79,14 +81,14 @@ export const BasicConfigForm = ({ onChange, defaultValues }: Props) => {
           setIsOpen(true)
         }}
       >
-        Change Icon
+        {t("checkout.config.basic.changeIcon")}
       </Button>
       <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
         <div className="p-2">
           <ImageUpload
             size="full"
             className="mx-auto"
-            description="Upload an image to use as the icon for your checkout"
+            description={t("checkout.config.basic.changeIconDesc")}
             isUploading={isUploading}
             preview={image!}
             onChange={async (fileOrFileUrl: any) => {
@@ -105,79 +107,79 @@ export const BasicConfigForm = ({ onChange, defaultValues }: Props) => {
         </div>
       </Modal>
       <Input
-        label="Title"
+        label={t("checkout.config.basic.form.title.title")}
         size="small"
-        description={BasicPaywallConfigSchema.shape.title.description}
+        description={t("checkout.config.basic.form.title.desc")}
         {...register('title', {
-          required: "Title can't be empty",
+          required: t("checkout.config.basic.form.title.error"),
         })}
         error={errors.title?.message}
       />
       <Input
-        label="Redirect URL"
+        label={t("checkout.config.basic.form.redirectUrl.title")}
         size="small"
-        description={BasicPaywallConfigSchema.shape.redirectUri.description}
+        description={t("checkout.config.basic.form.redirectUrl.desc")}
         {...register('redirectUri', {
-          required: "Redirect URL can't be empty",
+          required: t("checkout.config.basic.form.redirectUrl.error"),
         })}
         error={errors.redirectUri?.message}
       />
       <Input
-        label="Redirect Button Text"
+        label={t("checkout.config.basic.form.redirectBtn.title")}
         size="small"
         description={
-          BasicPaywallConfigSchema.shape.endingCallToAction.description
+          t("checkout.config.basic.form.redirectBtn.desc")
         }
         {...register('endingCallToAction', {
-          required: "Redirect Button Text can't be empty",
+          required: t("checkout.config.basic.form.redirectBtn.error"),
         })}
         error={errors.endingCallToAction?.message}
       />
       <Input
-        label="Referrer Address"
+        label={t("checkout.config.basic.form.refAddr.title")}
         size="small"
-        description={BasicPaywallConfigSchema.shape.referrer.description}
+        description={t("checkout.config.basic.form.refAddr.desc")}
         error={errors.referrer?.message}
         {...register('referrer', {})}
       />
       <TextBox
-        label="Message to Sign"
+        label={t("checkout.config.basic.form.msgToSign.title")}
         size="small"
-        description={BasicPaywallConfigSchema.shape.messageToSign.description}
+        description={t("checkout.config.basic.form.msgToSign.desc")}
         {...register('messageToSign', {
-          required: "Message to Sign can't be empty",
+          required: t("checkout.config.basic.form.msgToSign.error"),
         })}
         error={errors.messageToSign?.message}
       />
       <CheckBoxInput
-        label="Persistent Checkout"
+        label={t("checkout.config.basic.form.persCheckout.title")}
         description={
-          BasicPaywallConfigSchema.shape.persistentCheckout.description
+          t("checkout.config.basic.form.persCheckout.desc")
         }
         error={errors.persistentCheckout?.message}
         {...register('persistentCheckout')}
       />
       <CheckBoxInput
-        label="Hide Sold Out Locks"
-        description={BasicPaywallConfigSchema.shape.hideSoldOut.description}
+        label={t("checkout.config.basic.form.hide.title")}
+        description={t("checkout.config.basic.form.hide.desc")}
         error={errors.hideSoldOut?.message}
         {...register('hideSoldOut')}
       />
       <CheckBoxInput
-        label="Skip Recipient"
-        description={BasicPaywallConfigSchema.shape.skipRecipient.description}
+        label={t("checkout.config.basic.form.skipRecp.title")}
+        description={t("checkout.config.basic.form.skipRecp.desc")}
         error={errors.skipRecipient?.message}
         {...register('skipRecipient')}
       />
       <CheckBoxInput
-        label="Skip Select"
-        description={BasicPaywallConfigSchema.shape.skipSelect.description}
+        label={t("checkout.config.basic.form.skipSelect.title")}
+        description={t("checkout.config.basic.form.skipSelect.desc")}
         error={errors.skipSelect?.message}
         {...register('skipSelect')}
       />
       <CheckBoxInput
-        label="Pessimistic"
-        description={BasicPaywallConfigSchema.shape.pessimistic.description}
+        label={t("checkout.config.basic.form.pessimistic.title")}
+        description={t("checkout.config.basic.form.pessimistic.desc")}
         error={errors.pessimistic?.message}
         {...register('pessimistic')}
       />

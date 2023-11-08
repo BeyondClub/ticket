@@ -1,4 +1,7 @@
+import { useTranslation } from "next-i18next"
+
 export function PoweredByUnlock() {
+  const { t } = useTranslation()
   return (
     <div className="flex justify-center py-4">
       <a
@@ -7,7 +10,7 @@ export function PoweredByUnlock() {
         target="_blank"
         rel="noopener noreferrer"
       >
-        Powered by Unlock
+        {t("common.poweredByUnlock")}
       </a>
     </div>
   )

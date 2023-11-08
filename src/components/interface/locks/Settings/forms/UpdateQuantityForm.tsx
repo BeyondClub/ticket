@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query'
 import { ToggleSwitch, Input, Button } from '@unlock-protocol/ui'
 import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'next-i18next'
 import { ToastHelper } from '~/components/helpers/toast.helper'
 import { UNLIMITED_KEYS_COUNT, MAX_UINT } from '~/constants'
 import { useAuth } from '~/contexts/AuthenticationContext'
@@ -28,6 +29,7 @@ export const UpdateQuantityForm = ({
 }: UpdateQuantityFormProps) => {
   const [unlimitedQuantity, setUnlimitedQuantity] = useState(false)
   const { getWalletService } = useAuth()
+  const { t } = useTranslation()
 
   useEffect(() => {
     setUnlimitedQuantity(UNLIMITED_KEYS_COUNT === maxNumberOfKeys)
@@ -64,12 +66,12 @@ export const UpdateQuantityForm = ({
   const onHandleSubmit = async () => {
     if (isValid) {
       await ToastHelper.promise(updateQuantityMutation.mutateAsync(), {
-        loading: 'Updating quantity...',
-        success: 'Quantity updated',
-        error: `We could not update the amount of memberships for sale for this lock.`,
+        loading: t("events.settings.memTerms.quantity.form.loading"),
+        success: t("events.settings.memTerms.quantity.form.success"),
+        error: t("events.settings.memTerms.quantity.form.error1"),
       })
     } else {
-      ToastHelper.error('Form is not valid')
+      ToastHelper.error(t("common.formNotValid"))
       reset()
     }
   }
@@ -86,10 +88,10 @@ export const UpdateQuantityForm = ({
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <label className="block px-1 text-base" htmlFor="">
-            Number of memberships for sale:
+            {t("events.settings.memTerms.quantity.toggle.title")}
           </label>
           <ToggleSwitch
-            title="Unlimited"
+            title={t("common.unlimited")}
             enabled={unlimitedQuantity}
             setEnabled={setUnlimitedQuantity}
             disabled={disabledInput}
@@ -109,14 +111,14 @@ export const UpdateQuantityForm = ({
         <div className="relative">
           {!unlimitedQuantity && (
             <Input
-              placeholder="Enter quantity"
+              placeholder={t("events.settings.memTerms.quantity.form.title")}
               type="number"
               autoComplete="off"
               step={1}
               disabled={unlimitedQuantity || disabledInput}
               error={
                 errors?.maxNumberOfKeys &&
-                'Please choose a number of memberships for sale for your lock.'
+                t("events.settings.memTerms.quantity.form.error2")
               }
               {...register('maxNumberOfKeys', {
                 valueAsNumber: true,
@@ -135,7 +137,7 @@ export const UpdateQuantityForm = ({
           disabled={disabledInput}
           loading={updateQuantityMutation.isLoading}
         >
-          Update
+          {t("common.update")}
         </Button>
       )}
     </form>

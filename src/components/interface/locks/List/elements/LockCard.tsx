@@ -14,6 +14,7 @@ import { ethers } from 'ethers'
 import { AddressLink } from '~/components/interface/AddressLink'
 import { Card, Detail, Icon } from '@unlock-protocol/ui'
 import { CryptoIcon } from '@unlock-protocol/crypto-icon'
+import { useTranslation } from 'next-i18next'
 interface LockCardProps {
   lock: any
   network: number
@@ -75,6 +76,8 @@ export const LockCard = ({ lock, network }: LockCardProps) => {
     return ethers.utils.formatUnits(lock?.price, decimals)
   }
 
+  const { t } = useTranslation()
+
   const [
     { isLoading: loadingBalance, data: balance },
     { isLoading: loadingSymbol, data: tokenSymbol },
@@ -99,7 +102,7 @@ export const LockCard = ({ lock, network }: LockCardProps) => {
 
   const symbol = tokenSymbol ?? baseCurrencySymbol
 
-  const lockUrl = `/locks/lock?address=${lockAddress}&network=${network}`
+  const lockUrl = `/events/lock?address=${lockAddress}&network=${network}`
 
   const duration =
     lock?.expirationDuration === MAX_UINT ? (
@@ -126,7 +129,7 @@ export const LockCard = ({ lock, network }: LockCardProps) => {
               label={
                 <div className="flex items-center gap-1">
                   <Icon size={10} icon={TagIcon} />
-                  <span>Price</span>
+                  <span>{t("common.price")}</span>
                 </div>
               }
               loading={isLoading}
@@ -144,7 +147,7 @@ export const LockCard = ({ lock, network }: LockCardProps) => {
               label={
                 <div className="flex items-center gap-1">
                   <Icon size={10} icon={TagIcon} />
-                  <span>Balance</span>
+                  <span>{t("common.balance")}</span>
                 </div>
               }
               loading={isLoading}
@@ -161,7 +164,7 @@ export const LockCard = ({ lock, network }: LockCardProps) => {
               label={
                 <div className="flex items-center gap-1">
                   <Icon size={10} icon={TimeIcon} />
-                  <span>Key Duration</span>
+                  <span>{t("common.keyDuration")}</span>
                 </div>
               }
               labelSize="tiny"
@@ -174,7 +177,7 @@ export const LockCard = ({ lock, network }: LockCardProps) => {
               label={
                 <div className="flex items-center gap-1">
                   <Icon size={10} icon={KeyIcon} />
-                  <span>Key Sold</span>
+                  <span>{t("common.keySold")}</span>
                 </div>
               }
               labelSize="tiny"
@@ -187,7 +190,7 @@ export const LockCard = ({ lock, network }: LockCardProps) => {
           <div className="md:ml-auto md:col-span-1">
             <Link href={lockUrl} aria-label="arrow right">
               <button className="flex items-center justify-between w-full md:w-auto">
-                <span className="text-base font-bold md:hidden">Manage</span>
+                <span className="text-base font-bold md:hidden">{t("common.manage")}</span>
                 <ArrowRightIcon size={20} />
               </button>
             </Link>

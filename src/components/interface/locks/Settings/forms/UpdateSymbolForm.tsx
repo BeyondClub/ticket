@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Button, Input } from '@unlock-protocol/ui'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'next-i18next'
 import { ToastHelper } from '~/components/helpers/toast.helper'
 import { useAuth } from '~/contexts/AuthenticationContext'
 import { useWeb3Service } from '~/utils/withWeb3Service'
@@ -35,6 +36,7 @@ export const UpdateSymbolForm = ({
       symbol: '',
     },
   })
+  const { t } = useTranslation()
 
   const getSymbol = async () => {
     return await web3Service.getTokenSymbol(lockAddress, network)
@@ -58,7 +60,7 @@ export const UpdateSymbolForm = ({
         setValue('symbol', symbol)
       },
       onError: () => {
-        ToastHelper.error('Unable to retrieve Lock symbol.')
+        ToastHelper.error(t("events.settings.general.ticker.form.error2"))
       },
     }
   )
@@ -68,12 +70,12 @@ export const UpdateSymbolForm = ({
     if (isValid) {
       const changeSymbolPromise = changeSymbolMutation.mutateAsync(symbol)
       await ToastHelper.promise(changeSymbolPromise, {
-        loading: 'Updating lock symbol.',
-        success: 'Lock symbol updated.',
-        error: 'There is an issue updating the lock symbol.',
+        loading: t("events.settings.general.ticker.form.loading"),
+        success: t("events.settings.general.ticker.form.success"),
+        error: t("events.settings.general.ticker.form.error1"),
       })
     } else {
-      ToastHelper.error('Form is not valid.')
+      ToastHelper.error(t("common.formNotValid"))
       reset()
     }
   }
@@ -106,7 +108,7 @@ export const UpdateSymbolForm = ({
           disabled={disabledInput}
           loading={changeSymbolMutation.isLoading || isLoading}
         >
-          Update
+          {t("common.update")}
         </Button>
       )}
     </form>

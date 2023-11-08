@@ -4,6 +4,7 @@ import { MetadataFormData } from './utils'
 import Link from 'next/link'
 import { RiExternalLinkLine as ExternalLinkIcon } from 'react-icons/ri'
 import { getCertificationPath } from '~/components/content/certification/utils'
+import { useTranslation } from 'next-i18next'
 
 interface Props {
   disabled?: boolean
@@ -22,6 +23,8 @@ export function CertificationMetadataForm({
     control,
   } = useFormContext<MetadataFormData>()
 
+  const { t } = useTranslation()
+
   const { slug } = useWatch({
     control,
   })
@@ -38,20 +41,19 @@ export function CertificationMetadataForm({
 
   return (
     <div>
-      <Disclosure label="Certification">
+      <Disclosure label={t("events.metadata.form.certification.title")}>
         <>
           <p>
-            Add NFT properties if your NFTs are certifications. These will be
-            displayed on NFT marketplaces and wallets that support them.
+            {t("events.metadata.form.certification.desc.1")}
           </p>
           <p className="">
-            These properties will also be displayed on{' '}
+            {t("events.metadata.form.certification.desc.2")}{' '}
             <Link
               className="inline-flex items-center underline "
               target="newline"
               href={certificationPageUrl}
             >
-              your certification page <ExternalLinkIcon className="ml-1" />
+              {t("events.metadata.form.certification.desc.3")} <ExternalLinkIcon className="ml-1" />
             </Link>
             .
           </p>
@@ -61,8 +63,8 @@ export function CertificationMetadataForm({
                 {...register('certification.certification_issuer')}
                 disabled={disabled}
                 type="text"
-                label="Official name of the issuer"
-                description="Please enter the name of the organization that issues the certificates."
+                label={t("events.metadata.form.certification.issuer.title")}
+                description={t("events.metadata.form.certification.issuer.desc")}
                 error={errors.certification?.certification_issuer?.message}
               />
             </div>

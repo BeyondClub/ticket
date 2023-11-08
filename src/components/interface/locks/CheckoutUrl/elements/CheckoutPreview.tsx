@@ -7,6 +7,7 @@ import useClipboard from 'react-use-clipboard'
 import { ToastHelper } from '~/components/helpers/toast.helper'
 import FileSaver from 'file-saver'
 import { PaywallConfigType } from '@unlock-protocol/core'
+import { useTranslation } from 'next-i18next'
 
 interface CheckoutPreviewProps {
   paywallConfig?: PaywallConfigType
@@ -44,6 +45,7 @@ export const CheckoutShareOrDownload = ({
   const [_isCopied, setCopied] = useClipboard(checkoutUrl, {
     successDuration: 2000,
   })
+  const { t } = useTranslation()
   const hasLocks = Object.entries(paywallConfig?.locks ?? {})?.length > 0
 
   useEffect(() => {
@@ -73,7 +75,7 @@ export const CheckoutShareOrDownload = ({
           ToastHelper.success('URL copied')
         }}
       >
-        Copy URL
+        {t("checkout.config.events.copyUrl")}
       </Button>
       <Button
         variant="transparent"
@@ -81,7 +83,7 @@ export const CheckoutShareOrDownload = ({
         disabled={!hasLocks}
         onClick={() => onDownloadJson(paywallConfig)}
       >
-        Download JSON
+        {t("checkout.config.events.DownloadJson")}
       </Button>
     </div>
   ) : null
@@ -89,6 +91,7 @@ export const CheckoutShareOrDownload = ({
 
 export const CheckoutPreview = ({ paywallConfig }: CheckoutPreviewProps) => {
   const config = useConfig()
+  const { t } = useTranslation()
 
   const injectedProvider = selectProvider(config)
 
@@ -106,8 +109,8 @@ export const CheckoutPreview = ({ paywallConfig }: CheckoutPreviewProps) => {
             <div className="flex flex-col items-center gap-2">
               <span className="text-sm">
                 {hasLocks
-                  ? ' This checkout modal is ready for you to use.'
-                  : 'A Lock is required in order to see the full preview.'}
+                  ? t("checkout.preview.readyForUse")
+                  : t("checkout.preview.eventRequired")}
               </span>
             </div>
           </div>

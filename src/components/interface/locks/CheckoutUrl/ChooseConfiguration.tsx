@@ -5,6 +5,7 @@ import { Input, Placeholder, Select } from '@unlock-protocol/ui'
 import { useController, useFormContext } from 'react-hook-form'
 import { Configuration } from '.'
 import { PaywallConfigType } from '@unlock-protocol/core'
+import { useTranslation } from 'next-i18next'
 
 const RadioContentWrapper = classed.div('grid grid-cols-[24px_1fr] gap-2', {
   variants: {
@@ -79,6 +80,7 @@ export function ChooseConfiguration({
   setConfiguration,
   loading,
 }: ChooseConfigurationProps) {
+  const { t } = useTranslation()
   const {
     fieldState: { error },
   } = useController({
@@ -87,7 +89,7 @@ export function ChooseConfiguration({
     rules: {
       required: {
         value: configuration === 'new',
-        message: 'This field is required.',
+        message: t("common.fieldReq"),
       },
     },
   })
@@ -128,13 +130,13 @@ export function ChooseConfiguration({
   const configs: ConfigurationOptions[] = [
     {
       key: 'new',
-      label: 'Create a new one',
+      label: t("checkout.config.choose.form.new.title"),
       children: (
         <ConnectForm>
           {({ register }: any) => {
             return (
               <Input
-                placeholder="Enter name"
+                placeholder={t("checkout.config.choose.form.new.placeholder")}
                 type="text"
                 {...register('configName')}
                 error={error?.message}
@@ -150,7 +152,7 @@ export function ChooseConfiguration({
     },
     {
       key: 'existing',
-      label: 'Edit existing',
+      label: t("checkout.config.choose.form.existing.title"),
       children: (
         <Select
           disabled={items?.length === 0}
@@ -187,9 +189,8 @@ export function ChooseConfiguration({
                     <RadioGroup.Label>
                       <div className="flex flex-col gap-2">
                         <RadioContentWrapper
-                          className={`${
-                            disabled ? '' : 'cursor-pointer'
-                          } items-center `}
+                          className={`${disabled ? '' : 'cursor-pointer'
+                            } items-center `}
                         >
                           <Radio checked={checked} />
                           <span>{label}</span>

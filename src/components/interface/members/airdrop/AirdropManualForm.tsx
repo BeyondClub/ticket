@@ -19,6 +19,7 @@ import { onResolveName } from '~/utils/resolvers'
 import { useConfig } from '~/utils/withConfig'
 import { useWeb3Service } from '~/utils/withWeb3Service'
 import { AirdropListItem, AirdropMember } from './AirdropElements'
+import { useTranslation } from 'next-i18next'
 export interface Props {
   add(member: AirdropMember): void
   lock: Lock
@@ -52,6 +53,7 @@ export function AirdropForm({
   const { wallet } = useWatch({
     control,
   })
+  const { t } = useTranslation()
 
   const addressFieldChanged = (name: keyof AirdropMember) => {
     return async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,18 +67,18 @@ export function AirdropForm({
     }
   }
 
-  const required = useEmail ? 'Email is required' : 'Wallet address is required'
-  const label = useEmail ? 'Email' : 'Wallet address'
+  const required = useEmail ? t("airdrop.email.required") : t("airdrop.address.required")
+  const label = useEmail ? t("common.email") : t("airdrop.address.title")
 
   const description = useEmail
-    ? 'Enter the email address that will receive the membership NFT'
-    : 'Enter the wallet address or an ENS that will receive the membership NFT'
+    ? t("airdrop.email.desc.1")
+    : t("airdrop.address.desc")
   const error = errors?.wallet?.message
   const placeholder = useEmail ? 'user@email.com' : '0x...'
   const inputClass = twMerge(
     'box-border flex-1 block w-full transition-all border pl-4 py-2 text-base border-gray-400 rounded-lg shadow-sm hover:border-gray-500 focus:ring-gray-500 focus:border-gray-500 focus:outline-none disabled:bg-gray-100',
     error &&
-      'border-brand-secondary hover:border-brand-secondary focus:border-brand-secondary focus:ring-brand-secondary'
+    'border-brand-secondary hover:border-brand-secondary focus:border-brand-secondary focus:ring-brand-secondary'
   )
 
   const maxKeysPerAddress = lock?.maxKeysPerAddress || 1
@@ -136,7 +138,7 @@ export function AirdropForm({
                 )
                 return numberOfMemberships < (lock?.maxKeysPerAddress || 1)
                   ? true
-                  : 'Address already holds the maximum number of memberships.'
+                  : t("airdrop.address.error")
               } catch (error) {
                 console.error(error)
                 return '' // error already handle by the component
@@ -152,7 +154,7 @@ export function AirdropForm({
                   {label}
                 </label>
                 <div className="flex items-center gap-2">
-                  <div className="text-base">No wallet address?</div>
+                  <div className="text-base">{t("airdrop.address.noAddress")}</div>
                   <Toggle
                     value={useEmail}
                     onChange={(value: boolean) => {
@@ -208,32 +210,32 @@ export function AirdropForm({
       {!useEmail && (
         <Input
           type="email"
-          label="Email Address"
+          label={t("airdrop.email.title")}
           {...register('email', {
             required: {
               value: useEmail || emailRequired,
-              message: 'Email is required',
+              message: t("airdrop.email.required"),
             },
           })}
           description={
-            'A confirmation email will be sent to your recipient with the QR code and link for NFT.'
+            t("airdrop.email.desc.2")
           }
           error={errors.email?.message}
         />
       )}
       <Input
         pattern="\d+"
-        label="Number of keys to airdrop"
+        label={t("airdrop.no.title")}
         {...register('count', {
           valueAsNumber: true,
           validate: (item) => {
             if (!Number.isInteger(item)) {
-              return 'Only positive numbers are allowed.'
+              return t("airdrop.no.error.1")
             }
           },
           max: {
             value: maxKeysPerAddress,
-            message: `Your lock currently has a maximum of keys per address set to ${maxKeysPerAddress}.`,
+            message: `${t("airdrop.no.error.2")} ${maxKeysPerAddress}.`,
           },
         })}
         error={errors.count?.message}
@@ -241,7 +243,7 @@ export function AirdropForm({
 
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <span>Expiration</span>
+          <span>{t("common.expiration")}</span>
           <ToggleSwitch
             enabled={formValues.neverExpire}
             setEnabled={() => setValue('neverExpire', !formValues.neverExpire)}
@@ -250,7 +252,7 @@ export function AirdropForm({
                 setValue('expiration', undefined)
               }
             }}
-            title="Never expires"
+            title={t("events.extend.form.neverExp")}
           />
         </div>
         <div className="relative">
@@ -263,23 +265,23 @@ export function AirdropForm({
           />
           {errors?.expiration && (
             <span className="absolute text-xs text-red-700">
-              This field is required
+              {t("common.fieldReq")}
             </span>
           )}
         </div>
       </div>
       {!useEmail && (
         <Input
-          label="Key Manager"
+          label={t("airdrop.manager.title")}
           {...register('manager', {
             onChange: addressFieldChanged('manager'),
           })}
-          description="Key manager will be granted the permission to transfer or to cancel the membership. By default, your address is set as manager."
+          description={t("airdrop.manager.desc")}
           error={errors.manager?.message}
         />
       )}
       <Button loading={isSubmitting} disabled={isSubmitting} type="submit">
-        Add recipient
+        {t("airdrop.addRecp")}
       </Button>
     </form>
   )
@@ -302,6 +304,7 @@ export function AirdropManualForm({
     formatDate(lock.expirationDuration || 0)
   ).getTime()
   const [isConfirming, setIsConfirming] = useState(false)
+  const { t } = useTranslation()
 
   return (
     <div className="space-y-6 overflow-y-auto">
@@ -348,7 +351,7 @@ export function AirdropManualForm({
               setIsConfirming(false)
             }}
           >
-            Confirm Airdrop
+            {t("airdrop.confDrop")}
           </Button>
         </div>
       )}

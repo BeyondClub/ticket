@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query'
 import { Input, Button } from '@unlock-protocol/ui'
 import React from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'next-i18next'
 import { ToastHelper } from '~/components/helpers/toast.helper'
 import { useAuth } from '~/contexts/AuthenticationContext'
 
@@ -28,6 +29,7 @@ export const UpdateMaxKeysPerAddress = ({
   maxKeysPerAddress: maxKeysPerAddressValue = DEFAULT_KEYS_PER_ADDRESS,
 }: UpdateMaxKeysPerAddressProps) => {
   const { getWalletService } = useAuth()
+  const { t } = useTranslation()
 
   const {
     register,
@@ -57,12 +59,12 @@ export const UpdateMaxKeysPerAddress = ({
   const onHandleSubmit = async () => {
     if (isValid) {
       await ToastHelper.promise(updateMaxKeysPerAddressMutation.mutateAsync(), {
-        loading: 'Updating max keys per address...',
-        success: 'Maximum number of keys per address successfully updated',
-        error: `We could not update the max keys per address for this lock.`,
+        loading: t("events.settings.memTerms.no.form.loading"),
+        success: t("events.settings.memTerms.no.form.success"),
+        error: t("events.settings.memTerms.no.form.error1"),
       })
     } else {
-      ToastHelper.error('Form is not valid')
+      ToastHelper.error(t("common.formNotValid"))
       reset()
     }
   }
@@ -74,7 +76,7 @@ export const UpdateMaxKeysPerAddress = ({
     updateMaxKeysPerAddressMutation.isLoading ||
     !canUpdateMaxKeysPerAddress
 
-  const updateVersionUrl = `/locks/settings?address=${lockAddress}&network=${network}&defaultTab=advanced`
+  const updateVersionUrl = `/events/settings?address=${lockAddress}&network=${network}&defaultTab=advanced`
 
   return (
     <form
@@ -84,7 +86,7 @@ export const UpdateMaxKeysPerAddress = ({
       <div className="flex flex-col gap-4">
         <div className="relative">
           <Input
-            placeholder="Enter quantity"
+            placeholder={t("events.settings.memTerms.no.form.title")}
             type="number"
             autoComplete="off"
             step={1}
@@ -92,12 +94,12 @@ export const UpdateMaxKeysPerAddress = ({
             description={
               !canUpdateMaxKeysPerAddress && (
                 <>
-                  Update not supported with the current lock version.{' '}
+                  {t("events.settings.memTerms.no.form.desc1")}{' '}
                   <a
                     href={updateVersionUrl}
                     className="font-bold cursor-pointer text-brand-ui-primary"
                   >
-                    Upgrade your lock to the latest version{' '}
+                    {t("events.settings.memTerms.no.form.desc2")}{' '}
                   </a>
                 </>
               )
@@ -105,7 +107,7 @@ export const UpdateMaxKeysPerAddress = ({
             min={1}
             error={
               errors?.maxKeysPerAddress &&
-              'Please enter a positive numeric value'
+              t("events.settings.memTerms.no.form.error2")
             }
             {...register('maxKeysPerAddress', {
               valueAsNumber: true,
@@ -124,7 +126,7 @@ export const UpdateMaxKeysPerAddress = ({
           disabled={disabledInput}
           loading={updateMaxKeysPerAddressMutation.isLoading}
         >
-          Update
+          {t("common.update")}
         </Button>
       )}
     </form>

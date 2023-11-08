@@ -2,6 +2,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { Input, Button } from '@unlock-protocol/ui'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'next-i18next'
 import { ToastHelper } from '~/components/helpers/toast.helper'
 import { useAuth } from '~/contexts/AuthenticationContext'
 import { useWeb3Service } from '~/utils/withWeb3Service'
@@ -35,6 +36,7 @@ export const UpdateBaseTokenURI = ({
     setValue,
     formState: { errors },
   } = useForm<FormProps>()
+  const { t } = useTranslation()
 
   const getTokenURI = async () => {
     return await web3Service.tokenURI(
@@ -57,9 +59,9 @@ export const UpdateBaseTokenURI = ({
   const onSetBaseTokenURI = async (fields: FormProps) => {
     const setBaseTokenURIPromise = setBaseTokenURIMutation.mutateAsync(fields)
     await ToastHelper.promise(setBaseTokenURIPromise, {
-      error: 'Failed to update base token URI.',
-      success: 'Base token URI successfully updated.',
-      loading: 'Updating Base token URI.',
+      error: t("events.settings.general.baseUri.form.error1"),
+      success: t("events.settings.general.baseUri.form.success"),
+      loading: t("events.settings.general.baseUri.form.loading"),
     })
   }
 
@@ -84,7 +86,7 @@ export const UpdateBaseTokenURI = ({
       <div className="relative">
         <Input
           type="url"
-          label="Base token URI:"
+          label={`${t("events.settings.general.baseUri.title")}:`}
           {...register('baseTokenURI', {
             minLength: 1,
             required: true,
@@ -94,7 +96,7 @@ export const UpdateBaseTokenURI = ({
           disabled={disabledInput}
           error={
             errors?.baseTokenURI &&
-            'The base token URI must be a valid URL that ends with a final /'
+            t("events.settings.general.baseUri.form.error2")
           }
         />
       </div>
@@ -106,7 +108,7 @@ export const UpdateBaseTokenURI = ({
           disabled={disabledInput}
           loading={setBaseTokenURIMutation.isLoading || isLoading}
         >
-          Update
+          {t("common.update")}
         </Button>
       )}
     </form>

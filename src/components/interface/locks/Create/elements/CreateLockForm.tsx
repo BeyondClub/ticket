@@ -15,6 +15,7 @@ import { useConfig } from '~/utils/withConfig'
 import { useWeb3Service } from '~/utils/withWeb3Service'
 import { SelectCurrencyModal } from '../modals/SelectCurrencyModal'
 import { BalanceWarning } from './BalanceWarning'
+import { useTranslation } from 'next-i18next'
 
 export interface LockFormProps {
   name: string
@@ -36,24 +37,25 @@ interface CreateLockFormProps {
 
 export const networkDescription = (network: number) => {
   const { description, url, faucet, nativeCurrency } = networks[network!]
+  const { t } = useTranslation()
+
   return (
     <>
-      {description}{' '}
+      {t(`networks.description.${(description as string).trim().toLowerCase().replace(/[ .]/g, "_")}`)} {' '}
       {url && (
         <>
           <Link className="underline" href={url} target="_blank">
-            Learn more
+            {t("networks.description.learnMore")}
           </Link>
-          .
         </>
       )}
       {faucet && (
         <>
           {' '}
           <br />
-          Need some {nativeCurrency.name} to pay for gas?{' '}
+          {t("networks.description.faucet.1")} {nativeCurrency.name} {t("networks.description.faucet.2")}{' '}
           <Link className="underline" href={faucet} target="_blank">
-            Try this faucet
+            {t("networks.description.faucet.3")}
           </Link>
           .
         </>
@@ -98,6 +100,7 @@ export const CreateLockForm = ({
       isFree,
     },
   })
+  const { t } = useTranslation()
   const { network: selectedNetwork } = useWatch({
     control,
   })
@@ -185,7 +188,7 @@ export const CreateLockForm = ({
             onSubmit={handleSubmit(onHandleSubmit)}
           >
             <Select
-              label="Network:"
+              label={`${t("common.network")}:`}
               tooltip={
                 <>
                   Unlock supports{' '}
@@ -210,9 +213,9 @@ export const CreateLockForm = ({
             />
             <div className="relative">
               <Input
-                label="Name:"
+                label={`${t("common.name")}:`}
                 autoComplete="off"
-                placeholder="Lock Name"
+                placeholder={t("events.deploy.form.name.placeholder")}
                 {...register('name', {
                   required: true,
                   minLength: 3,
@@ -220,17 +223,17 @@ export const CreateLockForm = ({
               />
               {errors?.name && (
                 <span className="absolute text-xs text-red-700">
-                  A name is required.
+                  {t("events.deploy.form.name.error")}
                 </span>
               )}
             </div>
             <div className="flex flex-col gap-1">
               <div className="flex items-center justify-between">
                 <label className="block px-1 text-base" htmlFor="">
-                  Membership duration (in days):
+                  {t("events.deploy.form.duration.title")}:
                 </label>
                 <ToggleSwitch
-                  title="Unlimited"
+                  title={t("common.unlimited")}
                   enabled={unlimitedDuration}
                   setEnabled={setUnlimitedDuration}
                   onChange={(enable: boolean) => {
@@ -253,12 +256,12 @@ export const CreateLockForm = ({
                     min: 0,
                     required: !unlimitedDuration,
                   })}
-                  placeholder="Enter duration"
+                  placeholder={t("events.deploy.form.duration.placeholder")}
                   type="number"
                 />
                 {errors?.expirationDuration && (
                   <span className="absolute mt-1 text-xs text-red-700">
-                    Please enter amount of days.
+                    {t("events.deploy.form.duration.error")}
                   </span>
                 )}
               </div>
@@ -266,10 +269,10 @@ export const CreateLockForm = ({
             <div className="flex flex-col gap-1">
               <div className="flex items-center justify-between">
                 <label className="block px-1 text-base" htmlFor="">
-                  Number of memberships for sale:
+                  {t("events.deploy.form.no.title")}:
                 </label>
                 <ToggleSwitch
-                  title="Unlimited"
+                  title={t("common.unlimited")}
                   enabled={unlimitedQuantity}
                   setEnabled={setUnlimitedQuantity}
                   onChange={(enable: boolean) => {
@@ -284,7 +287,7 @@ export const CreateLockForm = ({
               </div>
               <div className="relative">
                 <Input
-                  placeholder="Enter quantity"
+                  placeholder={t("events.deploy.form.no.placeholder")}
                   type="number"
                   autoComplete="off"
                   step={1}
@@ -297,7 +300,7 @@ export const CreateLockForm = ({
                 />
                 {errors?.maxNumberOfKeys && (
                   <span className="absolute mt-1 text-xs text-red-700">
-                    Please choose a number of memberships for your lock.
+                    {t("events.deploy.form.no.error")}
                   </span>
                 )}
               </div>
@@ -306,10 +309,10 @@ export const CreateLockForm = ({
             <div className="relative flex flex-col gap-1">
               <div className="flex items-center justify-between">
                 <label className="px-1 mb-2 text-base" htmlFor="">
-                  Currency & Price:
+                  {t("events.deploy.form.price.title")}:
                 </label>
                 <ToggleSwitch
-                  title="Free"
+                  title={t("common.free")}
                   enabled={isFree}
                   setEnabled={setIsFree}
                   onChange={(enable: boolean) => {
@@ -347,7 +350,7 @@ export const CreateLockForm = ({
                 </div>
                 {errors?.keyPrice && (
                   <span className="absolute text-xs text-red-700 ">
-                    Please enter a positive number
+                    {t("events.deploy.form.price.error")}
                   </span>
                 )}
               </div>
@@ -357,7 +360,7 @@ export const CreateLockForm = ({
               type="submit"
               disabled={submitDisabled}
             >
-              Next
+              {t("common.next")}
             </Button>
           </form>
         </div>

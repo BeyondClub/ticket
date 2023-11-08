@@ -26,6 +26,7 @@ export const GlobalWrapper = ({ children }: GlobalWrapperProps) => {
       <ConfigContext.Provider value={config}>
         <WedlockServiceContext.Provider value={wedlockService}>
           <ProviderContext.Provider value={{ provider, setProvider }}>
+            {/* @ts-ignore */}
             <Authenticate>{children}</Authenticate>
           </ProviderContext.Provider>
         </WedlockServiceContext.Provider>

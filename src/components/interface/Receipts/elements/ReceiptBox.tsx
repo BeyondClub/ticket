@@ -14,6 +14,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useGetPrice } from '~/hooks/usePrice'
 import Link from 'next/link'
 import { HiOutlineExternalLink as ExternalLinkIcon } from 'react-icons/hi'
+import { useTranslation } from 'next-i18next'
 
 interface ReceiptBoxProps {
   lockAddress: string
@@ -47,11 +48,11 @@ const Address = ({
 
 const NotAuthorizedBar = () => {
   const { account } = useAuth()
+  const { t } = useTranslation()
+
   return (
     <div className="w-full max-w-lg p-2 mt-5 text-base text-center text-red-700 bg-red-100 border border-red-700 rounded-xl">
-      You are connected as {addressMinify(account!)} and this address is not a
-      manager or payer for this receipt. If you want to update details, please
-      connect as lock manager or payer of the transaction.
+      {t("events.notManager.1")} {addressMinify(account!)} {t("events.notManager.3")}
     </div>
   )
 }

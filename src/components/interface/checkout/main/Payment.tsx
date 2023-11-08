@@ -31,6 +31,7 @@ import { useCrossmintEnabled } from '~/hooks/useCrossmintEnabled'
 import { useCrossChainRoutes } from '~/hooks/useCrossChainRoutes'
 import { usePricing } from '~/hooks/usePricing'
 import Link from 'next/link'
+import { useTranslation } from 'next-i18next'
 
 interface Props {
   injectedProvider: unknown
@@ -62,6 +63,7 @@ export function Payment({ injectedProvider, checkoutService }: Props) {
   const networkConfig = config.networks[lock.network]
   const baseSymbol = networkConfig.nativeCurrency.symbol
   const symbol = lockTickerSymbol(lock, baseSymbol)
+  const { t } = useTranslation()
 
   const { isLoading: isLoading, data: enableCreditCard } = useCreditCardEnabled(
     {
@@ -168,7 +170,7 @@ export function Payment({ injectedProvider, checkoutService }: Props) {
     !enableCreditCard &&
     networkConfig.universalCard?.cardPurchaserAddress &&
     lock.currencyContractAddress?.toLowerCase()?.trim() ===
-      USDC?.address?.toLowerCase()?.trim()
+    USDC?.address?.toLowerCase()?.trim()
 
   const allDisabled = [
     enableCreditCard,
@@ -191,7 +193,7 @@ export function Payment({ injectedProvider, checkoutService }: Props) {
           <div>
             <p className="text-sm font-bold">
               <ErrorIcon className="inline" />
-              There was an error when preparing the transaction.
+              {t("checkout.items.payment.error")}
             </p>
           </div>
         ) : (
@@ -211,7 +213,7 @@ export function Payment({ injectedProvider, checkoutService }: Props) {
                 className="grid w-full p-4 space-y-2 text-left border border-gray-400 rounded-lg shadow cursor-pointer group hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-white"
               >
                 <div className="flex justify-between w-full">
-                  <h3 className="font-bold"> Pay with {symbol} </h3>
+                  <h3 className="font-bold">{t("checkout.items.payment.payWith")} {symbol} </h3>
                   <AmountBadge
                     amount={pricingData?.total.toString() || ''}
                     symbol={symbol}
@@ -219,7 +221,7 @@ export function Payment({ injectedProvider, checkoutService }: Props) {
                 </div>
                 <div className="flex items-center justify-between w-full">
                   <div className="flex items-center w-full text-sm text-left text-gray-500">
-                    Your balance of {symbol.toUpperCase()} on{' '}
+                    {t("checkout.items.payment.balance.1")} {symbol.toUpperCase()} {t("checkout.items.payment.balance.2")}{' '}
                     {networkConfig.name}:{' ~'}
                     {formatNumber(Number(balance?.balance))}{' '}
                   </div>
@@ -230,7 +232,7 @@ export function Payment({ injectedProvider, checkoutService }: Props) {
                 </div>
                 <div className="inline-flex text-sm text-start">
                   {!balance?.isGasPayable &&
-                    `You don't have enough ${baseSymbol} for gas fee.`}
+                    `${t("checkout.items.payment.noGas.1")} ${baseSymbol} ${t("checkout.items.payment.noGas.2")}`}
                 </div>
               </button>
             )}
@@ -250,7 +252,7 @@ export function Payment({ injectedProvider, checkoutService }: Props) {
                   className="flex flex-col w-full p-4 space-y-2 border border-gray-400 rounded-lg shadow cursor-pointer group hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-white"
                 >
                   <div className="flex items-center justify-between w-full">
-                    <h3 className="font-bold"> Pay via Crossmint </h3>
+                    <h3 className="font-bold"> {t("checkout.items.payment.crossmint.title")} </h3>
                     <div className="flex items-center gap-x-1 px-2 py-0.5 rounded border font-medium text-sm">
                       <VisaIcon size={18} />
                       <MasterCardIcon size={18} />
@@ -264,8 +266,8 @@ export function Payment({ injectedProvider, checkoutService }: Props) {
                   </div>
                   <div className="flex items-center justify-between w-full">
                     <div className="text-sm text-left text-gray-500">
-                      Use your card with Crossmint. <br />
-                      <span className="text-xs">Additional fees may apply</span>
+                      {t("checkout.items.payment.crossmint.desc")} <br />
+                      <span className="text-xs">{t("checkout.items.payment.addFees")}</span>
                     </div>
                     <RightArrowIcon
                       className="transition-transform duration-300 ease-out group-hover:fill-brand-ui-primary group-hover:translate-x-1 group-disabled:translate-x-0 group-disabled:transition-none group-disabled:group-hover:fill-black"
@@ -290,7 +292,7 @@ export function Payment({ injectedProvider, checkoutService }: Props) {
                 className="flex flex-col w-full p-4 space-y-2 border border-gray-400 rounded-lg shadow cursor-pointer group hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-white"
               >
                 <div className="flex items-center justify-between w-full">
-                  <h3 className="font-bold"> Pay via Stripe </h3>
+                  <h3 className="font-bold"> {t("checkout.items.payment.stripe.title")} </h3>
                   <div className="flex items-center gap-x-1 px-2 py-0.5 rounded border font-medium text-sm">
                     <VisaIcon size={18} />
                     <MasterCardIcon size={18} />
@@ -298,8 +300,8 @@ export function Payment({ injectedProvider, checkoutService }: Props) {
                 </div>
                 <div className="flex items-center justify-between w-full">
                   <div className="text-sm text-left text-gray-500">
-                    Use cards, Google Pay, or Apple Pay. <br />
-                    <span className="text-xs">Additional fees may apply</span>
+                    {t("checkout.items.payment.stripe.desc")} <br />
+                    <span className="text-xs">{t("checkout.items.payment.addFees")}</span>
                   </div>
                   <RightArrowIcon
                     className="transition-transform duration-300 ease-out group-hover:fill-brand-ui-primary group-hover:translate-x-1 group-disabled:translate-x-0 group-disabled:transition-none group-disabled:group-hover:fill-black"
@@ -323,7 +325,7 @@ export function Payment({ injectedProvider, checkoutService }: Props) {
                 className="flex flex-col w-full p-4 space-y-2 border border-gray-400 rounded-lg shadow cursor-pointer group hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-white"
               >
                 <div className="flex items-center justify-between w-full">
-                  <h3 className="font-bold"> Pay via card </h3>
+                  <h3 className="font-bold"> {t("checkout.items.payment.card.title")} </h3>
                   <div className="flex items-center gap-x-1 px-2 py-0.5 rounded border font-medium text-sm">
                     <VisaIcon size={18} />
                     <MasterCardIcon size={18} />
@@ -331,8 +333,8 @@ export function Payment({ injectedProvider, checkoutService }: Props) {
                 </div>
                 <div className="flex items-center justify-between w-full">
                   <div className="text-sm text-left text-gray-500">
-                    Use cards, Google Pay, or Apple Pay. <br />
-                    <span className="text-xs">Additional fees may apply</span>
+                    {t("checkout.items.payment.stripe.desc")} <br />
+                    <span className="text-xs">{t("checkout.items.payment.addFees")}</span>
                   </div>
                   <RightArrowIcon
                     className="transition-transform duration-300 ease-out group-hover:fill-brand-ui-primary group-hover:translate-x-1 group-disabled:translate-x-0 group-disabled:transition-none group-disabled:group-hover:fill-black"
@@ -355,10 +357,10 @@ export function Payment({ injectedProvider, checkoutService }: Props) {
                 }}
                 className="flex flex-col w-full p-4 space-y-2 border border-gray-400 rounded-lg shadow cursor-pointer group hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-white"
               >
-                <h3 className="font-bold"> Claim membership for free </h3>
+                <h3 className="font-bold"> {t("checkout.items.payment.free.title")} </h3>
                 <div className="flex items-center justify-between w-full">
                   <div className="text-sm text-left text-gray-500">
-                    We will airdrop this free membership to you!
+                    {t("checkout.items.payment.free.desc")}
                   </div>
                   <div className="flex items-center justify-end">
                     <RightArrowIcon
@@ -372,7 +374,7 @@ export function Payment({ injectedProvider, checkoutService }: Props) {
 
             {isLoadingMoreRoutes && !enableClaim && (
               <div className="flex items-center justify-center w-full gap-2 text-sm text-center">
-                <LoadingIcon size={16} /> Loading more payment options...
+                <LoadingIcon size={16} /> {t("checkout.items.payment.loading")}
               </div>
             )}
 

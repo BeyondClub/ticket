@@ -3,6 +3,7 @@ import { UpdateHooksForm } from '../forms/UpdateHooksForm'
 import { UpdateReferralFee } from '../forms/UpdateReferralFee'
 import { UpdateVersionForm } from '../forms/UpdateVersionForm'
 import { SettingCard } from './SettingCard'
+import { useTranslation } from 'next-i18next'
 
 interface SettingMiscProps {
   lockAddress: string
@@ -14,20 +15,20 @@ interface SettingMiscProps {
 }
 
 const UpgradeCard = ({ isLastVersion }: { isLastVersion: boolean }) => {
+  const { t } = useTranslation()
   if (isLastVersion) {
     return (
-      <span className="text-base">You are running the latest version.</span>
+      <span className="text-base">{t("events.settings.advanced.version.latest")}</span>
     )
   }
 
   return (
     <div className="flex flex-col gap-1 p-4 bg-gray-100 rounded-lg ">
       <span className="text-base font-bold text-brand-ui-primary">
-        Upgrade Available 🔆
+        {t("events.settings.advanced.version.upgrade")} 🔆
       </span>
       <span className="text-base text-brand-dark">
-        This lock is deployed on an earlier version of the smart contract. An
-        upgrade is available to the latest features.
+        {t("events.settings.advanced.version.upgradeDesc")}
       </span>
     </div>
   )
@@ -42,6 +43,7 @@ export const SettingMisc = ({
   publicLockLatestVersion,
 }: SettingMiscProps) => {
   const [updatedVersion, setUpdatedVersion] = useState(publicLockVersion)
+  const { t } = useTranslation()
 
   const isLastVersion =
     updatedVersion !== undefined &&
@@ -51,8 +53,8 @@ export const SettingMisc = ({
   return (
     <div className="grid grid-cols-1 gap-6">
       <SettingCard
-        label="Referral fee"
-        description="Set custom referral percentage for each address. Easily decide how much each promoter earns from your membership."
+        label={t("events.settings.advanced.referral.title")}
+        description={t("events.settings.advanced.referral.desc")}
         isLoading={isLoading}
       >
         <UpdateReferralFee
@@ -64,19 +66,17 @@ export const SettingMisc = ({
       </SettingCard>
 
       <SettingCard
-        label="Hooks"
+        label={t("events.settings.advanced.hooks.title")}
         description={
           <span>
-            {`Hooks are 3rd party contracts that can be called when your Lock
-            itself is called. Whether it'd be for password protected purchase,
-            or other use case. You can also learn more from our`}{' '}
+            {t("events.settings.advanced.hooks.desc1")}{' '}
             <a
               href="https://docs.unlock-protocol.com/core-protocol/public-lock/hooks"
               target="_blank"
               rel="noreferrer"
               className="font-bold text-brand-ui-primary"
             >
-              docs.
+              {t("events.settings.advanced.hooks.desc2")}
             </a>
           </span>
         }
@@ -93,7 +93,7 @@ export const SettingMisc = ({
 
       {(updatedVersion ?? 0) >= 10 && (
         <SettingCard
-          label="Versioning"
+          label={t("events.settings.advanced.version.title")}
           description={<UpgradeCard isLastVersion={isLastVersion} />}
           isLoading={isLoading}
           disabled={isLastVersion}

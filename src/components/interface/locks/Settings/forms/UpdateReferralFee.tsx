@@ -9,6 +9,7 @@ import { ethers } from 'ethers'
 import Image from 'next/image'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'next-i18next'
 import { ToastHelper } from '~/components/helpers/toast.helper'
 import LoadingIcon from '~/components/interface/Loading'
 import { useReferrerFee } from '~/hooks/useReferrerFee'
@@ -36,6 +37,7 @@ export const UpdateReferralFee = ({
 }: UpdateReferralFeeProps) => {
   const [isReferralAddressToggled, setIsReferralAddressToggled] =
     useState(false)
+  const { t } = useTranslation()
 
   const {
     watch,
@@ -66,9 +68,9 @@ export const UpdateReferralFee = ({
     })
 
     await ToastHelper.promise(setReferrerFeePromise, {
-      loading: 'Setting new referrer',
-      error: 'Failed to update the values, please try again.',
-      success: 'Referrer set',
+      loading: t("events.settings.advanced.referral.set.loading"),
+      error: t("events.settings.advanced.referral.set.error"),
+      success: t("events.settings.advanced.referral.set.success"),
     })
 
     reset()
@@ -85,8 +87,8 @@ export const UpdateReferralFee = ({
     <form className="grid gap-6" onSubmit={handleSubmit(onSubmit)}>
       <div className="grid gap-2">
         <ToggleSwitch
-          title="Custom Referrer Address"
-          description={'Set a referrer for a custom address.'}
+          title={t("events.settings.advanced.referral.toggle.title")}
+          description={t("events.settings.advanced.referral.toggle.desc")}
           enabled={isReferralAddressToggled}
           disabled={isDisabledReferrerInput}
           setEnabled={(enabled: boolean) => {
@@ -113,7 +115,7 @@ export const UpdateReferralFee = ({
       </div>
 
       <div className="grid gap-2">
-        <span className="text-base semibold">{'Referrer fee (%)'}</span>
+        <span className="text-base semibold">{t("events.settings.advanced.referral.fee")}</span>
 
         <Input
           type="number"
@@ -124,7 +126,7 @@ export const UpdateReferralFee = ({
           })}
           error={
             errors?.referralFeePercentage &&
-            'This field accept percentage value between 1 and 100.'
+            t("events.settings.advanced.referral.formErr")
           }
           disabled={isDisabledReferrerInput}
         />
@@ -142,13 +144,13 @@ export const UpdateReferralFee = ({
           }
           loading={isSettingReferrerFee}
         >
-          Apply
+          {t("common.apply")}
         </Button>
       )}
 
       <div className="flex flex-col mt-5 items-start">
         <div className="flex items-center justify-between w-full">
-          <Card.Title>Referrers ({referralFees.length})</Card.Title>
+          <Card.Title>{t("events.settings.advanced.referral.referrers")} ({referralFees.length})</Card.Title>
 
           {!isLoading ? (
             <Button
@@ -167,7 +169,7 @@ export const UpdateReferralFee = ({
                 />
               }
             >
-              Refresh
+              {t("common.refresh")}
             </Button>
           ) : null}
         </div>
@@ -189,7 +191,7 @@ export const UpdateReferralFee = ({
                 >
                   <h2 className="text-md font-medium break-words">
                     {isAddressLinkedToAnyReferrer
-                      ? 'Referral fee applied to any referrer'
+                      ? t("events.settings.advanced.referral.feeApplied")
                       : referrer}
                   </h2>
                   <h2 className="text-md pl-3 font-medium break-words">
@@ -201,7 +203,7 @@ export const UpdateReferralFee = ({
           </div>
         ) : (
           <h2 className="text-1xl mt-3 w-full text-center">
-            You haven&apos;t added any referrers yet
+            {t("events.settings.advanced.referral.noReferrers")}
           </h2>
         )}
       </div>

@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query'
 import { ToggleSwitch, Input, Button } from '@unlock-protocol/ui'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'next-i18next'
 import { ToastHelper } from '~/components/helpers/toast.helper'
 import {
   UNLIMITED_KEYS_DURATION,
@@ -27,6 +28,7 @@ export const UpdateDurationForm = ({
   const [unlimitedDuration, setUnlimitedDuration] = useState(
     duration === UNLIMITED_KEYS_DURATION
   )
+  const { t } = useTranslation()
   const durationInDays = Math.round(
     parseInt(`${duration ?? 0}`, 10) / ONE_DAY_IN_SECONDS
   )
@@ -74,12 +76,12 @@ export const UpdateDurationForm = ({
   const onHandleSubmit = async () => {
     if (isValid) {
       await ToastHelper.promise(updateDurationMutation.mutateAsync(), {
-        loading: 'Updating duration...',
-        success: 'Duration updated',
-        error: 'We could not update the duration for this lock.',
+        loading: t("events.settings.memTerms.duration.form.loading"),
+        success: t("events.settings.memTerms.duration.form.success"),
+        error: t("events.settings.memTerms.duration.form.error1"),
       })
     } else {
-      ToastHelper.error('Form is not valid')
+      ToastHelper.error(t("common.formNotValid"))
       reset()
     }
   }
@@ -93,10 +95,10 @@ export const UpdateDurationForm = ({
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <label className="block px-1 text-base" htmlFor="">
-            Membership duration (in days):
+            {t("events.settings.memTerms.duration.form.title")}
           </label>
           <ToggleSwitch
-            title="Unlimited"
+            title={t("common.unlimited")}
             enabled={unlimitedDuration}
             setEnabled={setUnlimitedDuration}
             disabled={disabledInput}
@@ -122,9 +124,9 @@ export const UpdateDurationForm = ({
               required: !unlimitedDuration,
               min: 0,
             })}
-            placeholder="Enter duration"
+            placeholder={t("events.settings.memTerms.duration.form.placeholder")}
             type="number"
-            error={errors?.expirationDuration && 'Please enter amount of days.'}
+            error={errors?.expirationDuration && t("events.settings.memTerms.duration.form.error2")}
           />
         </div>
       </div>
@@ -136,7 +138,7 @@ export const UpdateDurationForm = ({
           disabled={disabledInput}
           loading={updateDurationMutation.isLoading}
         >
-          Update
+          {t("common.update")}
         </Button>
       )}
     </form>

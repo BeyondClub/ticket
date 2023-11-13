@@ -99,7 +99,7 @@ export const Footer = ({
 
   return (
     <footer className="flex flex-col w-full gap-16 md:gap-24">
-      {subscriptionForm && <EmailSubscriptionForm {...subscriptionForm} />}
+      {/* {subscriptionForm && <EmailSubscriptionForm {...subscriptionForm} />} */}
       <div className="flex flex-col w-full gap-16 md:mb-20 md:grid md:grid-cols-3 md:gap-44">
         <div className="flex flex-col w-full gap-10 mb-10">
           <div className="flex flex-col gap-9">

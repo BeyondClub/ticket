@@ -31,6 +31,7 @@ import { useMetadata } from '~/hooks/metadata'
 import { LockType, getLockTypeByMetadata } from '@unlock-protocol/core'
 import { FiInfo as InfoIcon } from 'react-icons/fi'
 import { TransferKeyDrawer } from '~/components/interface/keychain/TransferKeyDrawer'
+import { TFunction, useTranslation } from 'next-i18next'
 
 interface MetadataCardProps {
   metadata: any
@@ -64,41 +65,42 @@ const MembershipRenewal = ({
 }: KeyRenewalProps) => {
   const possible = ethers.BigNumber.from(possibleRenewals)
   const approved = ethers.BigNumber.from(approvedRenewals)
+  const { t } = useTranslation()
 
   if (possible.lte(0)) {
     return (
-      <Detail className="py-2" label="Renewals" inline justify={false}>
-        User balance of {balance.amount} {balance.symbol} is too low to renew
+      <Detail className="py-2" label={t("common.renewals")} inline justify={false}>
+        {t("events.metadata.lowBalance", { balance: balance.amount + " " + balance.symbol })}
       </Detail>
     )
   }
 
   if (approved.lte(0)) {
     return (
-      <Detail className="py-2" label="Renewals" inline justify={false}>
-        No renewals approved
+      <Detail className="py-2" label={t("common.renewals")} inline justify={false}>
+        {t("events.metadata.noRenewalsApproved")}
       </Detail>
     )
   }
 
   if (approved.gt(0) && approved.lte(UNLIMITED_RENEWAL_LIMIT)) {
     return (
-      <Detail className="py-2" label="Renewals" inline justify={false}>
-        {approved.toString()} times
+      <Detail className="py-2" label={t("common.renewals")} inline justify={false}>
+        {approved.toString()} {t("events.metadata.renewals.noTimes")}
       </Detail>
     )
   }
 
   if (approved.gt(UNLIMITED_RENEWAL_LIMIT)) {
     return (
-      <Detail className="py-2" label="Renewals" inline justify={false}>
-        Renews unlimited times
+      <Detail className="py-2" label={t("common.renewals")} inline justify={false}>
+        {t("events.metadata.renewals.unlimitedTimes")}
       </Detail>
     )
   }
 
   return (
-    <Detail className="py-2" label="Renewals" inline justify={false}>
+    <Detail className="py-2" label={t("common.renewals")} inline justify={false}>
       -
     </Detail>
   )
@@ -121,6 +123,7 @@ const ChangeManagerModal = ({
 }) => {
   const { getWalletService } = useAuth()
   const [isOpen, setIsOpen] = useState(false)
+  const { t } = useTranslation()
 
   const {
     setValue,
@@ -152,7 +155,7 @@ const ChangeManagerModal = ({
       if (typeof onChange === 'function') {
         onChange(newManager)
       }
-      ToastHelper.success('Key Manager updated')
+      ToastHelper.success(t("events.metadata.managerUpdate.success"))
       setIsOpen(false)
     },
   })
@@ -178,10 +181,10 @@ const ChangeManagerModal = ({
         <div className="flex flex-col w-full gap-5">
           <div className="text-left">
             <h3 className="text-xl font-semibold text-left text-black-500">
-              Change Key Manager
+              {t("events.metadata.managerUpdate.title")}
             </h3>
             <span className="text-sm leading-tight text-gray-500">
-              Update the address of the Key Manager.
+              {t("events.metadata.managerUpdate.desc")}
             </span>
           </div>
           <form className="grid w-full gap-3" onSubmit={handleSubmit(onSubmit)}>
@@ -196,7 +199,7 @@ const ChangeManagerModal = ({
                 return (
                   <>
                     <AddressInput
-                      label="New Manager"
+                      label={t("events.metadata.newMgr.title")}
                       value={newManager}
                       disabled={changeManagerMutation.isLoading}
                       onChange={(value: any) => {
@@ -208,8 +211,7 @@ const ChangeManagerModal = ({
                     />
                     {managerUnchanged && (
                       <span className="text-sm text-red-500">
-                        This address is already the current manager for this
-                        key.
+                        {t("events.metadata.managerUpdate.error")}
                       </span>
                     )}
                   </>
@@ -222,7 +224,7 @@ const ChangeManagerModal = ({
               type="submit"
               loading={changeManagerMutation.isLoading}
             >
-              Update
+              {t("common.update")}
             </Button>
           </form>
         </div>
@@ -232,7 +234,7 @@ const ChangeManagerModal = ({
         size="small"
         onClick={() => setIsOpen(true)}
       >
-        {label ?? 'Change'}
+        {label ?? t("common.change")}
       </Button>
     </>
   )
@@ -250,6 +252,7 @@ export const MetadataCard = ({
   const [checkInTimestamp, setCheckedInTimestamp] = useState<string | null>(
     null
   )
+  const { t } = useTranslation()
 
   const items = Object.entries(data || {}).filter(([key]) => {
     return !keysToIgnore.includes(key)
@@ -315,9 +318,9 @@ export const MetadataCard = ({
   const onSendQrCode = async () => {
     if (!network) return
     ToastHelper.promise(sendEmailMutation.mutateAsync(), {
-      success: 'Email sent',
-      loading: 'Sending email...',
-      error: 'We could not send email.',
+      success: t("events.metadata.qrSend.success"),
+      loading: t("events.metadata.qrSend.loading"),
+      error: t("events.metadata.qrSend.error"),
     })
   }
 
@@ -343,16 +346,16 @@ export const MetadataCard = ({
   const markAsCheckInMutation = useMutation(onMarkAsCheckIn, {
     onSuccess: () => {
       setCheckedInTimestamp(new Date().toLocaleString())
-      ToastHelper.success('Successfully marked ticket as checked-in')
+      ToastHelper.success(t("events.metadata.checkin.success"))
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
         if (error.response?.status === 409) {
-          ToastHelper.error('Ticket already checked-in')
+          ToastHelper.error(t("events.metadata.checkin.error1"))
           return
         }
       }
-      ToastHelper.error('Error on marking ticket as checked-in')
+      ToastHelper.error(t("events.metadata.checkin.error2"))
     },
   })
 
@@ -383,7 +386,7 @@ export const MetadataCard = ({
       />
       <div className="flex flex-col gap-3 md:flex-row">
         <Button variant="outlined-primary" size="small">
-          <Link href={metadataPageUrl}>Edit token properties</Link>
+          <Link href={metadataPageUrl}>{t("events.metadata.editTokenProps")}</Link>
         </Button>
 
         {!isCheckedIn && (
@@ -394,7 +397,7 @@ export const MetadataCard = ({
             disabled={markAsCheckInMutation.isLoading}
             loading={markAsCheckInMutation.isLoading}
           >
-            Mark as checked-in
+            {t("events.metadata.markCheckedIn")}
           </Button>
         )}
 
@@ -407,7 +410,7 @@ export const MetadataCard = ({
           >
             <Link href={receiptsPageUrl}>
               <div className="flex items-center gap-2">
-                <span>Show receipts</span>
+                <span>{t("events.metadata.showReceipts")}</span>
                 <ReceiptIcon size={18} />
               </div>
             </Link>
@@ -424,7 +427,7 @@ export const MetadataCard = ({
               iconRight={<CheckIcon size={11} />}
               className="mb-4"
             >
-              <span className="text-sm font-semibold">Checked-in</span>
+              <span className="text-sm font-semibold">{t("events.metadata.checkedIn")}</span>
             </Badge>
           )}
           <div className="flex flex-col divide-y divide-gray-400">
@@ -433,7 +436,7 @@ export const MetadataCard = ({
                 className="py-2"
                 inline
                 justify={false}
-                label="Checked-in at:"
+                label={t("events.metadata.checkedInAt")}
               >
                 {getCheckInTime()}
               </Detail>
@@ -442,7 +445,7 @@ export const MetadataCard = ({
               className="py-2"
               label={
                 <div className="flex flex-col w-full gap-2 md:items-center md:flex-row">
-                  <span>Email:</span>
+                  <span>{t("common.email")}:</span>
                   {hasEmail ? (
                     <div className="flex flex-col w-full gap-3 md:flex-row">
                       <span className="block text-base font-semibold text-black">
@@ -453,10 +456,10 @@ export const MetadataCard = ({
                         variant="outlined-primary"
                         onClick={() => setAddEmailModalOpen(true)}
                       >
-                        Edit email
+                        {t("events.metadata.editEmail")}
                       </Button>
                       {lockSettings?.sendEmail ? (
-                        SendEmailMapping[eventType as keyof LockType] && (
+                        SendEmailMapping(t)[eventType as keyof LockType] && (
                           <Button
                             size="tiny"
                             variant="outlined-primary"
@@ -467,13 +470,13 @@ export const MetadataCard = ({
                             }
                           >
                             {sendEmailMutation.isSuccess
-                              ? 'Email sent'
-                              : SendEmailMapping[eventType as keyof LockType]}
+                              ? t("events.metadata.qrSend.success")
+                              : SendEmailMapping(t)[eventType as keyof LockType]}
                           </Button>
                         )
                       ) : (
                         <Button size="tiny" variant="outlined-primary" disabled>
-                          Email are disabled
+                          {t("events.metadata.emailDisabled")}
                         </Button>
                       )}
                     </div>
@@ -483,7 +486,7 @@ export const MetadataCard = ({
                       size="tiny"
                       onClick={() => setAddEmailModalOpen(true)}
                     >
-                      Add email
+                      {t("events.metadata.addEmail")}
                     </Button>
                   )}
                 </div>
@@ -509,12 +512,12 @@ export const MetadataCard = ({
                 <div className="flex flex-col justify-between w-full gap-2 md:items-center md:flex-row">
                   <div>
                     <Tooltip
-                      tip="Address of the owner of the NFT."
-                      label="Address of the owner of the NFT."
+                      tip={t("events.metadata.ownerAddress")}
+                      label={t("events.metadata.ownerAddress")}
                       side="bottom"
                     >
                       <div className="flex items-center gap-2">
-                        <span>Key Owner </span>
+                        <span>{t("events.metadata.keyOwner")} </span>
                         <InfoIcon />:
                         <div className="flex gap-2">
                           {/* show full address on desktop */}
@@ -550,7 +553,7 @@ export const MetadataCard = ({
                           onClick={() => setShowTransferKey(true)}
                           className="w-full md:w-auto"
                         >
-                          Transfer ownership
+                          {t("events.metadata.transferOwnership")}
                         </Button>
                       )}
                       {ownerIsManager && (
@@ -560,7 +563,7 @@ export const MetadataCard = ({
                             network={network}
                             manager={manager}
                             tokenId={tokenId}
-                            label="Set key manager"
+                            label={t("events.metadata.setKeyMgr")}
                             onChange={(keyManager) => {
                               setData({
                                 ...data,
@@ -583,12 +586,12 @@ export const MetadataCard = ({
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Tooltip
-                          label="Address of the manager of the NFT. This address has the transfer rights for this NFT which cannot be transferred by its owner."
-                          tip="Address of the manager of the NFT. This address has the transfer rights for this NFT which cannot be transferred by its owner."
+                          label={t("events.metadata.keyMgrDetail")}
+                          tip={t("events.metadata.keyMgrDetail")}
                           side="right"
                         >
                           <div className="flex items-center gap-1">
-                            <span>Key Manager </span>
+                            <span>{t("events.metadata.keyMgr")} </span>
                             <InfoIcon />:
                           </div>
                         </Tooltip>
@@ -619,7 +622,7 @@ export const MetadataCard = ({
                         network={network}
                         manager={manager}
                         tokenId={tokenId}
-                        label="Change key manager"
+                        label={t("events.metadata.changeMgr.title")}
                         onChange={(keyManager) => {
                           setData({
                             ...data,
@@ -636,7 +639,7 @@ export const MetadataCard = ({
               <>
                 <Detail
                   className="py-2"
-                  label="User Balance:"
+                  label={t("events.metadata.userBal")}
                   inline
                   justify={false}
                 >
@@ -650,7 +653,7 @@ export const MetadataCard = ({
                 {expirationDuration && expirationDuration !== MAX_UINT && (
                   <Detail
                     className="py-2"
-                    label="Renewal duration:"
+                    label={t("events.metadata.renewalDur")}
                     inline
                     justify={false}
                   >
@@ -666,10 +669,12 @@ export const MetadataCard = ({
   )
 }
 
-const SendEmailMapping: Record<keyof LockType, string> = {
-  isCertification: 'Send Certificate by email',
-  isEvent: 'Send QR-code by email',
-  isStamp: 'Send Stamp by email',
+const SendEmailMapping: (t: TFunction) => Record<keyof LockType, string> = (t) => {
+  return {
+    isCertification: t("events.metadata.sendCert"),
+    isEvent: t("events.metadata.sendQr"),
+    isStamp: t("events.metadata.sendStamp"),
+  }
 }
 const UpdateEmailModal = ({
   isOpen,
@@ -702,6 +707,7 @@ const UpdateEmailModal = ({
     userAddress,
     network,
   })
+  const { t } = useTranslation()
 
   const updateData = (formFields: FieldValues) => {
     reset() // reset form state
@@ -715,9 +721,9 @@ const UpdateEmailModal = ({
   const updateMetadata = async (params: any, callback?: () => void) => {
     const updateMetadataPromise = updateUserMetadata(params)
     await ToastHelper.promise(updateMetadataPromise, {
-      loading: 'Updating email address',
-      success: 'Email successfully added to member',
-      error: `Can't update the email address.`,
+      loading: t("events.metadata.updateEmailAddr.loading"),
+      success: t("events.metadata.updateEmailAddr.success"),
+      error: t("events.metadata.updateEmailAddr.error1"),
     })
     if (typeof callback === 'function') {
       callback()
@@ -744,7 +750,7 @@ const UpdateEmailModal = ({
         }
       )
     } catch (err) {
-      ToastHelper.error('There is some unexpected issue, please try again')
+      ToastHelper.error(t("events.metadata.updateEmailAddr.error2"))
     }
   }
 
@@ -752,7 +758,7 @@ const UpdateEmailModal = ({
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
       <div className="flex flex-col gap-3">
         <span className="mr-0 font-semibold text-md">
-          {hasEmail ? 'Update email address' : 'Add email address to metadata'}
+          {hasEmail ? t("events.metadata.updateEmailAddr.desc") : t("events.metadata.updateEmailAddr.addToMetaDesc")}
         </span>
         <form onSubmit={handleSubmit(onUpdateValue)}>
           <Input
@@ -767,10 +773,10 @@ const UpdateEmailModal = ({
               onClick={() => setIsOpen(false)}
               disabled={loading}
             >
-              Abort
+              {t("common.abort")}
             </Button>
             <Button type="submit" disabled={loading}>
-              {hasEmail ? 'Update email' : 'Add email'}
+              {hasEmail ? t("events.metadata.updateEmailAddr.title") : t("events.metadata.updateEmailAddr.addToMeta")}
             </Button>
           </div>
         </form>

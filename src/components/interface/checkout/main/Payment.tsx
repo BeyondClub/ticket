@@ -479,21 +479,19 @@ export function Payment({ injectedProvider, checkoutService }: Props) {
             {allDisabled && (
               <div className="text-sm">
                 <p className="mb-4">
-                  Credit card payments have not been enabled for this
-                  membership.
+                  {t("checkout.preview.credit.title")}
                 </p>
                 {isUnlockAccount && (
                   <>
                     <p className="mb-4">
-                      Ready to get your own wallet to purchase this membership
-                      with cryptocurrency?{' '}
+                      {t("checkout.preview.credit.desc")}{' '}
                       <a
                         href="https://ethereum.org/en/wallets/find-wallet/"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1 text-sm text-gray-500 underline"
                       >
-                        <span>Click here</span>
+                        <span>{t("common.clickHere")}</span>
                         <ExternalLinkIcon />
                       </a>
                     </p>

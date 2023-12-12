@@ -7,6 +7,7 @@ import { PoweredByUnlock } from '../PoweredByUnlock'
 import { UnlockAccountService } from './unlockAccountMachine'
 import Link from 'next/link'
 import { useAuth } from '~/contexts/AuthenticationContext'
+import { useTranslation } from 'next-i18next'
 
 interface Props {
   unlockAccountService: UnlockAccountService
@@ -23,6 +24,7 @@ export function EnterEmail({ unlockAccountService }: Props) {
   const { email } = useAuth()
   const storageService = useStorageService()
   const [isContinuing, setIsContinuing] = useState(false)
+  const { t } = useTranslation()
 
   async function onSubmit({ email }: FieldValues) {
     try {
@@ -50,11 +52,11 @@ export function EnterEmail({ unlockAccountService }: Props) {
     <div className="flex flex-col justify-between h-full">
       <main className="flex flex-col h-full px-6 pb-2 space-y-2 overflow-auto">
         <h3 className="font-bold ml-0.5">
-          Login or create your Unlock account
+          {t('checkout.preview.login.title')}
         </h3>
         <form id="enter-email" onSubmit={handleSubmit(onSubmit)}>
           <Input
-            label="Enter your email address:"
+            label={`${t('common.enterEmail')}:`}
             type="email"
             size="small"
             placeholder="your@email.com"
@@ -67,23 +69,22 @@ export function EnterEmail({ unlockAccountService }: Props) {
           />
         </form>
         <p className="ml-0.5 text-sm grow">
-          This step enables you to log-in or create an{' '}
+          {t("checkout.preview.login.desc.1")}{' '}
           <Link
             href="https://docs.unlock-protocol.com/tools/sign-in-with-ethereum/unlock-accounts"
             target="_blank"
             rel="noopener noreferrer"
             className="underline text-ui-main-500"
           >
-            Unlock account
+            {t("checkout.preview.login.desc.2")}
           </Link>
-          . If you already have a crypto wallet, please connect it.
+          {t("checkout.preview.login.desc.3")}
         </p>
         <section className="ml-0.5 text-sm mt-auto text-gray-500">
-          <p className="font-bold">💡 Did you know?</p>
+          <p className="font-bold">💡 {t("common.didYouKnow")}</p>
           <p>
             {' '}
-            You can pay by credit card card even if you logged-in with your
-            crypto wallet!
+            {t("checkout.preview.login.desc.4")}
           </p>{' '}
         </section>
       </main>
@@ -94,7 +95,7 @@ export function EnterEmail({ unlockAccountService }: Props) {
           disabled={isContinuing}
           type="submit"
         >
-          {isContinuing ? 'Continuing' : 'Continue'}
+          {isContinuing ? t("common.continuing") : t("common.continue")}
         </Button>
         <PoweredByUnlock />
       </footer>

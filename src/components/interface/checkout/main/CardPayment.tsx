@@ -26,6 +26,8 @@ import {
   useRemovePaymentMethods,
 } from '~/hooks/usePaymentMethods'
 import { useAuth } from '~/contexts/AuthenticationContext'
+import { useTranslation } from 'next-i18next'
+import { t } from 'i18next'
 
 interface Props {
   injectedProvider: unknown
@@ -43,6 +45,7 @@ export function CardPayment({ checkoutService, injectedProvider }: Props) {
     refetch: refetchPaymentMethods,
   } = usePaymentMethodList()
   const { mutateAsync: removePaymentMethods } = useRemovePaymentMethods()
+  const { t } = useTranslation()
 
   const payment = methods?.[0]
   const card = payment?.card
@@ -94,7 +97,7 @@ export function CardPayment({ checkoutService, injectedProvider }: Props) {
               form="payment"
               className="w-full"
             >
-              Next
+              {t("common.next")}
             </Button>
           ) : (
             <Button
@@ -110,7 +113,7 @@ export function CardPayment({ checkoutService, injectedProvider }: Props) {
                 })
               }}
             >
-              Continue
+              {t("common.continue")}
             </Button>
           )}
         </Connected>
@@ -141,6 +144,7 @@ export function SetupForm({
       setClientSecret(secret)
     }
   }, [])
+  const { i18n } = useTranslation()
 
   useEffect(() => {
     fetchSetupIntent()
@@ -164,6 +168,7 @@ export function SetupForm({
         appearance: {
           theme: 'stripe',
         },
+        locale: i18n.language as "ja" | "en",
       }}
     >
       <PaymentForm
@@ -197,6 +202,7 @@ export function PaymentForm({
     email: string
   }>()
   const { email } = useAuth()
+  const { t } = useTranslation()
 
   const onHandleSubmit = async ({
     name,
@@ -238,31 +244,29 @@ export function PaymentForm({
     >
       <div className="flex flex-col w-full">
         <label className="text-sm text-gray-700" htmlFor="name">
-          Name
+          {t("common.name")}
         </label>
         <input
           disabled={isSubmitting}
           id="name"
-          className={`border-gray-200 rounded shadow-sm outline-none appearance-none focus:border-gray-200 focus:ring-2 focus:outline-none focus:shadow-outline focus:ring-blue-200 ${
-            errors.name && 'border-red-600 border-2'
-          }`}
+          className={`border-gray-200 rounded shadow-sm outline-none appearance-none focus:border-gray-200 focus:ring-2 focus:outline-none focus:shadow-outline focus:ring-blue-200 ${errors.name && 'border-red-600 border-2'
+            }`}
           type="text"
           {...register('name', {
-            required: 'Name is required',
+            required: t("events.form.basicInfo.name.error"),
           })}
         />
         <p className="mt-2 text-sm text-red-600">{errors.name?.message}</p>
       </div>
       <div className="flex flex-col w-full">
         <label className="text-sm text-gray-700" htmlFor="name">
-          Email
+          {t("common.email")}
         </label>
         <input
           disabled={isSubmitting}
           id="email"
-          className={`border-gray-200 rounded shadow-sm outline-none appearance-none focus:border-gray-200 focus:ring-2 focus:outline-none focus:shadow-outline focus:ring-blue-200 ${
-            errors.email && 'border-red-600 border-2'
-          }`}
+          className={`border-gray-200 rounded shadow-sm outline-none appearance-none focus:border-gray-200 focus:ring-2 focus:outline-none focus:shadow-outline focus:ring-blue-200 ${errors.email && 'border-red-600 border-2'
+            }`}
           type="email"
           {...register('email', {
             value: email || undefined,

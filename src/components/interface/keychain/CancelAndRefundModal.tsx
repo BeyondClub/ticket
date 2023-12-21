@@ -4,6 +4,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { ToastHelper } from '../../helpers/toast.helper'
 import { useKeychain } from '~/hooks/useKeychain'
 import { useAuth } from '~/contexts/AuthenticationContext'
+import { useTranslation } from 'next-i18next'
 
 export interface CancelAndRefundProps {
   isOpen: boolean
@@ -30,6 +31,7 @@ export const CancelAndRefundModal = ({
 }: CancelAndRefundProps) => {
   const { getWalletService } = useAuth()
   const { address: lockAddress, tokenAddress } = lock ?? {}
+  const { t } = useTranslation()
 
   const { getAmounts } = useKeychain({
     lockAddress,
@@ -47,7 +49,7 @@ export const CancelAndRefundModal = ({
       refetchInterval: false,
       meta: {
         errorMessage:
-          'We could not retrieve the refund amount for this membership.',
+          t("ticket.options.cancelRefundError.2"),
       },
     }
   )
@@ -70,7 +72,7 @@ export const CancelAndRefundModal = ({
 
   const cancelRefundMutation = useMutation(cancelAndRefund, {
     onSuccess: () => {
-      ToastHelper.success('Key cancelled and successfully refunded.')
+      ToastHelper.success(t("ticket.options.cancelRefundSuccess"))
       setIsOpen(false)
       if (typeof onExpireAndRefund === 'function') {
         onExpireAndRefund()
@@ -80,8 +82,8 @@ export const CancelAndRefundModal = ({
       setIsOpen(false)
       ToastHelper.error(
         err?.error?.message ??
-          err?.message ??
-          'There was an error in refund process. Please try again.'
+        err?.message ??
+        t("ticket.options.cancelRefundError.1")
       )
     },
   })
@@ -93,7 +95,7 @@ export const CancelAndRefundModal = ({
   const buttonDisabled =
     isLoading || !isRefundable || cancelRefundMutation?.isLoading
 
-  if (!lock) return <span>No lock selected</span>
+  if (!lock) return <span>{t("ticket.options.cancelRefundError.3")}</span>
 
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
@@ -109,22 +111,21 @@ export const CancelAndRefundModal = ({
           <div className="flex flex-col w-full gap-5">
             <div className="text-left">
               <h3 className="text-xl font-semibold text-left text-black-500">
-                Cancel and Refund
+                {t("ticket.options.cancelRefund")}
               </h3>
               <p className="mt-2 text-md">
                 {hasMaxCancellationFee ? (
-                  <span>This key is not refundable.</span>
+                  <span>{t("ticket.options.cancelRefundDesc.1")}</span>
                 ) : isRefundable ? (
                   <>
                     <span>
                       {currency} {parseFloat(`${refundAmount}`!).toFixed(3)}
                     </span>
-                    {` will be refunded, Do you want to proceed?`}
+                    {` ${t("ticket.options.cancelRefundDesc.2")}`}
                   </>
                 ) : (
                   <span>
-                    Refund is not possible because the contract does not have
-                    funds to cover it.
+                    {t("ticket.options.cancelRefundDesc.3")}
                   </span>
                 )}
               </p>
@@ -135,7 +136,7 @@ export const CancelAndRefundModal = ({
               disabled={buttonDisabled}
               loading={cancelRefundMutation.isLoading}
             >
-              {cancelRefundMutation.isLoading ? 'Refunding...' : 'Confirm'}
+              {cancelRefundMutation.isLoading ? `${t("common.refunding")}...` : t("common.confirm")}
             </Button>
           </div>
         )

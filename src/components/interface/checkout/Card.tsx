@@ -1,4 +1,5 @@
 import { Button } from '@unlock-protocol/ui'
+import { useTranslation } from 'next-i18next'
 import { BsCreditCard as CreditCardIcon } from 'react-icons/bs'
 
 interface Props {
@@ -18,6 +19,8 @@ export function Card({
   exp_month,
   exp_year,
 }: Props) {
+  const { t } = useTranslation()
+
   return (
     <div className="w-full max-w-md bg-white border rounded-xl">
       <div className="px-6 pt-6">
@@ -32,7 +35,7 @@ export function Card({
       </div>
       <div className="flex items-center justify-end p-2">
         <Button onClick={onChange} size="small">
-          Change
+          {t("common.change")}
         </Button>
       </div>
     </div>

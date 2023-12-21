@@ -8,9 +8,11 @@ import { useAuth } from '~/contexts/AuthenticationContext'
 import { OpenSeaIcon } from '../icons'
 import { Tooltip } from '@unlock-protocol/ui'
 import networks from '@unlock-protocol/networks'
+import { useTranslation } from 'next-i18next'
 
 export const KeychainContent = () => {
   const { account } = useAuth()
+  const { t } = useTranslation()
 
   const networkConfig = networks[1]
 
@@ -18,11 +20,11 @@ export const KeychainContent = () => {
     <AppLayout
       title={
         <div className="flex justify-between">
-          <h1 className="text-4xl font-bold">Member Keychain</h1>
+          <h1 className="text-4xl font-bold">{t("ticket.myTickets")}</h1>
           {networkConfig && account && (
             <div className="flex gap-3">
               {networkConfig.blockScan && networkConfig.blockScan.url && (
-                <Tooltip tip="Show Blockscan" label="Show Blockscan">
+                <Tooltip tip={t("common.showBlockscan")} label={t("common.showBlockscan")}>
                   <a
                     href={networkConfig.blockScan.url(account!)}
                     target="_blank"
@@ -36,8 +38,8 @@ export const KeychainContent = () => {
 
               {networkConfig.opensea && networkConfig.opensea.profileUrl && (
                 <Tooltip
-                  tip="View Opensea Profile"
-                  label="View Opensea Profile"
+                  tip={t("common.viewOpenSea")}
+                  label={t("common.viewOpenSea")}
                 >
                   <a
                     href={networkConfig.opensea!.profileUrl(account!) ?? '#'}
@@ -53,10 +55,10 @@ export const KeychainContent = () => {
           )}
         </div>
       }
-      description="A Key is a membership NFT created on Unlock Protocol"
+      description=""
     >
       <Head>
-        <title>{pageTitle('Member Keychain')}</title>
+        <title>{pageTitle('My Tickets')}</title>
       </Head>
       <KeyDetails />
     </AppLayout>

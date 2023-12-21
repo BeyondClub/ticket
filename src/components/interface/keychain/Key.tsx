@@ -48,6 +48,7 @@ import { useGetReceiptsPageUrl } from '~/hooks/useReceipts'
 import { AddToDeviceWallet, ApplePassModal } from './AddToPhoneWallet'
 import { isIOS } from 'react-device-detect'
 import Image from 'next/image'
+import { useTranslation } from 'react-i18next'
 
 export const MenuButton = tw.button(
   'group flex gap-2 w-full font-semibold items-center rounded-md px-2 py-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed',
@@ -83,6 +84,7 @@ function Key({ ownedKey, account, network }: Props) {
   const [showApplePassModal, setShowApplePassModal] = useState(false)
   const [applePassUrl, setPassUrl] = useState<string>()
   const isKeyExpired = isExpired || expireAndRefunded
+  const { t } = useTranslation()
 
   const { data: lockData, isLoading: isLockDataLoading } = useQuery(
     ['lock', lock.address, network],
@@ -241,7 +243,7 @@ function Key({ ownedKey, account, network }: Props) {
               variant="red"
               iconRight={<DangerIcon size={12} key="expired" />}
             >
-              Expired
+              {t("common.expired")}
             </Badge>
           ) : (
             <Badge
@@ -249,7 +251,7 @@ function Key({ ownedKey, account, network }: Props) {
               variant="green"
               iconRight={<CheckIcon size={12} key="valid" />}
             >
-              Valid
+              {t("common.valid")}
             </Badge>
           )}
         </div>
@@ -269,7 +271,7 @@ function Key({ ownedKey, account, network }: Props) {
                 variant="outlined-primary"
                 iconLeft={<ToolsIcon key="options" />}
               >
-                Options
+                {t("common.options")}
               </Button>
             </Menu.Button>
             <Transition
@@ -291,7 +293,7 @@ function Key({ ownedKey, account, network }: Props) {
                         onClick={onOpenSea}
                       >
                         <OpenSeaIcon size={16} />
-                        View on Opensea
+                        {t("common.viewOnOpenSea")}
                       </MenuButton>
                     )}
                   </Menu.Item>
@@ -303,7 +305,7 @@ function Key({ ownedKey, account, network }: Props) {
                         onClick={onExploreLock}
                       >
                         <ExploreIcon size={16} />
-                        Block explorer
+                        {t("common.blkExplorer")}
                       </MenuButton>
                     )}
                   </Menu.Item>
@@ -315,7 +317,7 @@ function Key({ ownedKey, account, network }: Props) {
                         onClick={addToWallet}
                       >
                         <WalletIcon />
-                        Add to my crypto wallet
+                        {t("ticket.options.addWallet")}
                       </MenuButton>
                     )}
                   </Menu.Item>
@@ -342,7 +344,7 @@ function Key({ ownedKey, account, network }: Props) {
                               alt="Google Wallet"
                               src={`/images/illustrations/google-wallet.svg`}
                             />
-                            Add to my Google Wallet
+                            {t("ticket.options.addGoogleWallet")}
                           </AddToDeviceWallet>
                         )}
                       </Menu.Item>
@@ -374,7 +376,7 @@ function Key({ ownedKey, account, network }: Props) {
                               alt="Apple Wallet"
                               src={`/images/illustrations/apple-wallet.svg`}
                             />
-                            Add to my Apple Wallet
+                            {t("ticket.options.addAppleWallet")}
                           </AddToDeviceWallet>
                         )}
                       </Menu.Item>
@@ -391,7 +393,7 @@ function Key({ ownedKey, account, network }: Props) {
                         }}
                       >
                         <InfoIcon />
-                        Show details
+                        {t("ticket.options.showDetails")}
                       </MenuButton>
                     )}
                   </Menu.Item>
@@ -404,7 +406,7 @@ function Key({ ownedKey, account, network }: Props) {
                           onClick={onReceiptsPage}
                         >
                           <ReceiptIcon />
-                          Show receipts
+                          {t("ticket.options.showReceipts")}
                         </MenuButton>
                       )}
                     </Menu.Item>
@@ -421,8 +423,8 @@ function Key({ ownedKey, account, network }: Props) {
                       >
                         <ExtendMembershipIcon />
                         {isRenewable && !isKeyExpired
-                          ? 'Renew membership'
-                          : 'Extend membership'}
+                          ? t("ticket.options.renewMembership")
+                          : t("ticket.options.extendMembership")}
                       </MenuButton>
                     )}
                   </Menu.Item>
@@ -439,7 +441,7 @@ function Key({ ownedKey, account, network }: Props) {
                         }}
                       >
                         <CancelIcon />
-                        Cancel and refund
+                        {t("ticket.options.cancelRefund")}
                       </MenuButton>
                     )}
                   </Menu.Item>
@@ -493,13 +495,13 @@ function Key({ ownedKey, account, network }: Props) {
             rel="noreferrer"
             className="inline-flex items-center gap-2 text-ui-main-500 px-2 py-0.5 rounded-lg bg-ui-main-50 hover:bg-ui-main-100 hover:text-ui-main-600"
           >
-            View <ExternalIcon size={18} />
+            {t("common.view")} <ExternalIcon size={18} />
           </a>
         </div>
         <h3 className="text-xl font-bold rounded">{lock.name}</h3>
         {networkName && (
           <div className="flex items-center justify-between gap-2 py-1">
-            <span className="text-gray-500">Network</span>
+            <span className="text-gray-500">{t("common.network")}</span>
             <span className="font-bold">{networkName}</span>
           </div>
         )}

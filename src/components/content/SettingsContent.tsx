@@ -14,6 +14,7 @@ import {
   usePaymentMethodList,
   useRemovePaymentMethods,
 } from '~/hooks/usePaymentMethods'
+import { useTranslation } from 'next-i18next'
 
 export const PaymentSettings = () => {
   const config = useConfig()
@@ -25,6 +26,7 @@ export const PaymentSettings = () => {
     isInitialLoading: isMethodLoading,
     refetch: refetchPaymentMethodList,
   } = usePaymentMethodList()
+  const { t } = useTranslation()
 
   const payment = methods?.[0]
   const card = payment?.card
@@ -65,7 +67,7 @@ export const PaymentSettings = () => {
         type="submit"
         form="payment"
       >
-        Save
+        {t("common.save")}
       </Button>
     </div>
   )
@@ -73,11 +75,10 @@ export const PaymentSettings = () => {
   return (
     <div className="flex flex-col gap-4 mt-6 mb-4">
       <div className="col-span-12 text-base font-bold leading-5">
-        Card Payments
+        {t("settings.card.title")}
       </div>
       <p>
-        Some membership contracts may have fiat payment enabled. If you enter
-        your payment details you will be able to use perform a fiat payment.
+        {t("settings.card.desc")}
       </p>
       {cardContent}
     </div>
@@ -85,10 +86,12 @@ export const PaymentSettings = () => {
 }
 
 export const SettingsContent = () => {
+  const { t } = useTranslation()
+
   return (
-    <AppLayout title="Account Settings">
+    <AppLayout title={t("settings.title")}>
       <Head>
-        <title>{pageTitle('Account Settings')}</title>
+        <title>{pageTitle(t("settings.title"))}</title>
       </Head>
       <AccountInfo />
       <PaymentSettings />

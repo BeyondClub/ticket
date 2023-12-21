@@ -3,6 +3,7 @@ import QRCode from 'qrcode.react'
 import { Button, Input, Icon, Modal } from '@unlock-protocol/ui'
 import { FaEnvelope } from 'react-icons/fa'
 import { Key } from '~/hooks/useKeys'
+import { useTranslation } from 'next-i18next'
 
 interface Props {
   isOpen: boolean
@@ -83,6 +84,8 @@ interface SubmitProps {
 }
 const Submit = ({ active, submit }: SubmitProps) => {
   const [submitted, setSubmitted] = useState(false)
+  const { t } = useTranslation()
+
   if (active) {
     return (
       <Button
@@ -94,7 +97,7 @@ const Submit = ({ active, submit }: SubmitProps) => {
           submit()
         }}
       >
-        {submitted ? 'Sent!' : 'Receive by email'}
+        {submitted ? t("common.sentEx") : t("common.receiveByEmail")}
       </Button>
     )
   }
@@ -104,7 +107,7 @@ const Submit = ({ active, submit }: SubmitProps) => {
       iconLeft={<Icon icon={FaEnvelope} size="medium" key="Smart Phone" />}
       disabled={submitted}
     >
-      Receive by email
+      {t("common.receiveByEmail")}
     </Button>
   )
 }

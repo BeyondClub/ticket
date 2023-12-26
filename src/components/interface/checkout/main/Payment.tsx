@@ -213,7 +213,7 @@ export function Payment({ injectedProvider, checkoutService }: Props) {
                 className="grid w-full p-4 space-y-2 text-left border border-gray-400 rounded-lg shadow cursor-pointer group hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-white"
               >
                 <div className="flex justify-between w-full">
-                  <h3 className="font-bold">{t("checkout.items.payment.payWith")} {symbol} </h3>
+                  <h3 className="font-bold">{t("checkout.items.payment.payWith", { symbol: symbol })}</h3>
                   <AmountBadge
                     amount={pricingData?.total.toString() || ''}
                     symbol={symbol}
@@ -221,8 +221,7 @@ export function Payment({ injectedProvider, checkoutService }: Props) {
                 </div>
                 <div className="flex items-center justify-between w-full">
                   <div className="flex items-center w-full text-sm text-left text-gray-500">
-                    {t("checkout.items.payment.balance.1")} {symbol.toUpperCase()} {t("checkout.items.payment.balance.2")}{' '}
-                    {networkConfig.name}:{' ~'}
+                    {t("checkout.items.payment.balance", { symbol: symbol, network: networkConfig.name })}:{' ~'}
                     {formatNumber(Number(balance?.balance))}{' '}
                   </div>
                   <RightArrowIcon

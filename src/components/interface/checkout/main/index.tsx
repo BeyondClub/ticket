@@ -20,6 +20,7 @@ import { isEqual } from 'lodash'
 import { CheckoutHead, TopNavigation } from '../Shell'
 import { PaywallConfigType } from '@unlock-protocol/core'
 import { Guild } from './Guild'
+import LanguageSwitcher from '../../LanguageSwitcher'
 interface Props {
   injectedProvider: any
   paywallConfig: PaywallConfigType
@@ -253,6 +254,9 @@ export function Checkout({
 
   return (
     <div className="bg-white z-10  shadow-xl max-w-md rounded-xl flex flex-col w-full h-[90vh] sm:h-[80vh] min-h-[32rem] max-h-[42rem]">
+      <div className='absolute right-5 top-5'>
+        <LanguageSwitcher />
+      </div>
       <TopNavigation
         onClose={!paywallConfig?.persistentCheckout ? onClose : undefined}
         onBack={onBack}

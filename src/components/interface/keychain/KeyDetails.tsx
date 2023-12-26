@@ -4,6 +4,7 @@ import Key from './Key'
 import { ImageBar } from '../locks/Manage/elements/ImageBar'
 import { useKeys } from '~/hooks/useKeys'
 import { Placeholder } from '@unlock-protocol/ui'
+import { useTranslation } from 'next-i18next'
 
 export const KeyDetails = () => {
   const { account } = useContext(AuthenticationContext)
@@ -11,10 +12,12 @@ export const KeyDetails = () => {
     owner: account,
   })
 
+  const { t } = useTranslation()
+
   if (!keys?.length && !isKeysLoading) {
     return (
       <ImageBar
-        description="You don't have any keys yet"
+        description={t("ticket.noTickets")}
         src="/images/illustrations/img-error.svg"
       />
     )

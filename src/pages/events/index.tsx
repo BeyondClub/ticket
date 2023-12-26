@@ -7,6 +7,7 @@ import { Button } from '@unlock-protocol/ui'
 import { useAuth } from '~/contexts/AuthenticationContext'
 import { Launcher } from '~/components/interface/Launcher'
 import { useTranslation } from 'next-i18next'
+import { useRouter } from 'next/router'
 
 export async function getStaticProps({ locale }) {
   return {
@@ -20,6 +21,7 @@ const Events: NextPage = () => {
   const { account } = useAuth()
   const [showLauncher, setShowLauncher] = React.useState(false)
   const { t } = useTranslation()
+  const router = useRouter()
 
   const Description = () => {
     return (
@@ -29,7 +31,8 @@ const Events: NextPage = () => {
         </span>
         {account && (
           <Button
-            onClick={() => setShowLauncher(true)}
+            // onClick={() => setShowLauncher(true)}
+            onClick={() => router.push('/event/new')}
             className="md:auto"
             size="large"
           >

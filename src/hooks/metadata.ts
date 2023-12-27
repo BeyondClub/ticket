@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useTranslation } from 'next-i18next'
 import { ToastHelper } from '~/components/helpers/toast.helper'
 import { Metadata } from '~/components/interface/locks/metadata/utils'
 import { storage } from '~/config/storage'
@@ -15,6 +16,7 @@ export const useUpdateMetadata = ({
   keyId,
 }: Partial<Options>) => {
   const queryClient = useQueryClient()
+  const { t } = useTranslation()
   return useMutation(
     ['updateMetadata', network, lockAddress, keyId],
     async (metadata: Metadata): Promise<Partial<Metadata>> => {
@@ -42,10 +44,10 @@ export const useUpdateMetadata = ({
     {
       onError: (error: Error) => {
         console.error(error)
-        ToastHelper.error('Metadata update failed')
+        ToastHelper.error(t("metadata.updateErr"))
       },
       onSuccess: () => {
-        ToastHelper.success('Metadata updated')
+        ToastHelper.success(t("metadata.update"))
         queryClient.invalidateQueries({
           queryKey: ['metadata', lockAddress],
         })

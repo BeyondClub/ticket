@@ -21,6 +21,7 @@ import {
   TbTools as ToolsIcon,
   TbSettings as SettingsIcon,
 } from 'react-icons/tb'
+import { IoMdEye as EyeIcon } from "react-icons/io";
 import { CgWebsite as WebsiteIcon } from 'react-icons/cg'
 import { FaRegEdit as EditIcon } from 'react-icons/fa'
 import { BiRightArrow as RightArrowIcon } from 'react-icons/bi'
@@ -33,6 +34,7 @@ import { useMetadata } from '~/hooks/metadata'
 import { getLockTypeByMetadata } from '@unlock-protocol/core'
 import { MEMBERS_PER_PAGE } from '~/constants'
 import { useTranslation } from 'next-i18next'
+import { getEventPath } from '~/components/content/event/utils'
 
 interface ActionBarProps {
   lockAddress: string
@@ -284,6 +286,19 @@ const TopActionBar = ({ lockAddress, network }: TopActionBarProps) => {
           />
         </Button>
         <div className="flex gap-3">
+          <Button
+            onClick={() => {
+              router.push(
+                getEventPath({ network, lockAddress })
+              )
+            }}
+          >
+            <div className="flex items-center gap-2">
+              <Icon icon={EyeIcon} size={20} />
+              <span>{t("common.previewEvent")}</span>
+            </div>
+          </Button>
+
           {isManager && (
             <Button
               onClick={() => {

@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { FiTwitter } from 'react-icons/fi'
 import { Metadata } from '~/components/interface/locks/metadata/utils'
 import { getEventDate } from './utils'
+import { useTranslation } from 'next-i18next'
 
 interface TweetItButtonProps {
   event: Partial<Metadata>
@@ -10,6 +11,7 @@ interface TweetItButtonProps {
 
 export const TweetItButton = ({ event }: TweetItButtonProps) => {
   const eventDate = getEventDate(event.ticket)
+  const { t } = useTranslation()
 
   if (!event.name || !eventDate) {
     return null
@@ -34,8 +36,8 @@ export const TweetItButton = ({ event }: TweetItButtonProps) => {
   return (
     <Tooltip
       delay={0}
-      label="Share on Twitter"
-      tip="Share on Twitter"
+      label={t("common.shareOnTwitter")}
+      tip={t("common.shareOnTwitter")}
       side="bottom"
     >
       <Link

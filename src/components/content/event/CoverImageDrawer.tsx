@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useUpdateMetadata } from '~/hooks/metadata'
 import { useImageUpload } from '~/hooks/useImageUpload'
 import { useLockManager } from '~/hooks/useLockManager'
+import { useTranslation } from 'next-i18next'
 
 interface CoverImageDrawerProps {
   image: string
@@ -27,6 +28,7 @@ export const CoverImageDrawer = ({
     lockAddress,
     network,
   })
+  const { t } = useTranslation()
 
   const { mutateAsync: uploadImage, isLoading: isUploading } = useImageUpload()
 
@@ -62,15 +64,15 @@ export const CoverImageDrawer = ({
             setImage(coverImage || '')
           }}
         >
-          {coverImage ? 'Change image' : 'Upload Image'}
+          {coverImage ? t("events.coverImg.change") : t("events.coverImg.upload")}
         </Button>
       )}
       <div className="relative">
-        <Drawer isOpen={isOpen} setIsOpen={setIsOpen} title="Cover image">
+        <Drawer isOpen={isOpen} setIsOpen={setIsOpen} title={t("events.coverImg.title")}>
           <div className="z-10 mt-2 space-y-6">
             <ImageUpload
               size="full"
-              description="This illustration will be used as cover image for your event page"
+              description={t("events.coverImg.desc")}
               preview={image}
               isUploading={isUploading}
               imageRatio="cover"
@@ -96,7 +98,7 @@ export const CoverImageDrawer = ({
             loading={isLoading}
             disabled={image === coverImage}
           >
-            Save
+            {t("common.save")}
           </Button>
         </Drawer>
       </div>

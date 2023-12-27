@@ -44,6 +44,7 @@ import { EventDetail } from './EventDetail'
 import { EventLocation } from './EventLocation'
 import { LockPriceDetails } from './LockPriceDetails'
 import { CheckoutRegistrationCard } from './CheckoutRegistrationCard'
+import { Trans, useTranslation } from 'next-i18next'
 
 interface EventDetailsProps {
   lockAddress: string
@@ -63,6 +64,7 @@ export const EventDetails = ({
     lockAddress,
     network,
   })
+  const { t, i18n } = useTranslation()
 
   const {
     isLoading: isLoadingSettings,
@@ -156,8 +158,7 @@ export const EventDetails = ({
       return (
         <>
           <p className="mb-2">
-            Your event details are not set. Please make sure you add a date,
-            time and location.
+            {t("events.errors.addTimeLoc")}
           </p>
           <Button
             onClick={onEdit}
@@ -165,12 +166,12 @@ export const EventDetails = ({
             className="w-32 border"
             size="small"
           >
-            Edit Details
+            {t("common.editDetails")}
           </Button>
         </>
       )
     }
-    return <p>This contract is not configured.</p>
+    return <p>{t("events.errors.notConfigured")}</p>
   }
 
   const eventData = toFormData(metadata!)
@@ -204,7 +205,7 @@ export const EventDetails = ({
   }
 
   const startDate = eventDate
-    ? eventDate.toLocaleDateString(undefined, {
+    ? eventDate.toLocaleDateString(i18n.language === "ja" ? "ja" : undefined, {
       timeZone: eventData?.ticket?.event_timezone,
       weekday: 'long',
       year: 'numeric',
@@ -215,7 +216,7 @@ export const EventDetails = ({
 
   const startTime =
     eventDate && eventData.ticket?.event_start_time
-      ? eventDate.toLocaleTimeString(navigator.language || 'en-US', {
+      ? eventDate.toLocaleTimeString(i18n.language === "ja" ? "ja" : undefined, {
         timeZone: eventData.ticket.event_timezone,
         hour: '2-digit',
         minute: '2-digit',
@@ -224,7 +225,7 @@ export const EventDetails = ({
 
   const endDate =
     eventEndDate && eventEndDate && !isSameDay
-      ? eventEndDate.toLocaleDateString(undefined, {
+      ? eventEndDate.toLocaleDateString(i18n.language === "ja" ? "ja" : undefined, {
         timeZone: eventData?.ticket?.event_timezone,
         weekday: 'long',
         year: 'numeric',
@@ -235,7 +236,7 @@ export const EventDetails = ({
 
   const endTime =
     eventDate && eventData.ticket?.event_end_time && eventEndDate && isSameDay
-      ? eventEndDate.toLocaleTimeString(navigator.language || 'en-US', {
+      ? eventEndDate.toLocaleTimeString(i18n.language === "ja" ? "ja" : undefined, {
         timeZone: eventData.ticket.event_timezone,
         hour: '2-digit',
         minute: '2-digit',
@@ -261,14 +262,16 @@ export const EventDetails = ({
 
     return (
       <Card className="grid gap-6 mt-10 lg:mt-0">
-        <span className="text-2xl font-bold text-gray-900">Registration</span>
+        <span className="text-2xl font-bold text-gray-900">{t("common.registration")}</span>
         {hasValidKey ? (
           <p className="text-lg">
-            🎉 You already have a ticket! You can view it in{' '}
-            <Link className="underline" href="/keychain">
-              your keychain
-            </Link>
-            .
+            <Trans i18nKey="events.registrationConf">
+              🎉 You already have a ticket! You can view it in
+              <Link className="underline" href="/keychain">
+                your keychain
+              </Link>
+              .
+            </Trans>
           </p>
         ) : (
           <>
@@ -294,7 +297,7 @@ export const EventDetails = ({
                   setCheckoutOpen(true)
                 }}
               >
-                Register
+                {t("common.register")}
               </Button>
             )}
           </>
@@ -327,7 +330,7 @@ export const EventDetails = ({
 
       <NextSeo
         title={eventData.title}
-        description={`${eventData.description}. Powered by Unlock Protocol.`}
+        description={`${eventData.description}`}
         openGraph={{
           images: [
             {
@@ -390,26 +393,26 @@ export const EventDetails = ({
             <h1 className="text-4xl font-bold md:text-7xl">{eventData.name}</h1>
             {!hasCheckoutId && (
               <div className="flex gap-2 flex-rows">
-                <span className="text-brand-gray">Ticket contract</span>
+                <span className="text-brand-gray">{t("common.ticketContract")}</span>
                 <AddressLink lockAddress={lockAddress} network={network} />
               </div>
             )}
             <section className="mt-4">
               <div className="grid grid-cols-1 gap-6 md:p-6 md:grid-cols-2 rounded-2xl">
                 {hasDate && (
-                  <EventDetail label="Date" icon={CalendarIcon}>
+                  <EventDetail label={t("common.date")} icon={CalendarIcon}>
                     <div
                       style={{ color: `#${eventData.background_color}` }}
                       className="flex flex-col text-lg font-normal text-brand-dark"
                     >
                       {(startDate || endDate) && (
                         <span>
-                          {startDate} {endDate && <>to {endDate}</>}
+                          {startDate} {endDate && <>- {endDate}</>}
                         </span>
                       )}
                       {startTime && endTime && (
                         <span>
-                          {startTime} {endTime && <>to {endTime}</>}
+                          {startTime} {endTime && <>- {endTime}</>}
                         </span>
                       )}
                     </div>
@@ -418,7 +421,7 @@ export const EventDetails = ({
                 {hasLocation && <EventLocation eventData={eventData} />}
               </div>
               <div className="mt-14">
-                <h2 className="text-2xl font-bold">Event Information</h2>
+                <h2 className="text-2xl font-bold">{t("common.eventInformation")}</h2>
                 {eventData.description && (
                   <div className="mt-4 markdown">
                     {/* eslint-disable-next-line react/no-children-prop */}
@@ -450,14 +453,14 @@ export const EventDetails = ({
         {isLockManager && (
           <div className="grid gap-6 mt-12">
             <span className="text-2xl font-bold text-brand-dark">
-              Tools for you, the event organizer
+              {t("events.manage.toolsForYou")}
             </span>
             <div className="grid gap-4">
               <Card className="grid grid-cols-1 gap-2 md:items-center md:grid-cols-3">
                 <div className="md:col-span-2">
                   <Card.Label
-                    title="Promote your event"
-                    description="Share your event's URL with your community and start selling tickets!"
+                    title={t("events.manage.promote.title")}
+                    description={t("events.manage.promote.desc")}
                   />
                   <pre className="">{eventUrl}</pre>
                 </div>
@@ -473,7 +476,7 @@ export const EventDetails = ({
                       ToastHelper.success('Copied!')
                     }}
                   >
-                    Copy URL
+                    {t("events.manage.promote.copy")}
                   </Button>
                 </div>
               </Card>
@@ -481,15 +484,15 @@ export const EventDetails = ({
               <Card className="grid grid-cols-1 gap-2 md:items-center md:grid-cols-3">
                 <div className="md:col-span-2">
                   <Card.Label
-                    title="Manage Attendees"
-                    description="See who is attending your event, invite people with airdrops and more!"
+                    title={t("events.manage.manageAttendees.title")}
+                    description={t("events.manage.manageAttendees.desc")}
                   />
                 </div>
                 <div className="md:col-span-1">
                   {eventLocks?.map(({ lockAddress, network }) => {
-                    let label = 'Manage attendees'
+                    let label = t("events.manage.manageAttendees.title")
                     if (eventLocks.length > 1) {
-                      label = `Manage attendees for ${minifyAddress(
+                      label = `${t("events.manage.manageAttendees.titleFor")} ${minifyAddress(
                         lockAddress
                       )}`
                     }
@@ -512,8 +515,8 @@ export const EventDetails = ({
               <Card className="grid grid-cols-1 gap-2 md:items-center md:grid-cols-3">
                 <div className="md:col-span-2">
                   <Card.Label
-                    title="Event details"
-                    description="Need to change something? Access your contract (Lock) and update its details."
+                    title={t("events.manage.eventDetails.title")}
+                    description={t("events.manage.eventDetails.desc")}
                   />
                 </div>
                 <div className="md:col-span-1">
@@ -523,20 +526,20 @@ export const EventDetails = ({
                     className="w-full border"
                     size="small"
                   >
-                    Edit Details
+                    {t("events.manage.eventDetails.edit")}
                   </Button>
                 </div>
               </Card>
 
               <Disclosure
-                label="Verifiers"
-                description="Add and manage trusted users at the event to help check-in attendees as they arrive."
+                label={t("events.manage.verifiers.title")}
+                description={t("events.manage.verifiers.desc")}
               >
                 <div className="grid gap-2">
                   {eventLocks?.map(({ lockAddress, network }) => {
                     return (
                       <Disclosure
-                        label={`Verifiers for ${minifyAddress(lockAddress)}`}
+                        label={`${t("events.manage.verifiers.titleFor")} ${minifyAddress(lockAddress)}`}
                         key={lockAddress}
                       >
                         <VerifierForm
@@ -552,8 +555,8 @@ export const EventDetails = ({
               </Disclosure>
 
               <Disclosure
-                label="Customize the Checkout"
-                description="Create a custom checkout experience with your event's name, logo, and ticket multiple ticket tiers."
+                label={t("events.manage.checkout.title")}
+                description={t("events.manage.checkout.desc")}
               >
                 <EventCheckoutUrl
                   lockAddress={lockAddress}

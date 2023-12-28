@@ -9,6 +9,7 @@ import EventDetails from './event/EventDetails'
 import { EventLandingPage } from './event/EventLandingPage'
 import { useRouterQueryForLockAddressAndNetworks } from '~/hooks/useRouterQueryForLockAddressAndNetworks'
 import { useMetadata } from '~/hooks/metadata'
+import { useTranslation } from 'next-i18next'
 
 export const EventContent = () => {
   const {
@@ -38,6 +39,7 @@ export const EventContentWithProps = ({
   metadata,
 }: EventContentWithPropsProps) => {
   const router = useRouter()
+  const { t } = useTranslation()
 
   const handleCreateEvent = () => {
     router.push(
@@ -58,7 +60,7 @@ export const EventContentWithProps = ({
       logoImageUrl="/images/svg/logo-beyondclub.svg"
     >
       <Head>
-        <title>{pageTitle('Event')}</title>
+        <title>{pageTitle(t('common.event'))}</title>
       </Head>
 
       {!metadata && <EventLandingPage handleCreateEvent={handleCreateEvent} />}

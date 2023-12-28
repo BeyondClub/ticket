@@ -4,8 +4,9 @@ import { storage } from '~/config/storage'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 interface Params {
-  params: {
-    slug: string
+  query: {
+    lockAddress: string
+    network: string
   },
   locale: string
 }
@@ -18,13 +19,23 @@ interface EventPageProps {
   }
 }
 
-export const getServerSideProps = async ({ params, locale }: Params) => {
-  const { data: lockSettings } = await storage.getLockSettingsBySlug(
-    params.slug
-  )
+export const getServerSideProps = async ({ query, locale }: Params) => {
+  if (!(query.lockAddress && query.network)) {
+    return {
+      redirect: {
+        destination: '/events',
+        permanent: false,
+      },
+    }
+  }
+
+  const lockSettings = {
+    network: query.network,
+    lockAddress: query.lockAddress
+  }
   if (lockSettings?.network && lockSettings?.lockAddress) {
     const lockMetadataResponse = await storage.lockMetadata(
-      lockSettings.network,
+      parseInt(lockSettings.network),
       lockSettings.lockAddress
     )
     return {

@@ -12,6 +12,7 @@ import {
   SiMicrosoftoffice,
   SiMicrosoftoutlook,
 } from 'react-icons/si'
+import { useTranslation } from 'next-i18next'
 
 interface AddToCalendarButtonProps {
   event: Partial<Metadata>
@@ -19,6 +20,7 @@ interface AddToCalendarButtonProps {
 
 export const AddToCalendarButton = ({ event }: AddToCalendarButtonProps) => {
   const [isOpen, setOpen] = useState(false)
+  const { t } = useTranslation()
   const eventDate = getEventDate(event.ticket)
 
   const endDate = getEventEndDate(event.ticket)
@@ -42,7 +44,7 @@ export const AddToCalendarButton = ({ event }: AddToCalendarButtonProps) => {
     <>
       <Modal isOpen={isOpen} setIsOpen={setOpen}>
         <div className="w-full">
-          <p className="mb-2">Select your calendar application:</p>
+          <p className="mb-2">{t("common.calendar.select")}</p>
           <ul className="flex flex-col justify-between w-full">
             <li className="flex py-3">
               <Link
@@ -51,7 +53,7 @@ export const AddToCalendarButton = ({ event }: AddToCalendarButtonProps) => {
                 href={google(calendarEvent)}
               >
                 <SiGooglecalendar className="inline w-8 h-8 mr-3" />
-                Google Calendar
+                {t("common.calendar.google")}
               </Link>
             </li>
             <li className="flex py-3">
@@ -61,7 +63,7 @@ export const AddToCalendarButton = ({ event }: AddToCalendarButtonProps) => {
                 href={outlook(calendarEvent)}
               >
                 <SiMicrosoftoutlook className="inline w-8 h-8 mr-3" />
-                Microsoft Outlook
+                {t("common.calendar.outlook")}
               </Link>
             </li>
             <li className="flex py-3">
@@ -71,7 +73,7 @@ export const AddToCalendarButton = ({ event }: AddToCalendarButtonProps) => {
                 href={office365(calendarEvent)}
               >
                 <SiMicrosoftoffice className="inline w-8 h-8 mr-3" />
-                Microsoft Office 365
+                {t("common.calendar.office365")}
               </Link>
             </li>
             <li className="flex py-3">
@@ -81,7 +83,7 @@ export const AddToCalendarButton = ({ event }: AddToCalendarButtonProps) => {
                 href={ics(calendarEvent)}
               >
                 <BsCalendarDate className="inline w-8 h-8 mr-3" />
-                ICS file
+                {t("common.calendar.ics")}
               </Link>
             </li>
           </ul>
@@ -90,8 +92,8 @@ export const AddToCalendarButton = ({ event }: AddToCalendarButtonProps) => {
 
       <Tooltip
         delay={0}
-        label="Add to Calendar"
-        tip="Add to Calendar"
+        label={t("common.calendar.title")}
+        tip={t("common.calendar.title")}
         side="bottom"
       >
         <button

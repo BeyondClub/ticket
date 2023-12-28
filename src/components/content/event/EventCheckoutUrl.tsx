@@ -11,6 +11,7 @@ import { useMetadata } from '~/hooks/metadata'
 import { useRouter } from 'next/router'
 import { ToastHelper } from '~/components/helpers/toast.helper'
 import { useEffect, useState } from 'react'
+import { Trans, useTranslation } from 'next-i18next'
 
 interface EventCheckoutUrlProps {
   lockAddress: string
@@ -36,6 +37,7 @@ export const EventCheckoutUrl = ({
   const [useCheckoutURL, setUseCheckoutURL] = useState(false)
   const { isLoading: isLoadingConfigList, data: checkoutConfigList } =
     useCheckoutConfigsByUser()
+  const { t } = useTranslation()
 
   const saveSettingsMutation = useSaveLockSettings()
   const { data: metadata } = useMetadata({ lockAddress, network })
@@ -123,16 +125,14 @@ export const EventCheckoutUrl = ({
   if (!hasConfigList) {
     return (
       <span>
-        No items to choose from.{' '}
+        {t("events.manage.checkout.noItems")}{' '}
         <Link
           className="font-semibold text-brand-ui-primary"
           href={checkoutUrl}
           rel="noopener noreferrer"
         >
-          Create a new checkout URL, where you can configure the checkout steps
-          for your event.
-        </Link>{' '}
-        first.
+          {t("events.manage.checkout.createDesc")}
+        </Link>
       </span>
     )
   }
@@ -142,7 +142,7 @@ export const EventCheckoutUrl = ({
       <form className="grid gap-4" onSubmit={methods.handleSubmit(onSubmit)}>
         <div className="w-full">
           <ToggleSwitch
-            title="Set a custom checkout URL"
+            title={t("events.manage.checkout.customURL")}
             enabled={useCheckoutURL}
             size="small"
             setEnabled={(enabled) => {
@@ -176,15 +176,17 @@ export const EventCheckoutUrl = ({
                         }
                         description={
                           <span>
-                            Missing checkout URL? You can{' '}
-                            <Link
-                              className="font-semibold text-brand-ui-primary"
-                              href={checkoutUrl}
-                              rel="noopener noreferrer"
-                            >
-                              create a new one
-                            </Link>{' '}
-                            .
+                            <Trans i18nKey="events.manage.checkout.missingURL">
+                              Missing checkout URL? You can&nbsp;
+                              <Link
+                                className="font-semibold text-brand-ui-primary"
+                                href={checkoutUrl}
+                                rel="noopener noreferrer"
+                              >
+                                create a new one
+                              </Link>
+                              .
+                            </Trans>
                           </span>
                         }
                         onChange={(checkoutConfigId: string | number) => {
@@ -208,7 +210,7 @@ export const EventCheckoutUrl = ({
         </div>
         {isManager && (
           <Button disabled={!isDirty || disabled} className="w-full md:w-1/3">
-            Apply
+            {t("common.apply")}
           </Button>
         )}
       </form>

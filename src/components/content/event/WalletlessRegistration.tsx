@@ -21,6 +21,7 @@ import { TransactionStatus } from '~/components/interface/checkout/main/checkout
 import { onResolveName } from '~/utils/resolvers'
 import { RiCloseLine as CloseIcon } from 'react-icons/ri'
 import { useValidKey } from '~/hooks/useKey'
+import { useTranslation } from 'next-i18next'
 
 // TODO: once we have saved checkout config, use the metadata fields from there.
 // In the meantime, use email + wallet address
@@ -67,6 +68,7 @@ const WalletlessRegistrationClaiming = ({
     useState<TransactionStatus>('PROCESSING')
 
   const config = useConfig()
+  const { t } = useTranslation()
 
   useEffect(() => {
     if (
@@ -99,7 +101,7 @@ const WalletlessRegistrationClaiming = ({
       <div className="flex">
         {transactionStatus === 'FINISHED' && (
           <p className="mt-10 text-lg font-bold text-center">
-            🎉 You have been added to the attendees list!
+            {t("events.walletlessReg.success")}
           </p>
         )}
         <CloseIcon
@@ -142,6 +144,7 @@ export const WalletlessRegistrationForm = ({
     lockAddress,
     network,
   })
+  const { t } = useTranslation()
 
   const { refetch } = useValidKey({
     lockAddress,
@@ -182,11 +185,11 @@ export const WalletlessRegistrationForm = ({
       })
       setClaimResult({ hash, owner })
       setClaimOpen(true)
-      ToastHelper.success('Transaction successfully sent!')
+      ToastHelper.success(t("events.walletlessReg.txSuccess"))
     } catch (error) {
       console.error(error)
       ToastHelper.error(
-        'There was an error during registration. Please try again.'
+        t("events.walletlessReg.txFail")
       )
     }
     setLoading(false)
@@ -218,16 +221,16 @@ export const WalletlessRegistrationForm = ({
         {...register('email', {
           required: {
             value: true,
-            message: 'This field is required.',
+            message: t("common.fieldRequired"),
           },
         })}
         disabled={disabled}
         required
         type="email"
         placeholder="your@email.com"
-        label="Email address"
+        label={t("events.walletlessReg.email.title")}
         description={
-          'Please enter your email address to get a QR code by email.'
+          t("events.walletlessReg.email.desc")
         }
         error={errors?.email?.message}
       />
@@ -235,15 +238,15 @@ export const WalletlessRegistrationForm = ({
         {...register('fullname', {
           required: {
             value: true,
-            message: 'This field is required.',
+            message: t("common.fieldRequired"),
           },
         })}
         disabled={disabled}
         required
         placeholder="Satoshi Nakamoto"
-        label="Full Name"
+        label={t("events.walletlessReg.name.title")}
         description={
-          'Please enter your your full name to be added to the RSVP list.'
+          t("events.walletlessReg.name.desc")
         }
         error={errors?.fullname?.message}
       />
@@ -262,19 +265,19 @@ export const WalletlessRegistrationForm = ({
               value={recipient}
               withIcon
               placeholder="0x..."
-              label="Wallet address or ENS"
+              label={t("events.walletlessReg.wallet.title")}
               onChange={(value: any) => {
                 setValue('recipient', value)
               }}
               disabled={disabled}
-              description="Enter your address to get the NFT ticket right in your wallet and to save on gas fees."
+              description={t("events.walletlessReg.wallet.desc")}
               onResolveName={onResolveName}
             />
           )
         }}
       />
       <Button disabled={loading || disabled} loading={loading} type="submit">
-        RSVP now
+        {t("events.walletlessReg.rsvp")}
       </Button>
     </form>
   )

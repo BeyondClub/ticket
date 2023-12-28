@@ -48,7 +48,7 @@ import { useGetReceiptsPageUrl } from '~/hooks/useReceipts'
 import { AddToDeviceWallet, ApplePassModal } from './AddToPhoneWallet'
 import { isIOS } from 'react-device-detect'
 import Image from 'next/image'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 
 export const MenuButton = tw.button(
   'group flex gap-2 w-full font-semibold items-center rounded-md px-2 py-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed',

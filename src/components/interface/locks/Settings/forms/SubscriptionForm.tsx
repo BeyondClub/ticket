@@ -5,7 +5,7 @@ import { MAX_UINT } from '~/constants'
 import useLock from '~/hooks/useLock'
 import { useLockSettings } from '~/hooks/useLockSettings'
 import { useTabSettings } from '..'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 
 interface SubscriptionFormProps {
   lockAddress: string

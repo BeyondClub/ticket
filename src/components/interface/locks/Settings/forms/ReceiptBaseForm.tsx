@@ -9,7 +9,7 @@ import { useMutation } from '@tanstack/react-query'
 import { downloadAsCSV } from '../../Manage'
 import { storage } from '~/config/storage'
 import { FaFileCsv as CsvIcon } from 'react-icons/fa'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 
 const SupplierSchema = z.object({
   vat: z.string().optional(),

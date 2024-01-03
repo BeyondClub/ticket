@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import Head from 'next/head'
 import { pageTitle } from '../../constants'
@@ -6,7 +6,6 @@ import { useRouter } from 'next/router'
 import { AppLayout } from '../interface/layouts/AppLayout'
 import LoadingIcon from '../interface/Loading'
 import EventDetails from './event/EventDetails'
-import { EventLandingPage } from './event/EventLandingPage'
 import { useRouterQueryForLockAddressAndNetworks } from '~/hooks/useRouterQueryForLockAddressAndNetworks'
 import { useMetadata } from '~/hooks/metadata'
 import { useTranslation } from 'next-i18next'
@@ -41,13 +40,13 @@ export const EventContentWithProps = ({
   const router = useRouter()
   const { t } = useTranslation()
 
-  const handleCreateEvent = () => {
-    router.push(
-      'https://unlock-protocol-1.hubspotpagebuilder.com/unlock-protocol-newsletter-signup-0'
-    )
-  }
+  useEffect(() => {
+    if (router.isReady && !(router.query.lockAddress && router.query.network)) {
+      router.replace('/events')
+    }
+  }, [router])
 
-  if (isLoading) {
+  if (isLoading || !metadata) {
     return <LoadingIcon />
   }
 
@@ -63,7 +62,6 @@ export const EventContentWithProps = ({
         <title>{pageTitle(t('common.event'))}</title>
       </Head>
 
-      {!metadata && <EventLandingPage handleCreateEvent={handleCreateEvent} />}
       {!!metadata && lockAddress && network && (
         <EventDetails
           metadata={metadata}

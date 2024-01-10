@@ -44,10 +44,12 @@ interface AmountBadgeProps {
 }
 
 const AmountBadge = ({ symbol, amount }: AmountBadgeProps) => {
+  const { t } = useTranslation()
+
   return (
     <div className="flex items-center gap-x-1 px-2 py-0.5 rounded border font-medium text-sm">
       {Number(amount) <= 0
-        ? 'FREE'
+        ? t("common.free")
         : `${formatNumber(Number(amount))} ${symbol.toUpperCase()}`}
       <CryptoIcon size={16} symbol={symbol} />
     </div>

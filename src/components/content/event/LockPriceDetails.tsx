@@ -5,6 +5,7 @@ import { useGetLockCurrencySymbol } from '~/hooks/useSymbol'
 import { HiOutlineTicket as TicketIcon } from 'react-icons/hi'
 import { AddressLink } from '~/components/interface/AddressLink'
 import { Icon, Placeholder } from '@unlock-protocol/ui'
+import { useTranslation } from 'next-i18next'
 
 interface LockPriceDetailsProps {
   lockAddress: string
@@ -22,9 +23,10 @@ export const LockPriceDetails = ({
     lockAddress,
     network,
   })
+  const { t } = useTranslation()
 
   const price =
-    lock?.keyPrice && parseFloat(lock?.keyPrice) === 0 ? 'FREE' : lock?.keyPrice
+    lock?.keyPrice && parseFloat(lock?.keyPrice) === 0 ? t("common.free") : lock?.keyPrice
 
   const keysLeft =
     Math.max(lock?.maxNumberOfKeys || 0, 0) - (lock?.outstandingKeys || 0)
@@ -63,15 +65,15 @@ export const LockPriceDetails = ({
             <span className="text-base font-bold">&infin;</span>
           ) : (
             <span className="text-base font-bold">
-              {isSoldOut ? 'Sold out' : keysLeft}
+              {isSoldOut ? t("common.soldOut") : keysLeft}
             </span>
           )}
-          {!isSoldOut && <span className="text-gray-600">Left</span>}
+          {!isSoldOut && <span className="text-gray-600">{t("common.left")}</span>}
         </div>
       </div>
       {showContract && (
         <div className="flex gap-2 flex-rows">
-          <span className="text-brand-gray">Ticket contract</span>
+          <span className="text-brand-gray">{t("common.ticketContract")}</span>
           <AddressLink lockAddress={lockAddress} network={network} />
         </div>
       )}

@@ -233,9 +233,9 @@ export function ConfirmCrypto({
     }
   } else {
     if (isConfirming) {
-      buttonLabel = 'Paying using crypto'
+      buttonLabel = t("checkout.payingWithCrypto")
     } else {
-      buttonLabel = 'Pay using crypto'
+      buttonLabel = t("checkout.payWithCrypto")
     }
   }
 
@@ -258,7 +258,7 @@ export function ConfirmCrypto({
             <div>
               <p className="text-sm font-bold">
                 <ErrorIcon className="inline" />
-                There was an error when preparing the transaction.
+                {t("checkout.payment.error")}
               </p>
             </div>
           )}
@@ -321,14 +321,12 @@ export function ConfirmCrypto({
               <>
                 {!isPayable?.isTokenPayable && (
                   <small className="text-center text-red-500">
-                    You do not have enough {symbol} to complete this purchase.
+                    {t("checkout.payment.noEnoughCoins", { symbol: symbol })}
                   </small>
                 )}
                 {isPayable?.isTokenPayable && !isPayable?.isGasPayable && (
                   <small className="text-center text-red-500">
-                    You do not have enough{' '}
-                    {config.networks[lock!.network].nativeCurrency.symbol} to
-                    pay transaction fees (gas).
+                    {t("checkout.payment.noEnoughGas", { symbol: config.networks[lock!.network].nativeCurrency.symbol })}
                   </small>
                 )}
               </>

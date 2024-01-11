@@ -59,9 +59,9 @@ export const EventContentWithProps = ({
       logoImageUrl="/images/svg/logo-beyondclub.svg"
     >
       <Head>
-        <title>{pageTitle(t('common.event'))}</title>
+        <title>{pageTitle(metadata.name, t)}</title>
+        <meta name="description" content={metadata.description} />
       </Head>
-
       {!!metadata && lockAddress && network && (
         <EventDetails
           metadata={metadata}

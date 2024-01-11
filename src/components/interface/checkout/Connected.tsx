@@ -1,6 +1,7 @@
 import { Button, Icon, Tooltip } from '@unlock-protocol/ui'
 import { useActor } from '@xstate/react'
 import { ReactNode, useEffect, useMemo, useState } from 'react'
+import Image from 'next/image'
 import { FaEthereum as EthereumIcon } from 'react-icons/fa'
 import { SiBrave as BraveWalletIcon } from 'react-icons/si'
 import { useAuth } from '~/contexts/AuthenticationContext'
@@ -97,7 +98,7 @@ export function SignedOut({
       metamast: <></>,
       frame: <></>,
       status: <></>,
-      // metamask: <SvgComponents.Metamask width={32} />,
+      metamask: <Image src="/images/svg/wallets/metamask.svg" alt='metamask' height={32} width={32} />,
       // frame: <SvgComponents.Frame width={24} />,
       // status: <SvgComponents.Status width={32} />,
     }
@@ -143,7 +144,7 @@ export function SignedOut({
             type="button"
             className={iconButtonClass}
           >
-            {/* <SvgComponents.WalletConnect width={32} /> */}
+            <Image src="/images/svg/wallets/walletConnect.svg" alt='walletconnect' height={32} width={32} />
           </button>
           <button
             aria-label="coinbase wallet"
@@ -151,7 +152,7 @@ export function SignedOut({
             type="button"
             className={iconButtonClass}
           >
-            {/* <SvgComponents.CoinbaseWallet width={32} /> */}
+            <Image src="/images/svg/wallets/coinbaseWallet.svg" alt='coinbase' height={32} width={32} />
           </button>
         </div>
       </div>

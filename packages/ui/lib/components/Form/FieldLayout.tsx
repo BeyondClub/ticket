@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { Size, SizeStyleProp } from '../../types'
 import { twMerge } from 'tailwind-merge'
+import { useTranslation } from 'next-i18next'
 
 export interface Props {
   label?: string
@@ -51,6 +52,7 @@ export function FieldLayout(props: Props) {
   }
 
   function Message() {
+    const { t } = useTranslation()
     if (error) {
       return (
         <p id={label} className={errorClass}>
@@ -70,7 +72,7 @@ export function FieldLayout(props: Props) {
     if (description || optional) {
       return (
         <div id={label} className={descriptionClass}>
-          {optional && <span className="mr-1 italic">(optional)</span>}
+          {optional && <span className="mr-1 italic lowercase">({t("common.optional")})</span>}
           {description}
         </div>
       )

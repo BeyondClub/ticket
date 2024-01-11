@@ -183,7 +183,7 @@ export const EventDetails = ({
   const injectedProvider = selectProvider(config)
 
   const paywallConfig: PaywallConfigType = {
-    title: 'Registration',
+    title: t("common.registration"),
     icon: metadata?.image,
     locks: {
       [lockAddress]: {
@@ -192,7 +192,7 @@ export const EventDetails = ({
         metadataInputs: [
           {
             name: 'fullname',
-            label: 'Full name',
+            label: t("common.fullName"),
             defaultValue: '',
             type: 'text',
             required: true,

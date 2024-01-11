@@ -8,6 +8,7 @@ import { useAuth } from '~/contexts/AuthenticationContext'
 import { Launcher } from '~/components/interface/Launcher'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
+import Head from 'next/head'
 
 export async function getStaticProps({ locale }) {
   return {
@@ -51,6 +52,10 @@ const Events: NextPage = () => {
   }
   return (
     <AppLayout title={t("menu.events")} description={<Description />}>
+      <Head>
+        <title>{t("common.appTitle")}</title>
+        <meta name="description" content={t("common.appDesc")} />
+      </Head>
       <LocksListPage />
     </AppLayout>
   )

@@ -35,6 +35,7 @@ import {
   PaywallConfigType,
 } from '@unlock-protocol/core'
 import { useUpdateUsersMetadata } from '~/hooks/useUserMetadata'
+import { useTranslation } from 'next-i18next'
 interface Props {
   injectedProvider: unknown
   checkoutService: CheckoutService
@@ -75,6 +76,7 @@ export const MetadataInputs = ({
     setValue,
     formState: { errors },
   } = useFormContext<FormData>()
+  const { t } = useTranslation()
   const networkConfig = config.networks[lock.network]
 
   const onRecipientChange = useCallback(
@@ -99,18 +101,18 @@ export const MetadataInputs = ({
     [setValue, useEmail, id, lock, config.networks, networkConfig]
   )
 
-  const required = useEmail ? 'Email is required' : 'Wallet Address is required'
-  const labelText = useEmail ? 'Email' : 'Wallet'
+  const required = useEmail ? t("airdrop.email.required") : t("airdrop.address.required")
+  const labelText = useEmail ? t("common.email") : t("common.wallet")
   const label = id >= 1 ? `${labelText} #${id + 1}` : labelText
   const description = useEmail
-    ? 'Enter the email address that will receive the membership NFT'
-    : 'Enter the wallet address or an ENS that will receive the membership NFT'
+    ? t("airdrop.email.desc.1")
+    : t("airdrop.address.desc")
   const error = errors?.metadata?.[id]?.recipient?.message
   const placeholder = useEmail ? 'user@email.com' : '0x...'
   const inputClass = twMerge(
     'box-border flex-1 block w-full transition-all border pl-2.5 py-1.5 text-sm border-gray-400 rounded-lg shadow-sm hover:border-gray-500 focus:ring-gray-500 focus:border-gray-500 focus:outline-none disabled:bg-gray-100',
     error &&
-      'border-brand-secondary hover:border-brand-secondary focus:border-brand-secondary focus:ring-brand-secondary'
+    'border-brand-secondary hover:border-brand-secondary focus:border-brand-secondary focus:ring-brand-secondary'
   )
 
   const recipient = recipientFromConfig(paywallConfig, lock) || account
@@ -134,13 +136,13 @@ export const MetadataInputs = ({
               }}
               size="tiny"
             >
-              Change
+              {t("common.change")}
             </Button>
           </div>
           <p className="text-xs text-gray-600">
             {isUnlockAccount
-              ? 'The email address that will receive the membership NFT'
-              : 'The wallet address that will receive the membership NFT'}
+              ? t("airdrop.email.thatReceivesMsg")
+              : t("airdrop.address.thatReceivesMsg")}
           </p>
         </div>
       ) : (
@@ -159,10 +161,10 @@ export const MetadataInputs = ({
                   )
                   return numberOfMemberships < (lock?.maxKeysPerAddress || 1)
                     ? true
-                    : 'Address already holds the maximum number of memberships.'
+                    : t("airdrop.address.errors.1")
                 } catch (error) {
                   console.error(error)
-                  return 'There is a problem with using this address. Try another.'
+                  return t("airdrop.address.errors.2")
                 }
               },
             },
@@ -175,7 +177,7 @@ export const MetadataInputs = ({
                     {label}:
                   </label>
                   <div className="flex items-center gap-2">
-                    <div className="text-sm">No wallet address?</div>
+                    <div className="text-sm">{t("airdrop.address.errors.3")}</div>
                     <Toggle
                       value={useEmail}
                       onChange={(value) => {
@@ -241,7 +243,7 @@ export const MetadataInputs = ({
               type={type}
               error={errors?.metadata?.[id]?.[name]?.message}
               {...register(`metadata.${id}.${name}`, {
-                required: required && `${inputLabel} is required`,
+                required: required && t("common.variableIsRequired", { variable: inputLabel }),
                 value,
               })}
             />
@@ -251,22 +253,22 @@ export const MetadataInputs = ({
   )
 }
 
-const emailInput: MetadataInput = {
-  type: 'email',
-  name: 'email',
-  label: 'Email',
-  required: true,
-  placeholder: 'your@email.com',
-}
-
 export function Metadata({ checkoutService, injectedProvider }: Props) {
   const [state, send] = useActor(checkoutService)
   const { account } = useAuth()
   const { lock, paywallConfig, quantity } = state.context
   const web3Service = useWeb3Service()
+  const { t } = useTranslation()
   const locksConfig = paywallConfig.locks[lock!.address]
   const isEmailRequired =
     locksConfig.emailRequired || paywallConfig.emailRequired
+  const emailInput: MetadataInput = {
+    type: 'email',
+    name: 'email',
+    label: t("common.email"),
+    required: true,
+    placeholder: 'your@email.com',
+  }
   const metadataInputs = useMemo(() => {
     const inputs =
       locksConfig.metadataInputs || paywallConfig.metadataInputs || []
@@ -430,7 +432,7 @@ export function Metadata({ checkoutService, injectedProvider }: Props) {
             className="w-full"
             form="metadata"
           >
-            {isLoading ? 'Continuing' : 'Next'}
+            {isLoading ? t("common.continuing") : t("common.next")}
           </Button>
         </Connected>
         <PoweredByUnlock />

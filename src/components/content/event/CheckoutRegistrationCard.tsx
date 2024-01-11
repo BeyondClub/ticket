@@ -7,6 +7,7 @@ import { useValidKeyBulk } from '~/hooks/useKey'
 import { useConfig } from '~/utils/withConfig'
 import { Checkout } from '~/components/interface/checkout/main'
 import { LockPriceDetails } from './LockPriceDetails'
+import { Trans, useTranslation } from 'next-i18next'
 
 interface CheckoutRegistrationCardProps {
   isManager: boolean
@@ -24,6 +25,7 @@ export const CheckoutRegistrationCard = ({
   const [isCheckoutOpen, setCheckoutOpen] = useState(false)
 
   const config = useConfig()
+  const { t } = useTranslation()
 
   const {
     locks: eventLocks,
@@ -52,7 +54,7 @@ export const CheckoutRegistrationCard = ({
   if (eventLocks.length === 0) {
     return (
       <Card className="grid gap-6 mt-10 lg:mt-0">
-        <span className="text-2xl font-bold text-gray-900">Registration</span>
+        <span className="text-2xl font-bold text-gray-900">{t("common.registration")}</span>
         <span>
           {isManager
             ? 'The checkout URL assigned to this event is deleted or invalid. Please make sure to assign an existing one.'
@@ -75,14 +77,16 @@ export const CheckoutRegistrationCard = ({
         />
       </Modal>
       <Card className="grid gap-6 mt-10 lg:mt-0">
-        <span className="text-2xl font-bold text-gray-900">Registration</span>
+        <span className="text-2xl font-bold text-gray-900">{t("common.registration")}</span>
         {hasValidKey ? (
           <p className="text-lg">
-            🎉 You already have a ticket! You can view it in{' '}
-            <Link className="underline" href="/keychain">
-              your keychain
-            </Link>
-            .
+            <Trans i18nKey="events.registrationConf">
+              🎉 You already have a ticket! You can view it in
+              <Link className="underline" href="/keychain">
+                your keychain
+              </Link>
+              .
+            </Trans>
           </p>
         ) : (
           <div className="grid gap-6 md:gap-8">
@@ -105,7 +109,7 @@ export const CheckoutRegistrationCard = ({
             setCheckoutOpen(true)
           }}
         >
-          Register
+          {t("common.register")}
         </Button>
       </Card>
     </>

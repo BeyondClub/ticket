@@ -1,5 +1,6 @@
 /* eslint import/prefer-default-export: 0 */ // This file does not have a default export
 import { ethers } from 'ethers'
+import { TFunction, useTranslation } from 'next-i18next'
 import { config } from '~/config/app'
 
 export const ETHEREUM_NETWORKS_NAMES: { [id: number]: string } = {}
@@ -19,10 +20,14 @@ export const ADDRESS_ZERO = ethers.constants.AddressZero.toString()
  * @param title
  * @returns {string}
  */
-export const pageTitle = (title?: string): string => {
+export const pageTitle = (title?: string, t?: TFunction): string => {
   let pageTitle = ''
   if (title) pageTitle += `${title} | `
-  return (pageTitle += "Unlock: The Web's new business model")
+
+  if (t) {
+    return (pageTitle += t('common.appTitle'))
+  }
+  return (pageTitle += "beyondClub NFT Ticket – Free and easy to create NFT tickets for your event")
 }
 
 // used in defining the helpers for LOCK_PATH_NAME_REGEXP and ACCOUNT_REGEXP
@@ -57,9 +62,9 @@ const lockAddress = accountRegex
  */
 export const LOCK_PATH_NAME_REGEXP = new RegExp(
   `/(${prefix})/(${lockAddress})` +
-    // either "/urlEncodedRedirectUrl/#account" or just "#account" and these are all optional
-    // note that "/#account" as in "/paywall/<lockaddress>/#<useraccount>" is also matched
-    `(?:/(${urlEncodedRedirectUrl}))?(?:/?#(${userAccount}))?`
+  // either "/urlEncodedRedirectUrl/#account" or just "#account" and these are all optional
+  // note that "/#account" as in "/paywall/<lockaddress>/#<useraccount>" is also matched
+  `(?:/(${urlEncodedRedirectUrl}))?(?:/?#(${userAccount}))?`
 )
 
 export const PAGE_DESCRIPTION =

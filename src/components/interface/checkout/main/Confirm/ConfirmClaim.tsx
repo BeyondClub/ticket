@@ -146,7 +146,7 @@ export function ConfirmClaim({
               </div>
             ) : (
               <Pricing
-                keyPrice={'FREE'}
+                keyPrice={t("common.free")}
                 usdPrice={'0.00'}
                 isCardEnabled={false}
               />

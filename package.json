@@ -29,7 +29,7 @@
     "@unlock-protocol/crypto-icon": "0.1.2",
     "@unlock-protocol/eslint-config": "0.0.3",
     "@unlock-protocol/networks": "0.0.18",
-    "@unlock-protocol/unlock-js": "^0.40.2",
+    "@unlock-protocol/unlock-js": "^0.42.1",
     "@walletconnect/client": "1.8.0",
     "@walletconnect/ethereum-provider": "2.9.2",
     "@walletconnect/modal": "2.6.2",

@@ -131,8 +131,8 @@
     "vitest-localstorage-mock": "0.0.1"
   },
   "scripts": {
-    "dev": "i18nexus pull -k W4kViBcHxykO6noVRrUUcA && next dev",
-    "build": "i18nexus pull -k W4kViBcHxykO6noVRrUUcA && next build --no-lint",
+    "dev": "next dev",
+    "build": "next build --no-lint",
     "deploy": "yarn build && next export -o out",
     "deploy-netlify": "./scripts/deploy-netlify.sh",
     "deploy-vercel": "./scripts/deploy-vercel.sh",
